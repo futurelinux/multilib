@@ -1,0 +1,19 @@
+# Maintainer:  Ionut Biru <ibiru@archlinux.org>
+# Contributor: mightyjaym <jm.ambrosino@free.fr>
+# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
+
+pkgname=lib32-e2fsprogs
+pkgver=1.41.11
+pkgrel=1
+pkgdesc="Ext2 filesystem utilities"
+arch=(x86_64)
+url="http://e2fsprogs.sourceforge.net"
+license=('GPL' 'LGPL')
+depends=('lib32-glibc' 'lib32-util-linux-ng>=2.16')
+source=(http://www.chakra-project.org/repo/core-testing/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+
+build() {
+  install -d $pkgdir/opt/lib32/lib/
+  cp -dp $srcdir/lib/* $pkgdir/opt/lib32/lib/
+}
+md5sums=('d6f9ca21cbf946537e5d3f03139ab273')

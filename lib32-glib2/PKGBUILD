@@ -1,0 +1,23 @@
+# $Id: PKGBUILD 16637 2010-05-04 16:07:59Z ibiru $
+# Maintainer:  Ionut Biru <ibiru@archlinux.org>
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
+_pkgsourcename=glib2
+pkgname=lib32-$_pkgsourcename
+pkgver=2.26.0
+pkgrel=1
+pkgdesc="Common C routines used by GTK+ 2.4 and other libs"
+arch=('x86_64')
+url="http://www.gtk.org/"
+license=('LGPL')
+groups=('lib32')
+depends=('lib32-glibc')
+source=(http://www.chakra-project.org/repo/core-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+
+build() {
+	cd $srcdir
+	mkdir -p $pkgdir/opt/lib32/usr/lib
+	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+}
+md5sums=('1b5784b37ed94361943751466115b5f3')
+

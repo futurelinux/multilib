@@ -1,0 +1,21 @@
+# Maintainer: abveritas <veritasfarm@gmail.com>
+
+_pkgsourcename=libstdc++5
+pkgname=lib32-$_pkgsourcename
+pkgver=3.3.6
+pkgrel=3
+pkgdesc="GNU Standard C++ library version 3"
+url="http://gcc.gnu.org"
+license=('GPL')
+arch=('x86_64')
+groups=('lib32')
+depends=('lib32-gcc-libs')
+source=(http://www.chakra-project.org/repo/platform-testing/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+md5sums=('d6637d48f8432b7e6407a07ef0d08892')
+
+build() {
+	cd $srcdir
+
+	mkdir -p $pkgdir/usr/lib32
+	cp -dp usr/lib/*.so* $pkgdir/usr/lib32
+}
