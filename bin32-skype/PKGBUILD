@@ -1,0 +1,43 @@
+# Maintainer: Malte Rabenseifner <malte@zearan.de>
+# Contributor: speed145a/Jonny James <speed145a@aol.com>
+# Contributor: Ambi <ak_ambi@op.pl>
+# Contributor: Zerial <fernando@zerial.org>
+# Contributor: Jaroslaw Swierczynski <swiergot@juvepoland.com>
+# Contributor: dongiovanni
+
+pkgname=bin32-skype
+_pkgname32=skype
+pkgver=2.1.0.81
+pkgrel=5
+pkgdesc="P2P software for high-quality voice communication"
+arch=('x86_64')
+url="http://www.skype.com/"
+license=('custom')
+depends=('lib32-alsa-lib' 'lib32-dbus-core' 'lib32-e2fsprogs' 'lib32-fontconfig' 'lib32-freetype2' 'lib32-glib2' 'lib32-libxi' 'lib32-libxrandr' 'lib32-libxrender' 'lib32-libxss' 'lib32-libxv' 'lib32-openssl' 'lib32-pcre' 'lib32-qt')
+optdepends=('lib32-libv4l: support for webcams using the GSPCA kernel' 'lib32-libcanberra: XDG sound support')
+provides=('skype')
+conflicts=('bin32-skype-staticqt')
+options=(!strip)
+install=skype.install
+source=(http://www.skype.com/go/getskype-linux-beta-dynamic/$_pkgname32-$pkgver.tar.bz2)
+md5sums=('5411dcf89e33f53df5fbe5958bbaef54')
+
+build() {
+  cd "$srcdir/$_pkgname32-$pkgver"
+
+  install -dm 755 "$pkgdir/usr/share/$_pkgname32/avatars" || return 1
+  install -dm 755 "$pkgdir/usr/share/$_pkgname32/lang" || return 1
+  install -dm 755 "$pkgdir/usr/share/$_pkgname32/sounds" || return 1
+  install -m 644 avatars/* "$pkgdir/usr/share/$_pkgname32/avatars" || return 1
+  install -m 644 lang/* "$pkgdir/usr/share/$_pkgname32/lang" || return 1
+  install -m 644 sounds/* "$pkgdir/usr/share/$_pkgname32/sounds" || return 1
+
+  install -Dm 755 "$_pkgname32" "$pkgdir/usr/bin/$_pkgname32" || return 1
+  install -Dm 644 "$_pkgname32.conf" "$pkgdir/etc/dbus-1/system.d/$_pkgname32.conf" || return 1
+  install -Dm 644 icons/SkypeBlue_16x16.png "$pkgdir/usr/share/icons/hicolor/16x16/$_pkgname32.png" || return 1
+  install -Dm 644 icons/SkypeBlue_32x32.png "$pkgdir/usr/share/icons/hicolor/32x32/$_pkgname32.png" || return 1
+  install -Dm 644 icons/SkypeBlue_48x48.png "$pkgdir/usr/share/icons/hicolor/48x48/$_pkgname32.png" || return 1
+  install -Dm 644 icons/SkypeBlue_48x48.png "$pkgdir/usr/share/pixmaps/$_pkgname32.png" || return 1
+  install -Dm 644 "$_pkgname32.desktop" "$pkgdir/usr/share/applications/$_pkgname32.desktop" || return 1
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$_pkgname32/LICENSE" || return 1
+}
