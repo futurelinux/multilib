@@ -1,0 +1,25 @@
+#
+# Chakra Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Manuel Tortosa <manutortosa[at]chakra-project[dot]org>
+
+pkgname=lib32-sqlite3
+_i686pkgname=sqlite3
+pkgver=3.6.23.1
+pkgrel=1
+pkgdesc="A C library that implements an SQL database engine"
+arch=('x86_64')
+url="http://www.sqlite.org/"
+license=('LGPL')
+groups=('lib32')
+depends=('lib32-glibc')
+source=(http://chakra-project.org/repo/core-testing/i686/${_i686pkgname}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+
+build() {
+  mkdir -p $pkgdir/opt/lib32/usr/lib/
+  cp -rPf $srcdir/usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+
+# tcl support?
+#  cp -rPf $srcdur/usr/lib/tcl8.5/sqlite3/*.so* $pkgdir/opt/lib32/usr/lib
+}
+md5sums=('81777ffeb86a7272facaa139a6fec6fd')

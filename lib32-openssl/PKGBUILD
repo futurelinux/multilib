@@ -1,0 +1,22 @@
+# Contributor: Geoff Weber <janax99@yahoo.com>
+# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+_pkgsourcename=openssl
+pkgname=lib32-$_pkgsourcename
+pkgver=1.0.0.a
+pkgrel=2
+license='BSD'
+pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Security"
+arch=('x86_64')
+groups=('lib32')
+url="http://www.openssl.org"
+depends=('lib32-glibc')
+source=(http://chakra-project.org/repo/core-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+
+build() {
+  mkdir -p $pkgdir/opt/lib32/usr/lib/
+  cp -rPf $srcdir/usr/lib $pkgdir/opt/lib32/usr/
+}
+md5sums=('a53f669cf9bd342f5397d3b2f48762ed')
+#sha256sums=('cf9ef27c646604b2d2fa6be6b0472ce2fc18a996e36f31ffb4cbb3b390a004dc')
