@@ -1,0 +1,25 @@
+#
+# Chakra Packages for Chakra, part of chakra-project.org
+#
+# contributor (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+
+# include global config
+source ../_buildscripts/${current_repo}-${_arch}-cfg.conf 
+
+pkgname=lib32-alsa-oss
+pkgver=1.0.17
+pkgrel=1
+pkgdesc="OSS compatibility library (32 bit)"
+url="http://www.alsa-project.org"
+license=(GPL)
+options=(!libtool)
+groups=(lib32)
+arch=(x86_64)
+depends=('lib32-glibc' 'lib32-alsa-lib' 'alsa-oss')
+source=(http://www.chakra-project.org/repo/platform-testing/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+md5sums=('efbbae261402689efb3fb0f931030249')
+
+build() {
+  mkdir -p $pkgdir/opt/lib32
+  cp -a "$srcdir/usr" "$pkgdir/opt/lib32/usr"
+}
