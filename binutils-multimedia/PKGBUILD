@@ -5,19 +5,19 @@
 
 pkgname=binutils-multilib
 pkgver=2.20.1
-pkgrel=3
+pkgrel=1
 pkgdesc="A set of programs to assemble and manipulate binary and object files for multilib"
 arch=('x86_64')
 url="http://www.gnu.org/software/binutils/"
 license=('GPL')
 provides=("binutils=$pkgver-$pkgrel")
 conflicts=('binutils')
-depends=('glibc>=2.11-1' 'zlib')
+depends=('glibc>=2.12-1' 'zlib')
 makedepends=('gcc-multilib') # Make sure we compile this with gcc-multilib
 options=('!libtool' '!distcc' '!ccache')
 install=binutils.install
-source=(http://www.chakra-project.org/repo/core-testing/i686/binutils-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
-md5sums=('cf7f68995b6156fa5328da2ea2fcbdb6')
+source=(http://www.chakra-project.org/repo/core/i686/binutils-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+md5sums=('c4affa3698ebf172984fde6c900c251e')
 
 build() {
   cd ${srcdir}
