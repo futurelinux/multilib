@@ -1,0 +1,41 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+# include global config
+source ../_buildscripts/${current_repo}-${_arch}-cfg.conf
+
+_pkgbasename=attr
+pkgname=lib32-$_pkgbasename
+pkgver=2.4.44
+pkgrel=5
+pkgdesc="Extended attribute support library for ACL support (32-bit)"
+arch=(x86_64)
+url="http://oss.sgi.com/projects/xfs/"
+license=('LGPL')
+depends=('lib32-glibc' $_pkgbasename) 
+makedepends=('gcc-multilib' 'gettext')
+options=('!libtool')
+source=(http://www.chakra-project.org/repo/core/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+md5sums=('0f118c8b7a62735bc23993d783d2e3bc')
+
+build() {
+  cd $srcdir/attr-$pkgver 
+
+  export CC="gcc -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  autoconf
+  ./configure --prefix=/usr --libdir=/usr/lib32 --libexecdir=/usr/lib32
+  make 
+
+  # Doesn't like building as non-root
+
+  make prefix=${pkgdir}/usr \
+    PKG_LIB_DIR=$pkgdir/usr/lib32 \
+    PKG_DEVLIB_DIR=$pkgdir/usr/lib32 \
+    install-lib install-dev
+
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
+}
