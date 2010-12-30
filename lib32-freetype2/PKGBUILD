@@ -13,11 +13,11 @@ license=('GPL')
 arch=('x86_64')
 groups=('lib32')
 depends=('lib32-zlib')
-source=(http://www.chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://www.chakra-project.org/repo/core/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd $srcdir
 	mkdir -p $pkgdir/opt/lib32/usr/lib
 	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
 }
-md5sums=('f8fdf150aadd97d0e86a42e7a85f147c')
+md5sums=('5e74ac994c5e9fe24902ef18bc1a61ce')
