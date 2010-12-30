@@ -1,7 +1,11 @@
-# Maintainer: Mikko Seppälä <t-r-a-y@mbnet.fi>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgsourcename=libxcomposite
 pkgname=lib32-$_pkgsourcename
-pkgver=0.4.2
+pkgver=0.4.1
 pkgrel=1
 pkgdesc="X11 Composite extension library"
 url="http://xorg.freedesktop.org/"
@@ -9,7 +13,7 @@ license=('GPL')
 arch=('x86_64')
 groups=('lib32')
 depends=('lib32-glibc')
-source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
         cd $srcdir
@@ -17,5 +21,5 @@ build() {
         cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
 }
 
-md5sums=('9204300ac36e57e82aff520a1b4c37ab')
+md5sums=('75647619d3f3df3322d5e8d80aff6d2b')
 
