@@ -1,10 +1,11 @@
-# $Id: PKGBUILD 1886 2009-09-05 21:18:17Z ibiru $
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
-# Maintainer: Biru Ionut <ionut@archlinux.ro>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgsourcename=libxau
 pkgname=lib32-$_pkgsourcename
-pkgver=1.0.6
+pkgver=1.0.5
 pkgrel=1
 pkgdesc="X11 authorisation library"
 url="http://xorg.freedesktop.org/"
@@ -12,11 +13,11 @@ arch=(x86_64)
 license=('custom')
 groups=('lib32')
 depends=('lib32-glibc')
-source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd $srcdir
 	mkdir -p $pkgdir/opt/lib32/usr/lib
 	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
 }
-md5sums=('36fb2bba181ed40da5c1c6892352bce6')
+md5sums=('1b4da602e902a99acd051c25cc119480')

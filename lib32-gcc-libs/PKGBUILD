@@ -5,8 +5,8 @@
 
 _pkgsourcename=gcc-libs
 pkgname=lib32-$_pkgsourcename
-pkgver=4.5.1
-pkgrel=2
+pkgver=4.5.2
+pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="http://gcc.gnu.org"
