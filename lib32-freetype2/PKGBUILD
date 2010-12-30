@@ -1,6 +1,11 @@
-# $Id: PKGBUILD 11834 2010-02-19 11:11:26Z ibiru $
-# Maintainer : Ionut Biru <ibiru@archlinux.org>
-# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+# include global config
+source ../_buildscripts/${current_repo}-${_arch}-cfg.config
+
 _pkgsourcename=freetype2
 pkgname=lib32-$_pkgsourcename
 pkgver=2.4.3
@@ -11,7 +16,7 @@ license=('GPL')
 arch=('x86_64')
 groups=('lib32')
 depends=('lib32-zlib')
-source=(http://www.chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://www.chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd $srcdir

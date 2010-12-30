@@ -1,6 +1,11 @@
-# $Id: PKGBUILD 6236 2009-12-05 20:05:34Z ibiru $
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-# Maintainer: Mikko Srppälä <t-r-a-y@mbnet.fi>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+# include global config
+source ../_buildscripts/${current_repo}-${_arch}-cfg.conf
+
 _pkgsourcename=fontconfig
 pkgname=lib32-$_pkgsourcename
 pkgver=2.8.0
@@ -11,7 +16,7 @@ license=('custom')
 arch=(x86_64)
 groups=('lib32')
 depends=('lib32-expat>=2.0' 'lib32-freetype2')
-source=(http://www.chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://www.chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 md5sums=('6cb9a6234b53138ded09c9bb6402a8de')
 
 build() {

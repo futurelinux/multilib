@@ -1,10 +1,15 @@
-# Maintainer: Biru Ionut <ionut@archlinu.ro>
-# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
-# Provides lib32-gcc to not break too much stuff
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+# include global config
+source ../_buildscripts/${current_repo}-${_arch}-cfg.config
+
 _pkgsourcename=gcc-libs
 pkgname=lib32-$_pkgsourcename
 pkgver=4.5.1
-pkgrel=4
+pkgrel=2
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="http://gcc.gnu.org"
@@ -13,7 +18,7 @@ groups=('lib32')
 depends=('lib32-glibc')
 replaces=('lib32-gcc')
 provides=('lib32-gcc')
-source=(http://www.chakra-project.org/repo/core-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://www.chakra-project.org/repo/core/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd $srcdir
@@ -21,4 +26,4 @@ build() {
 	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
 #	cp -dp usr/lib/*.a* $pkgdir/opt/lib32/usr/lib
 }
-md5sums=('9b5c3bc149c1fccc5cd7cb8a973ff47d')
+md5sums=('d934316c19098a1133e917a3f6d181a3')
