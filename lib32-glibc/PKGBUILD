@@ -1,7 +1,7 @@
-# $Id: PKGBUILD 24810 2010-08-27 22:21:12Z heftig $
-# Maintainer: Jan "heftig" Steffens <jan.steffens@gmail.com>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-# Contributor: Allan McRae <allan@archlinux.org>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: valgrind requires rebuild with each new glibc version
@@ -9,7 +9,7 @@
 _pkgbasename=glibc
 pkgname=lib32-$_pkgbasename
 pkgver=2.12.1
-pkgrel=2
+pkgrel=1
 _glibcdate=20101017
 pkgdesc="GNU C Library for multilib"
 arch=('x86_64')
@@ -18,12 +18,12 @@ license=('GPL' 'LGPL')
 depends=("glibc>=$pkgver")
 options=('!strip' '!emptydirs')
 install=lib32-glibc.install
-source=(http://chakra-project.org/repo/core-testing/i686/${_pkgbasename}-${pkgver}-${pkgrel}-i686.pkg.tar.xz
+source=(http://chakra-project.org/repo/core/i686/${_pkgbasename}-${pkgver}-${pkgrel}-i686.pkg.tar.xz
         lib32-glibc.conf
         glibc-2.10-dont-build-timezone.patch
         glibc-2.10-bz4781.patch
         glibc-__i686.patch)
-md5sums=('b29ae27e4df5d75cff1d8dcd229dce1e'
+md5sums=('146980cf9ee044356fff720f7b565295 '
          '6e052f1cb693d5d3203f50f9d4e8c33b'
          '4dadb9203b69a3210d53514bb46f41c3'
          '0c5540efc51c0b93996c51b57a8540ae'

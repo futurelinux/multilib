@@ -3,9 +3,6 @@
 #
 # contributor (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 
-# include global config
-source ../_buildscripts/${current_repo}-${_arch}-cfg.conf 
-
 pkgname=lib32-alsa-oss
 pkgver=1.0.17
 pkgrel=1
