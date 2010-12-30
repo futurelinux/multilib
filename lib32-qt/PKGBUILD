@@ -1,3 +1,8 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgsourcename=qt
 pkgname=lib32-$_pkgsourcename
 pkgver=4.7.0
@@ -8,7 +13,7 @@ url="http://www.trolltech.com/products/qt/index.html"
 license=('GPL2')
 groups=('lib32')
 depends=('lib32-libxmu' 'lib32-libxcursor' 'lib32-libxinerama' 'lib32-mesa' 'lib32-libxft' 'lib32-libxrandr' 'lib32-libpng' 'lib32-libjpeg' 'lib32-libxi' 'lib32-sqlite3')
-source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd $srcdir
@@ -16,4 +21,4 @@ build() {
 	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
 	cp -dpr usr/lib/qt $pkgdir/opt/lib32/usr/lib/
 }
-md5sums=('8fc7231a7bd1a57dd31c5ffa9ea8755a')
+md5sums=('803e49a3c0b7272fef50af8d73834f68')

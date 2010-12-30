@@ -1,22 +1,22 @@
-# Contributor: Geoff Weber <janax99@yahoo.com>
-# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgsourcename=openssl
 pkgname=lib32-$_pkgsourcename
 pkgver=1.0.0.a
-pkgrel=2
+pkgrel=1
 license='BSD'
 pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Security"
 arch=('x86_64')
 groups=('lib32')
 url="http://www.openssl.org"
 depends=('lib32-glibc')
-source=(http://chakra-project.org/repo/core-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://chakra-project.org/repo/core/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.gz)
 
 build() {
   mkdir -p $pkgdir/opt/lib32/usr/lib/
   cp -rPf $srcdir/usr/lib $pkgdir/opt/lib32/usr/
 }
-md5sums=('a53f669cf9bd342f5397d3b2f48762ed')
-#sha256sums=('cf9ef27c646604b2d2fa6be6b0472ce2fc18a996e36f31ffb4cbb3b390a004dc')
+md5sums=('2d67f61832084c2c252bb1fd4955cc1f')
