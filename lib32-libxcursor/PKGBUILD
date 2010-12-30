@@ -1,6 +1,8 @@
-# $Id: PKGBUILD 1889 2009-09-05 21:19:41Z ibiru $
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-# Maintainer: Mikko Seppälä <t-r-a-y@mbnet.fi>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgsourcename=libxcursor
 pkgname=lib32-$_pkgsourcename
 pkgver=1.1.10
@@ -11,11 +13,11 @@ license=('custom')
 arch=('x86_64')
 groups=('lib32')
 depends=('lib32-libxfixes' 'lib32-libxrender')
-source=(http://mir.archlinux.fr/extra/os/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.gz)
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd $srcdir
 	mkdir -p $pkgdir/opt/lib32/usr/lib
 	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
 }
-md5sums=('21542ce01002eca1a911341762f0e65b')
+md5sums=('526c92c173b284157f14543b8807ba00')

@@ -1,9 +1,11 @@
-# $Id: PKGBUILD 18618 2010-06-09 09:06:45Z ibiru $
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-# Maintainer: Mikko Seppala <t-r-a-y@mbnet.fi>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgsourcename=libxrender
 pkgname=lib32-$_pkgsourcename
-pkgver=0.9.6
+pkgver=0.9.5
 pkgrel=1
 pkgdesc="X Rendering Extension client library"
 url="http://xorg.freedesktop.org/"
@@ -11,7 +13,7 @@ license=('custom')
 arch=('x86_64')
 groups=('lib32')
 depends=('lib32-libx11')
-source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz \
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz \
 	COPYING)
 
 build() {
@@ -22,7 +24,5 @@ build() {
     install -Dm644 $srcdir/COPYING \
 	  $pkgdir/opt/lib32/usr/share/licenses/$_pkgsourcename/COPYING
 }
-md5sums=('33679ff66645a63342265157a8a0cdfc'
+md5sums=('b17b10c5a4ac32a6e330c602c512ecbf'
          '90b90b60eb30f65fc9c2673d7cf59e24')
-#sha256sums=('30231fd99aaf0cbe38a2b84b387c83d1e628fafc321d94d9fb6189b155536035'
-#            '7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c')

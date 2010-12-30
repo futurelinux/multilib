@@ -1,21 +1,23 @@
-# $Id: PKGBUILD 19207 2010-06-21 10:21:00Z ibiru $
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-# Maintainer: Mikko Seppala <t-r-a-y@mbnet.fi>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgsourcename=libxfixes
 pkgname=lib32-$_pkgsourcename
-pkgver=4.0.5
-pkgrel=2
+pkgver=4.0.4
+pkgrel=1
 pkgdesc="X11 miscellaneous 'fixes' extension library"
 url="http://xorg.freedesktop.org/"
 license=('custom')
 arch=('x86_64')
 groups=('lib32')
 depends=('lib32-libx11')
-source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd $srcdir
 	mkdir -p $pkgdir/opt/lib32/usr/lib
 	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
 }
-md5sums=('03a50aa3fca287ca652888a33cb58fd2')
+md5sums=('3b3a2081e6ed83b95a3b5127d66a7d53')
