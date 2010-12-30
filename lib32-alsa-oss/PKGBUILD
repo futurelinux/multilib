@@ -16,7 +16,7 @@ options=(!libtool)
 groups=(lib32)
 arch=(x86_64)
 depends=('lib32-glibc' 'lib32-alsa-lib' 'alsa-oss')
-source=(http://www.chakra-project.org/repo/platform-testing/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+source=(http://www.chakra-project.org/repo/platform/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
 md5sums=('efbbae261402689efb3fb0f931030249')
 
 build() {

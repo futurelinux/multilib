@@ -10,7 +10,7 @@ arch=(x86_64)
 url="http://e2fsprogs.sourceforge.net"
 license=('GPL' 'LGPL')
 depends=('lib32-glibc' 'lib32-util-linux-ng>=2.16')
-source=(http://www.chakra-project.org/repo/core-testing/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+source=(http://www.chakra-project.org/repo/core/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
 
 build() {
   install -d $pkgdir/opt/lib32/lib/
