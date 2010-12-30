@@ -1,11 +1,12 @@
-# $Id: PKGBUILD 26722 2010-09-15 22:59:51Z bluewind $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributer: Jason Chu <jchu@xentac.net>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=openal
 pkgname=lib32-$_pkgbasename
 pkgver=1.12.854
-pkgrel=3
+pkgrel=1
 pkgdesc="OpenAL audio library for use with opengl (32-bit)"
 arch=('x86_64')
 url="http://www.openal.org/"
@@ -13,8 +14,8 @@ license=('LGPL')
 depends=('lib32-glibc' $_pkgbasename)
 makedepends=('lib32-alsa-lib' 'lib32-sdl' 'pkgconfig' 'cmake' 'gcc-multilib')
 options=('!libtool')
-source=(http://kcat.strangesoft.net/openal-releases/openal-soft-${pkgver}.tar.bz2)
-md5sums=('fbf36451fdebd6466edbdc0ee7db9603')
+source=(http://chakra-project.org/repo/platform/i686/${_pkgsourcename}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+md5sums=('b3106eacc766cfae6f97a35ade6d17a1')
 
 build() {
   export CC="gcc -m32"
