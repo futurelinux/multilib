@@ -11,11 +11,12 @@ license=('custom')
 arch=('x86_64')
 groups=('lib32')
 depends=('lib32-libxfixes' 'lib32-libxrender')
-source=(http://mir.archlinux.fr/extra/os/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.gz)
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+md5sums=('526c92c173b284157f14543b8807ba00')
+
 
 build() {
 	cd $srcdir
 	mkdir -p $pkgdir/opt/lib32/usr/lib
 	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
 }
-md5sums=('21542ce01002eca1a911341762f0e65b')
