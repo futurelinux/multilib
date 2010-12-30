@@ -1,5 +1,7 @@
-# Maintainer: Mikko Seppälä <t-r-a-y@mbnet.fi>
-# Contributor: Jakub Schmidtke <sjakub-at-gmail.com>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=lib32-libxv
 pkgver=1.0.5
@@ -10,7 +12,7 @@ url="http://xorg.freedesktop.org/"
 license=('GPL')
 depends=('lib32-libxext' 'videoproto')
 groups=('lib32')
-source=(http://chakra-project.org/repo/platform-testing/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+source=(http://chakra-project.org/repo/platform/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
 
 build() {
   mkdir -p $pkgdir/opt/lib32/usr/lib
