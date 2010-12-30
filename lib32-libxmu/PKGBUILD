@@ -1,6 +1,8 @@
-# $Id: PKGBUILD 4818 2009-11-01 18:39:48Z ibiru $
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-# Maintainer: Mikko Seppälä <t-r-a-y@mbnet.fi>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgsourcename=libxmu
 pkgname=lib32-$_pkgsourcename
 pkgver=1.0.5
@@ -11,7 +13,7 @@ url="http://xorg.freedesktop.org/"
 license=('custom')
 groups=('lib32')
 depends=('lib32-libxext' 'lib32-libxt')
-source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd $srcdir

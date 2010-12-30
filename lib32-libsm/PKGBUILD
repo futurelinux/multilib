@@ -1,0 +1,25 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+
+_pkgsourcename=libsm
+pkgname=lib32-$_pkgsourcename
+pkgver=1.1.1
+pkgrel=1
+pkgdesc="X11 Session Management library (32-bit)"
+arch=(x86_64)
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('lib32-libice' 'lib32-util-linux-ng' $_pkgbasename)
+makedepends=('xorg-util-macros' 'xtrans' 'lib32-gcc-libs')
+options=('!libtool')
+source=(http://www.chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+md5sums=('e201ea479dc9fa85aeb5ac6d278a7ae9')
+
+build() {
+        cd $srcdir
+        mkdir -p $pkgdir/opt/lib32/usr/lib
+        cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+}
