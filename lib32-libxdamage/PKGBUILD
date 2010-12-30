@@ -10,11 +10,10 @@ arch=('x86_64')
 groups=('lib32')
 depends=('lib32-glibc' 'lib32-libxfixes')
 source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+md5sums=('26c602d457a6194771e2ded8e14e780d')
 
 build() {
         cd $srcdir
         mkdir -p $pkgdir/opt/lib32/usr/lib
         cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
 }
-md5sums=('a18118ebc42ef34036054f105e42ee0d')
-sha256sums=('6a6a63efc8de116fb7a3e63d1fe4cf484babe3cffb25953290f0fa2d4745c87c')
