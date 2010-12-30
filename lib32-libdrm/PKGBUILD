@@ -1,22 +1,23 @@
-# $Id: PKGBUILD 19198 2010-06-21 10:14:24Z ibiru $
-# Maintainer:  Ionut Biru <ibiru@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgsourcename=libdrm
 pkgname=lib32-$_pkgsourcename
-pkgver=2.4.22
-pkgrel=1
+pkgver=2.4.19
+pkgrel=2
 pkgdesc="Userspace interface to kernel DRM services"
 url="http://dri.freedesktop.org/"
 license=('custom')
 arch=('x86_64')
 groups=('lib32')
 depends=('lib32-glibc')
-source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd "$srcdir"
 	mkdir -p "$pkgdir/opt/lib32/usr/lib"
 	cp -dp usr/lib/*.so* "$pkgdir/opt/lib32/usr/lib"
 }
-md5sums=('9de1cf04effd54592eb534495c319e1f')
+md5sums=('a407f1a97b221255f6c4bfb2e3052869')

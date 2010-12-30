@@ -1,7 +1,7 @@
-# $Id: PKGBUILD 18480 2010-06-05 15:43:25Z ibiru $
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgsourcename=libjpeg
 pkgname=lib32-$_pkgsourcename
@@ -13,7 +13,7 @@ license=('custom')
 arch=(x86_64)
 groups=('lib32')
 depends=('lib32-glibc')
-source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz 
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz 
 \
 	LICENSE)
 build() {
@@ -24,6 +24,6 @@ build() {
 	install -Dm644 $srcdir/LICENSE \
  	$pkgdir/opt/lib32/usr/share/licenses/$_pkgsourcename/LICENSE
 }
-md5sums=('b89beed51a4318f1b0724ccfab692050'
+md5sums=('31e3eeaddd36553d17c60e775df6fce7'
          '5ec5b8b1cb747c855d84f83200cedc1f')
 

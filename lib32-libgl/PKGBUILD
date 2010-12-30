@@ -1,8 +1,11 @@
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
-# Contributor: Mikko Seppälä <t-ra-y-@mbnet.fi>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgsourcename=libgl
 pkgname=lib32-$_pkgsourcename
-pkgver=7.9
+pkgver=7.7.1
 pkgrel=1
 pkgdesc="Mesa DRI OpenGL library and drivers"
 arch=('x86_64')
@@ -12,7 +15,7 @@ groups=('lib32')
 depends=('lib32-libxxf86vm' 'lib32-libdrm>=2.0' 'lib32-libxext')
 replaces=('lib32-libgl-dri')
 provides=('lib32-libgl-dri')
-source=(http://chakra-project.org/repo/platform-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
 
 build() {
 	cd "$srcdir"
@@ -21,4 +24,4 @@ build() {
 	# Fix for intel-dri
         install -Dm755 "$srcdir/usr/lib/xorg/modules/dri/swrast_dri.so" "$pkgdir/opt/lib32/usr/lib/"
 }
-md5sums=('d480b2db5aa28ae52b46ddc4f31fbad3')
+md5sums=('5aa8ad68889e9034dac9ae325e5340a5')
