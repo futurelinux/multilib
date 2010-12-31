@@ -1,16 +1,16 @@
 # Contributor: snsotorm <snostormjp@gmail.com>
 
-pkgname=lib32-libv4l
-_i686pkgname=libv4l
-pkgver=0.6.4
+_pkgsourcename=v4l-utils
+pkgname=lib32-${_pkgsourcename}
+pkgver=0.8.1
 pkgrel=1
 pkgdesc="Userspace library for Video 4 Linux (1 and 2)"
 arch=('x86_64')
 url="http://linuxtv.org/hg/v4l-dvb"
 license=('LGPL')
 depends=('lib32-glibc')
-source=(http://chakra-project.org/repo/platform-testing/i686/${_i686pkgname}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
-md5sums=('3fb0bf29ea065d4c31278cfec6a821a2')
+source=(http://chakra-project.org/repo/platform-testing/i686/${_pkgsourcename}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+md5sums=('548cf83168def4ae51b7a2db44b95eb5')
 
 build()
 {
