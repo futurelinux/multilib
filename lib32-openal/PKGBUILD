@@ -5,7 +5,7 @@
 _pkgsourcename=openal
 pkgname=lib32-${_pkgsourcename}
 pkgver=1.12.854
-pkgrel=3
+pkgrel=1
 pkgdesc="OpenAL audio library for use with opengl (32-bit)"
 arch=('x86_64')
 url="http://www.openal.org/"
@@ -14,7 +14,7 @@ depends=('lib32-glibc' $_pkgbasename)
 makedepends=('lib32-alsa-lib' 'lib32-sdl' 'pkgconfig' 'cmake' 'lib32-gcc-libs')
 options=('!libtool')
 source=(http://chakra-project.org/repo/platform-testing/i686/${_pkgsourcename}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
-md5sums=('fbf36451fdebd6466edbdc0ee7db9603')
+md5sums=('b3106eacc766cfae6f97a35ade6d17a1')
 
 build() {
         cd $srcdir
