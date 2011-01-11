@@ -15,7 +15,7 @@ pkgdesc="The GNU Compiler Collection for multilib"
 arch=('x86_64')
 license=('GPL' 'LGPL' 'custom')
 url="http://gcc.gnu.org"
-makedepends=('binutils-multilib>=2.20.1' 'libmpc>=0.8.2-2' 'cloog-ppl>=0.15.9-2' 'elfutils' 'gcc-ada-multilib'
+makedepends=('binutils-multilib>=2.20.1' 'libmpc>=0.8.2-1' 'cloog-ppl>=0.15.9-2' 'elfutils' 'gcc-ada-multilib'
              'glibc>=2.11.1-2' 'lib32-glibc>=2.12.1')
 options=('!libtool' '!emptydirs')
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-{core,g++,fortran,objc,ada}-${pkgver}.tar.bz2
