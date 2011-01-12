@@ -3,21 +3,41 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=freetype2
-pkgname=lib32-$_pkgsourcename
+_pkgbasename=freetype2
+pkgname=lib32-$_pkgbasename
 pkgver=2.4.3
-pkgrel=1
-pkgdesc="TrueType font rendering library"
-url="http://freetype.sourceforge.net"
+pkgrel=2
+pkgdesc="TrueType font rendering library (32-bit)"
+arch=(x86_64)
 license=('GPL')
-arch=('x86_64')
-groups=('lib32')
-depends=('lib32-zlib')
-source=(http://www.chakra-project.org/repo/core/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+url="http://freetype.sourceforge.net"
+depends=('lib32-zlib' $_pkgbasename)
+makedepends=(gcc-multilib)
+options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
+        freetype-2.3.0-enable-spr.patch
+        freetype-2.2.1-enable-valid.patch)
+md5sums=('75ac7082bde7b3805dc5d6bc806fa045'
+         '816dc8619a6904a7385769433c0a8653'
+         '214119610444c9b02766ccee5e220680')
 
 build() {
-	cd $srcdir
-	mkdir -p $pkgdir/opt/lib32/usr/lib
-	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/freetype-${pkgver}"
+  patch -Np1 -i "${srcdir}/freetype-2.3.0-enable-spr.patch"
+  patch -Np1 -i "${srcdir}/freetype-2.2.1-enable-valid.patch"
+
+  ./configure --prefix=/usr --libdir=/usr/lib32
+  make
 }
-md5sums=('5e74ac994c5e9fe24902ef18bc1a61ce')
+
+package() {
+  cd "${srcdir}/freetype-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+}
