@@ -3,25 +3,34 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=zlib
-pkgname=lib32-$_pkgsourcename
+_pkgbasename=zlib
+pkgname=lib32-$_pkgbasename
 pkgver=1.2.5
-pkgrel=1
-pkgdesc="A compression/decompression Library"
-url="http://www.gzip.org/zlib"
-license=('custom:zlib')
-arch=(x86_64)
-groups=('lib32')
-depends=('lib32-glibc')
-source=(http://www.chakra-project.org/repo/core/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+pkgrel=2
+pkgdesc='Compression library implementing the deflate compression method found in gzip and PKZIP (32-bit)'
+arch=('x86_64')
+license=('custom')
+url="http://www.zlib.net/"
+depends=('lib32-glibc' $_pkgbasename)
+makedepends=(gcc-multilib)
+options=('!makeflags')
+source=("http://zlib.net/zlib-${pkgver}.tar.gz"
+        'zlib-1.2.5-lfs-decls.patch')
+md5sums=('c735eab2d659a96e5a594c9e8541ad63'
+         '4cb279ea3beab621f3526bf7b7ab99e5')
 
 build() {
-	cd $startdir/src
-	mkdir -p $startdir/pkg/opt/lib32/usr/lib
-#        mkdir -p $startdir/pkg/opt/lib32/lib
-	cp -dp usr/lib/*.so* $startdir/pkg/opt/lib32/usr/lib
-# 1.2.3.3 does not have stuff in /lib, keep in comments
-#        cp -dp lib/*.so* $startdir/pkg/opt/lib32/lib
-}
-md5sums=('af7e0284905458836b6140c483ea06ae')
+	export CC="gcc -m32"
+	export CXX="g++ -m32"
+	export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
+	cd ${srcdir}/zlib-$pkgver
+	# see http://bugs.archlinux.org/task/19280
+	patch -p1 -i ${srcdir}/zlib-1.2.5-lfs-decls.patch
+	# work around gcc bug; see https://bugs.archlinux.org/task/20647
+	export CFLAGS="${CFLAGS/-O2/-O3} -fno-tree-vectorize -DUNALIGNED_OK"
+	./configure --prefix=/usr \
+          --libdir=/usr/lib32
+	make
+	make check
+}

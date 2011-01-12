@@ -3,21 +3,35 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=libxdamage
-pkgname=lib32-$_pkgsourcename
+_pkgbasename=libxdamage
+pkgname=lib32-$_pkgbasename
 pkgver=1.1.2
-pkgrel=1
-pkgdesc="X11 damaged region extension library"
+pkgrel=2
+pkgdesc="X11 damaged region extension library (32-bit)"
+arch=(x86_64)
 url="http://xorg.freedesktop.org/"
-license=('GPL')
-arch=('x86_64')
-groups=('lib32')
-depends=('lib32-glibc' 'lib32-libxfixes')
-source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+license=('custom')
+depends=('lib32-libxfixes>=4.0.4' $_pkgbasename)
+makedepends=('pkg-config' 'damageproto>=1.2.0' gcc-multilib)
+options=('!libtool')
+source=(${url}/releases/individual/lib/libXdamage-${pkgver}.tar.bz2)
+md5sums=('b42780bce703ec202a33e5693991c09d')
 
 build() {
-        cd $srcdir
-        mkdir -p $pkgdir/opt/lib32/usr/lib
-        cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/libXdamage-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static --libdir=/usr/lib32
+  make
 }
-md5sums=('9be40ff0badec91e6fa8e98ca4a886a6')
+
+package() {
+  cd "${srcdir}/libXdamage-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install || return 1
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}
