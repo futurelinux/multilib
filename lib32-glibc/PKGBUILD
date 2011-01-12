@@ -9,7 +9,7 @@
 _pkgbasename=glibc
 pkgname=lib32-$_pkgbasename
 pkgver=2.12.1
-pkgrel=1
+pkgrel=2
 _glibcdate=20101025
 pkgdesc="GNU C Library for multilib"
 arch=('x86_64')
@@ -69,7 +69,6 @@ build() {
       --libdir=/usr/lib32 --libexecdir=/usr/lib32 \
       --with-headers=/usr/include \
       --enable-add-ons=nptl,libidn \
-      --enable-forced-unwind \
       --enable-kernel=2.6.27 \
       --with-tls --with-__thread \
       --enable-bind-now --without-gd \
