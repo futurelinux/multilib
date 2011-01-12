@@ -3,23 +3,36 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=libxcomposite
-pkgname=lib32-$_pkgsourcename
+_pkgbasename=libxcomposite
+pkgname=lib32-$_pkgbasename
 pkgver=0.4.1
-pkgrel=1
-pkgdesc="X11 Composite extension library"
+pkgrel=2
+pkgdesc="X11 Composite extension library (32-bit)"
+arch=(x86_64)
 url="http://xorg.freedesktop.org/"
-license=('GPL')
-arch=('x86_64')
-groups=('lib32')
-depends=('lib32-glibc')
-source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+license=('custom')
+depends=('lib32-libxfixes' 'lib32-libxext' 'compositeproto' $_pkgbasename)
+makedepends=('xorg-util-macros' gcc-multilib)
+options=(!libtool)
+source=(${url}/releases/individual/lib/libXcomposite-${pkgver}.tar.bz2)
+md5sums=('0f1367f57fdf5df17a8dd71d0fa68248')
 
 build() {
-        cd $srcdir
-        mkdir -p $pkgdir/opt/lib32/usr/lib
-        cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/libXcomposite-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static --libdir=/usr/lib32
+  make
 }
 
-md5sums=('75647619d3f3df3322d5e8d80aff6d2b')
+package() {
+  cd "${srcdir}/libXcomposite-${pkgver}"
 
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

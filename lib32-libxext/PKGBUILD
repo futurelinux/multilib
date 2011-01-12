@@ -3,26 +3,37 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=libxext
-pkgname=lib32-$_pkgsourcename
+_pkgbasename=libxext
+pkgname=lib32-$_pkgbasename
 pkgver=1.2.0
-pkgrel=1
-pkgdesc="X11 miscellaneous extensions library"
+pkgrel=2
+pkgdesc="X11 miscellaneous extensions library (32-bit)"
+arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
-arch=('x86_64')
-groups=('lib32')
-depends=('lib32-libx11')
-source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz \
-	COPYING)
+depends=('lib32-libx11' 'xextproto' $_pkgbasename)
+makedepends=('xorg-util-macros' 'gcc-multilib')
+options=('!libtool')
+source=(${url}/releases/individual/lib/libXext-${pkgver}.tar.bz2)
+md5sums=('9bb236ff0193e9fc1c1fb504dd840331')
+
 build() {
-	cd $srcdir
-	mkdir -p $pkgdir/opt/lib32/usr/lib
-	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+  cd "${srcdir}/libXext-${pkgver}"
 
-        install -Dm644 $srcdir/COPYING \
-		$pkgdir/opt/lib32/usr/share/licenses/$_pkgsourcename/COPYING
+  export CC="gcc -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static --libdir=/usr/lib32
+  make
 }
-md5sums=('ecb8ce4a87bbfd0c3f49a87134302cc7'
-         'ce97dd25f113a659fef031e6cfe15b53')
 
+package() {
+  cd "${srcdir}/libXext-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share}
+
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname" 
+}

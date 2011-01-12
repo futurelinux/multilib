@@ -3,10 +3,10 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=libxdmcp
-pkgname=lib32-$_pkgsourcename
+_pkgbasename=libxdmcp
+pkgname=lib32-$_pkgbasename
 pkgver=1.0.3
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 Display Manager Control Protocol library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
