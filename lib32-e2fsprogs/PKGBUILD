@@ -1,0 +1,44 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+_pkgbasename=e2fsprogs
+pkgname=lib32-e2fsprogs
+pkgver=1.41.11
+pkgrel=1
+pkgdesc="Ext2 filesystem libraries (32-bit)"
+arch=(x86_64)
+license=('GPL' 'LGPL' 'MIT')
+url="http://e2fsprogs.sourceforge.net"
+depends=('lib32-util-linux-ng>=2.16' $_pkgbasename)
+makedepends=('bc' 'gcc-multilib')
+source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz"
+		"makefile.in.patch")
+md5sums=('fb507a40c2706bc38306f150d069e345'
+		 '3f28ffba24868e9da9ff24364a3cd40e')
+
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  # Fix for lib/ext2fs/Makefile.in
+  patch -Np1 -i ../makefile.in.patch
+
+  ./configure --prefix=/usr --libdir=/usr/lib32 --with-root-prefix="" --enable-elf-shlibs \
+      --disable-{debugfs,imager,resizer,fsck,uuidd,libuuid,libblkid}
+  make
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  make DESTDIR="${pkgdir}" install-libs
+
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}
