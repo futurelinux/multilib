@@ -1,0 +1,132 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+_pkgbasename=qt
+pkgname=lib32-$_pkgbasename
+pkgver=4.7.0
+pkgrel=1
+kdeqtver=7abde40e7484d0ab7d61de3531bc0aeedf24aa85
+pkgdesc='A cross-platform application and UI framework (32-bit)'
+arch=('x86_64')
+url='http://qt.nokia.com/'
+license=('GPL3' 'LGPL')
+depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl}
+         lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes} $_pkgbasename)
+
+makedepends=(cups gcc-multilib lib32-{mesa,libcups,libxfixes})
+options=('!libtool')
+_pkgfqn="qt-everywhere-opensource-src-${pkgver}"
+source=("ftp://ftp.qt.nokia.com/qt/source/${_pkgfqn}.tar.gz"
+		"http://chakra-project.org/sources/qt/kde-qt-${kdeqtver}.patch.gz"
+		'http://chakra-project.org/sources/qt/qt-any-appmenu.patch'
+		'http://chakra-project.org/sources/qt/qt-4.7.0-qmake-linker-flags-as-needed.patch'
+		'http://chakra-project.org/sources/qt/qt-4.7.0-fix-scroll-when-last-item-is-removed.patch'
+		'http://chakra-project.org/sources/qt/qt-4.7.0-fix-opengl-multisampling-for-some-graphics-drivers.patch')
+
+md5sums=('3a2f25b9b115037277f4fb759194a7a5'
+		 '9d665e17a64c9e32b374ba5b1eafb350'
+         'dba7f852bce6e1ebd78f6a78f9979c68'
+         'c436732fc467271e8a3838145c122070'
+         'ef20c34afc5be5ed62f2935be66d9402'
+         'b2e0f134bbb848ebef41134a45a36ee9')
+
+_create-kdeqt-patch() {
+	  #Create patches
+	  echo "creating kde-qt patches"
+	  local codir=$(mktemp -d)
+	  mkdir -p "${codir}/kde-qt"
+	  git clone git://gitorious.org/+kde-developers/qt/kde-qt.git "${codir}/kde-qt"
+	  pushd "${codir}/kde-qt"
+	  git checkout --track -b ${pkgver}-patched origin/${pkgver}-patched
+	  local kdeqtver=$(git --no-pager show --format='%H' "${pkgver}-patched" | head -1)
+	  git diff "v${pkgver}..${pkgver}-patched" | gzip > "${codir}/kde-qt-${kdeqtver}.patch.gz"
+          popd
+          mv "${codir}/kde-qt-${kdeqtver}.patch.gz" .
+	  rm -rf "${codir}"
+	  md5sum kde-qt-${kdeqtver}.patch.gz
+}
+
+build() {
+  unset QMAKESPEC
+  export QT4DIR=$srcdir/$_pkgfqn
+  export PATH=${QT4DIR}/bin:${PATH}
+  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd $srcdir/$_pkgfqn
+
+	msg "applying kde-qt patches"
+	patch -p1 -i $srcdir/kde-qt-${kdeqtver}.patch || return 1
+
+	msg "apply other patches"
+	# Already fixed in 4.7.1
+	patch -Np1 -i ${srcdir}/qt-4.7.0-fix-scroll-when-last-item-is-removed.patch || return 1
+	patch -Np1 -i ${srcdir}/qt-4.7.0-qmake-linker-flags-as-needed.patch || return 1
+	patch -Np1 -i ${srcdir}/qt-4.7.0-fix-opengl-multisampling-for-some-graphics-drivers.patch
+	# apply appmenu patch from Aurelien Gateau
+	patch -Np1 -i ${srcdir}/qt-any-appmenu.patch || return 1
+
+	sed -e "s|-O2|$CXXFLAGS -m32|" \
+        -e "/^QMAKE_RPATH/s| -Wl,-rpath,||g" \
+        -e "/^QMAKE_LINK\s/s|g++|g++ -m32|g" \
+        -e "/^QMAKE_LFLAGS\s/s|+=|+= $LDFLAGS|g" \
+        -i mkspecs/common/g++.conf
+
+  ./configure -confirm-license -opensource -v -platform linux-g++-32 \
+    -prefix /usr \
+    -libdir /usr/lib32 \
+    -plugindir /usr/lib32/qt/plugins \
+    -importdir /usr/lib32/qt/imports \
+    -datadir /usr/share/qt \
+    -translationdir /usr/share/qt/translations \
+    -sysconfdir /etc \
+    -largefile \
+    -system-sqlite \
+    -xmlpatterns \
+    -no-phonon \
+    -no-phonon-backend \
+    -svg \
+    -webkit \
+    -script \
+    -scripttools \
+    -system-zlib \
+    -system-libtiff \
+    -system-libpng \
+    -system-libmng \
+    -system-libjpeg \
+    -nomake demos \
+    -nomake examples \
+    -nomake docs \
+    -nomake tools \
+    -no-rpath \
+    -openssl-linked \
+    -optimized-qmake \
+    -dbus \
+    -reduce-relocations \
+    -no-separate-debug-info \
+    -no-gtkstyle \
+    -opengl \
+    -no-openvg \
+    -glib
+
+	msg "starting the build"
+	make
+}
+
+package() {
+  cd $srcdir/$_pkgfqn
+  make INSTALL_ROOT=$pkgdir install
+
+  # Fix wrong path in pkgconfig files
+  find ${pkgdir}/usr/lib32/pkgconfig -type f -name '*.pc' \
+    -exec perl -pi -e "s, -L${srcdir}/?\S+,,g" {} \;
+  # Fix wrong path in prl files
+  find ${pkgdir}/usr/lib32 -type f -name '*.prl' \
+    -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}
