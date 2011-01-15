@@ -1,0 +1,15 @@
+whisperer(){
+    echo "----------------------------------------------------------------" 
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "lib32-catalyst-utils works now with [lib32] repository"
+    echo "You _NEED_ to read this:"
+    echo "----------------------------------------------------------------"
+}
+
+post_install() {
+    whisperer
+}
+
+post_upgrade() {
+    whisperer
+}
