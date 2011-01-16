@@ -5,7 +5,7 @@
 
 _pkgbasename=libxml2
 pkgname=lib32-$_pkgbasename
-pkgver=2.7.7
+pkgver=2.7.8
 pkgrel=1
 pkgdesc="XML parsing library, version 2 (32-bit)"
 arch=(x86_64)
@@ -15,9 +15,11 @@ makedepends=(gcc-multilib)
 options=('!libtool')
 url="http://www.xmlsoft.org/"
 source=(ftp://ftp.xmlsoft.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz
-		largefile64.patch)
-md5sums=('9abc9959823ca9ff904f1fbcf21df066'
-		 '5ad4915665608ebfa5b89f7908467a72')
+		largefile64.patch
+		shared_library_versionning.patch)
+md5sums=('8127a65e8c3b08856093099b52599c86'
+		 '5ad4915665608ebfa5b89f7908467a72'
+		 '84aeb7c6db023eae044e95d9211dba53')
 
 build() {
   export CC="gcc -m32"
@@ -28,7 +30,7 @@ build() {
 #  patch -Np1 -i "${srcdir}/shared_library_versionning.patch"
 #  patch -Np1 -i "${srcdir}/largefile64.patch" || return 1
   autoreconf -fi
-  ./configure --prefix=/usr --without-python --with-threads --with-history --libdir=/usr/lib32
+  ./configure --prefix=/usr --with-threads --with-history --libdir=/usr/lib32
   make
 }
 
