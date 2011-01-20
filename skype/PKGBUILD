@@ -1,15 +1,11 @@
-#
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-# include global config
-source ../_buildscripts/${current_repo}-${_arch}-cfg.conf
-
 pkgname=skype
 pkgver=2.1.0.81
-pkgrel=5
+pkgrel=1
 arch=(i686 x86_64)
 pkgdesc="P2P software for high-quality voice communication"
 url="http://www.skype.com/"
@@ -25,18 +21,18 @@ if [[ $CARCH == i686 ]]; then
               'libcanberra: XDG sound support'
               'pulseaudio: PulseAudio support')
 else
-  depends+=(lib32-{qt,alsa-lib,libxss,libxv})
-  optdepends=('lib32-v4l-utils: webcam support'
-              'lib32-libcanberra: XDG sound support'
-              'lib32-pulseaudio: PulseAudio support')
+  depends+=(lib32-{qt,alsa-lib,libxss,libxv,v4l-utils})
+  optdepends=('lib32-libcanberra: XDG sound support'
+              'lib32-libpulse: PulseAudio support')
   conflicts+=(bin32-skype bin32-skype-staticqt)
   provides=("bin32-skype=$pkgver")
   replaces=(bin32-skype)
 fi
 
-source=(http://download.skype.com/linux/$pkgname-$pkgver.tar.bz2)
-md5sums=('5411dcf89e33f53df5fbe5958bbaef54')
-         
+source=(http://download.skype.com/linux/$pkgname-$pkgver.tar.bz2 PERMISSION)
+md5sums=('5411dcf89e33f53df5fbe5958bbaef54'
+         '26e1772379d4d4df9471b6ed660a6d97')
+
 package() {
   cd "$srcdir/$pkgname-$pkgver"
 

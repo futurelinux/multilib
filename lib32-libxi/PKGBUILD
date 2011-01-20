@@ -3,22 +3,37 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=libxi
-pkgname=lib32-$_pkgsourcename
-pkgver=1.3
-pkgrel=2
-pkgdesc="X11 Input extension library"
-url="http://xorg.freedesktop.org/"
+_pkgbasename=libxi
+pkgname=lib32-$_pkgbasename
+pkgver=1.3.2
+pkgrel=1
+pkgdesc="X11 Input extension library (32-bit)"
 arch=('x86_64')
+url="http://xorg.freedesktop.org"
+depends=('lib32-libxext' 'inputproto' $_pkgbasename)
+makedepends=('pkgconfig' 'xorg-util-macros' gcc-multilib)
+options=(!libtool)
 license=('custom')
-groups=('lib32')
-depends=('lib32-libxext')
-source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+source=(${url}/releases/individual/lib/libXi-${pkgver}.tar.bz2)
+md5sums=('26f93781356b1fdde08f7ee9cd5884d6')
 
 build() {
-	cd $srcdir
-	mkdir -p $pkgdir/opt/lib32/usr/lib
-	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/libXi-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static \
+    --libdir=/usr/lib32
+  make
 }
 
-md5sums=('4e5d75a7898376ca783e1264e17b2223')
+package() {
+  cd "${srcdir}/libXi-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

@@ -1,23 +1,50 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 
-pkgname=lib32-util-linux-ng
+_pkgbasename=util-linux-ng
+pkgname=lib32-$_pkgbasename
 pkgver=2.17.2
-pkgrel=2
-pkgdesc="Miscellaneous system utilities for Linux"
-arch=('x86_64')
+pkgrel=1
+pkgdesc="Miscellaneous system utilities for Linux (32-bit)"
 url="http://userweb.kernel.org/~kzak/util-linux-ng/"
+arch=('x86_64')
+depends=('lib32-glibc' $_pkgbasename)
+makedepends=('gcc-multilib')
 license=('GPL2')
-depends=('lib32-glibc')
-source=(http://www.chakra-project.org/repo/core/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
+options=('!libtool' '!emptydirs')
+source=(ftp://ftp.kernel.org/pub/linux/utils/${_pkgbasename}/v2.17/${_pkgbasename}-${pkgver}.tar.bz2
+        fsck-static.patch)
+
+md5sums=('4635725a3eef1c57090bac8ea5e082e6'
+         '499f80605a50d1c7b27894f3319343e8')
 
 build() {
-  install -d $pkgdir/opt/lib32/lib/
-  cp -dp $srcdir/lib/* $pkgdir/opt/lib32/lib/
-  install -d $pkgdir/opt/lib32/usr/lib
-  cp -dp $srcdir/usr/lib/*.so $pkgdir/opt/lib32/usr/lib
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
+  # Provide static fsck
+  patch -Np1 -i "${srcdir}/fsck-static.patch" || return 1
+
+  # hardware clock
+  sed -e 's%etc/adjtime%var/lib/hwclock/adjtime%' -i hwclock/hwclock.c
+  mkdir -p "${pkgdir}/var/lib/hwclock"
+
+  export CC="gcc -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  autoreconf
+  automake
+  ./configure --without-ncurses --libdir=/usr/lib32
+
+  make -C shlibs
 }
-md5sums=('c3bdee86adf30f9bb59d7e8f2d553332')
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  make -C shlibs DESTDIR="${pkgdir}" install
+
+  # remove files
+  rm -rf "${pkgdir}"/usr/{include,share}
+}

@@ -5,17 +5,17 @@
 
 _pkgbasename=libxpm
 pkgname=lib32-$_pkgbasename
-pkgver=3.5.8
+pkgver=3.5.9
 pkgrel=1
 pkgdesc="X11 pixmap library (32-bit)"
 arch=(x86_64)
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('lib32-libxt' 'lib32-libxext' $_pkgbasename)
-makedepends=('xorg-util-macros' 'lib32-gcc-libs')
+makedepends=('xorg-util-macros' gcc-multilib)
 options=('!libtool')
-source=(http://chakra-project.org/repo/platform/i686/$_pkgbasename-$pkgver-$pkgrel-i686.pkg.tar.xz)
-md5sums=('2873e6bea95194ab30b8f2e83ec41b86')
+source=(${url}/releases/individual/lib/libXpm-${pkgver}.tar.bz2)
+sha1sums=('38258a1d589d3f157e0338d0fd13eec11bc4a39b')
 
 build() {
   export CC="gcc -m32"

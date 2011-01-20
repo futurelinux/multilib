@@ -1,5 +1,7 @@
-# 
-# Maintainer: abveritas <abveritas@chakra-project.org>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
@@ -7,7 +9,7 @@
 pkgbase='gcc-multilib'
 pkgname=('gcc-multilib' 'gcc-libs-multilib' 'lib32-gcc-libs' 'gcc-fortran-multilib' 'gcc-objc-multilib' 'gcc-ada-multilib')
 pkgver=4.5.2
-pkgrel=2
+pkgrel=1
 #_snapshot=4.5-20100610
 _libstdcppmanver=4.5.2     # Note: check source directory name when updating this
 pkgdesc="The GNU Compiler Collection for multilib"
@@ -17,7 +19,7 @@ url="http://gcc.gnu.org"
 makedepends=('binutils-multilib>=2.20.1' 'libmpc>=0.8.2-1' 'cloog-ppl>=0.15.9-2' 'elfutils' 'gcc-ada-multilib'
              'glibc>=2.11.1-2' 'lib32-glibc>=2.12.1')
 options=('!libtool' '!emptydirs')
-source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-{core,g++,fortran,objc,ada,testsuite}-${pkgver}.tar.bz2
+source=(http://gcc.fyxm.net/releases/gcc-${pkgver}/gcc-{core,g++,fortran,objc,ada,testsuite}-${pkgver}.tar.bz2
 	#ftp://gcc.gnu.org/pub/gcc/snapshots/${_snapshot}/gcc-{core,g++,fortran,objc,ada,testsuite}-${_snapshot}.tar.bz2
 	ftp://gcc.gnu.org/pub/gcc/libstdc++/doxygen/libstdc++-api-${_libstdcppmanver}.man.tar.bz2
 	gcc_pure64.patch

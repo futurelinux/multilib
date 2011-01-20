@@ -1,12 +1,12 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 
 _pkgbasename=attr
 pkgname=lib32-$_pkgbasename
 pkgver=2.4.44
-pkgrel=5
+pkgrel=1
 pkgdesc="Extended attribute support library for ACL support (32-bit)"
 arch=(x86_64)
 url="http://oss.sgi.com/projects/xfs/"
@@ -14,8 +14,8 @@ license=('LGPL')
 depends=('lib32-glibc' $_pkgbasename) 
 makedepends=('gcc-multilib' 'gettext')
 options=('!libtool')
-source=(http://www.chakra-project.org/repo/core/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
-md5sums=('0f118c8b7a62735bc23993d783d2e3bc')
+source=(ftp://ftp.archlinux.org/other/attr/attr-${pkgver}.src.tar.gz)
+sha256sums=('e01fa00686072a02dddf994e6217be950f51c1dc0852ad2e210c48b6e8de793a')
 
 build() {
   cd $srcdir/attr-$pkgver 

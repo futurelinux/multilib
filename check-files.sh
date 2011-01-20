@@ -20,7 +20,6 @@ _script_name="Check files"
 _build_arch="$_arch"
 _cur_repo=`pwd | awk -F '/' '{print $NF}'`
 _needed_functions="config_handling helpers messages"
-
 # load functions
 for subroutine in ${_needed_functions}
 do

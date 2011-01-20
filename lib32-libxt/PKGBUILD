@@ -1,23 +1,39 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 
-_pkgsourcename=libxt
-pkgname=lib32-$_pkgsourcename
+_pkgbasename=libxt
+pkgname=lib32-$_pkgbasename
 pkgver=1.0.8
 pkgrel=1
-pkgdesc="X11 toolkit intrinsics library"
+pkgdesc="X11 toolkit intrinsics library (32-bit)"
+arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
-arch=('x86_64')
-groups=('lib32')
-depends=('lib32-libsm' 'lib32-libx11')
-source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+depends=('lib32-libsm' 'lib32-libx11' $_pkgbasename)
+makedepends=('xorg-util-macros' 'gcc-multilib')
+options=('!libtool')
+source=(${url}/releases/individual/lib/libXt-${pkgver}.tar.bz2)
+sha1sums=('d5e3dfba90a12169771399b3e2ccae07243489c9')
 
 build() {
-	cd $srcdir
-	mkdir -p $pkgdir/opt/lib32/usr/lib
-	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+  cd "${srcdir}/libXt-${pkgver}"
+
+  export CC="gcc -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static --libdir=/usr/lib32
+  make
 }
-md5sums=('8f96fc8274d98c1246d26ccb99ea9803')
+
+package() {
+  cd "${srcdir}/libXt-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share}
+
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname" 
+}

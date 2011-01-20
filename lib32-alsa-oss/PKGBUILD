@@ -1,22 +1,35 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
 #
-# Chakra Packages for Chakra, part of chakra-project.org
-#
-# contributor (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 
-pkgname=lib32-alsa-oss
+_pkgbasename=alsa-oss
+pkgname=lib32-${_pkgbasename}
 pkgver=1.0.17
 pkgrel=1
 pkgdesc="OSS compatibility library (32 bit)"
-url="http://www.alsa-project.org"
-license=(GPL)
-options=(!libtool)
-groups=(lib32)
 arch=(x86_64)
+license=('GPL')
+url="http://www.alsa-project.org"
+options=(!libtool)
 depends=('lib32-glibc' 'lib32-alsa-lib' 'alsa-oss')
-source=(http://www.chakra-project.org/repo/platform/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel}-i686.pkg.tar.xz)
-md5sums=('efbbae261402689efb3fb0f931030249')
+source=(ftp://ftp.alsa-project.org/pub/oss-lib/${_pkgbasename}-$pkgver.tar.bz2)
+md5sums=('1b1850c2fc91476a73d50f537cbd402f')
 
 build() {
-  mkdir -p $pkgdir/opt/lib32
-  cp -a "$srcdir/usr" "$pkgdir/opt/lib32/usr"
+  cd $srcdir/${_pkgbasename}-$pkgver
+
+  export CC='gcc -m32'
+  export PKG_CONFIG_PATH=/usr/lib32/pkgconfig
+  ./configure --prefix=/usr  --libdir=/usr/lib32
+  make
+}
+
+package() {
+  cd $srcdir/${_pkgbasename}-$pkgver
+
+  make DESTDIR="$pkgdir" install
+
+  # Clean up lib32 package
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
 }

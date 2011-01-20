@@ -1,29 +1,40 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Cal‡ <jiveaxe@gmail.com>
+# maintainer (x86_64): Giuseppe Cal√† <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=libjpeg
-pkgname=lib32-$_pkgsourcename
+_pkgbasename=libjpeg
+pkgname=lib32-$_pkgbasename
 pkgver=8.0.2
+_pkgver=8b
 pkgrel=1
-pkgdesc="Library of JPEG support functions"
-url="ftp://ftp.uu.net/graphics/jpeg/"
+pkgdesc="Library of JPEG support functions (32-bit)"
+arch=('x86_64')
+url="http://www.ijg.org/"
 license=('custom')
-arch=(x86_64)
-groups=('lib32')
-depends=('lib32-glibc')
-source=(http://chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz 
-\
-	LICENSE)
+depends=('lib32-glibc' $_pkgbasename)
+makedepends=('libtool' 'gcc-multilib')
+options=('!libtool')
+source=(http://www.ijg.org/files/jpegsrc.v${_pkgver}.tar.gz)
+md5sums=('e022acbc5b36cd2cb70785f5b575661e')
+
 build() {
-	cd $srcdir
-	mkdir -p $pkgdir/opt/lib32/usr/lib
-	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+  cd $srcdir/jpeg-${_pkgver}
 
-	install -Dm644 $srcdir/LICENSE \
- 	$pkgdir/opt/lib32/usr/share/licenses/$_pkgsourcename/LICENSE
+  export CC="gcc -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  ./configure --prefix=/usr --enable-shared --enable-static \
+    --libdir=/usr/lib32
+  make
 }
-md5sums=('31e3eeaddd36553d17c60e775df6fce7'
-         '5ec5b8b1cb747c855d84f83200cedc1f')
 
+package() {
+  cd $srcdir/jpeg-${_pkgver}
+  make DESTDIR="$pkgdir" install
+  
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname" 
+}

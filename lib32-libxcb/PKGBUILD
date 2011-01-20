@@ -5,8 +5,8 @@
 
 _pkgbasename=libxcb
 pkgname=lib32-libxcb
-pkgver=1.6
-pkgrel=2
+pkgver=1.7
+pkgrel=1
 pkgdesc="X11 client-side library"
 arch=(x86_64)
 url="http://xcb.freedesktop.org/"
@@ -19,8 +19,8 @@ options=('!libtool')
 license=('custom')
 source=(${url}/dist/${_pkgbasename}-${pkgver}.tar.bz2
         libxcb-1.1-no-pthread-stubs.patch)
-sha1sums=('b0a6fec4c02ec876f32bbd4b64ffe8a25f0da518'
-          '518f70ecbff04e1078cd64edf7b497dbaf33d19b')
+sha1sums=('7540f0587907bce421914f0ddb813810cb2f36f8'
+          '3455e84642283bc91c8313af319002a20bbcbdf4')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"

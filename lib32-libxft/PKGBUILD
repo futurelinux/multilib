@@ -1,23 +1,38 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Cal‡ <jiveaxe@gmail.com>
+# maintainer (x86_64): Giuseppe Cal√† <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=libxft
-pkgname=lib32-$_pkgsourcename
+_pkgbasename=libxft
+pkgname=lib32-$_pkgbasename
 pkgver=2.1.14
 pkgrel=1
-pkgdesc="FreeType-based font drawing library for X"
-url="http://xorg.freedesktop.org/"
-license=('custom')
+pkgdesc="FreeType-based font drawing library for X (32-bit)"
 arch=('x86_64')
-groups=('lib32')
+license=('custom')
+url="http://xorg.freedesktop.org/"
 depends=('lib32-fontconfig' 'lib32-libxrender')
-source=(http://www.chakra-project.org/repo/platform/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+makedepends=('gcc-multilib')
+options=('!libtool')
+source=(${url}/releases/individual/lib/libXft-${pkgver}.tar.bz2)
+md5sums=('254e62a233491e0e1251636536163e20')
 
 build() {
-	cd $srcdir
-	mkdir -p $pkgdir/opt/lib32/usr/lib
-	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd ${srcdir}/libXft-${pkgver}
+  ./configure --prefix=/usr \
+    --libdir=/usr/lib32 --disable-static
+  make
 }
-md5sums=('1585858274f5d76f505791636307dc2e')
+
+package() {
+  cd "${srcdir}/libXft-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

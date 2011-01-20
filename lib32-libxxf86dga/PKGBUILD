@@ -12,13 +12,28 @@ arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libxext' 'xf86dgaproto' $_pkgbasename)
-makedepends=('xorg-util-macros' 'lib32-gcc-libs')
+makedepends=('xorg-util-macros' gcc-multilib)
 options=('!libtool')
-source=(http://chakra-project.org/repo/platform/i686/$_pkgbasename-$pkgver-$pkgrel-i686.pkg.tar.xz)
-md5sums=('565bc5b0e139e5f440776269d93fdb5b')
+source=(${url}/releases/individual/lib/libXxf86dga-${pkgver}.tar.bz2)
+md5sums=('368837d3d7a4d3b4f70be48383e3544e')
 
 build() {
-	cd $srcdir
-	mkdir -p $pkgdir/opt/lib32/usr/lib
-	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/libXxf86dga-${pkgver}"
+  ./configure --prefix=/usr --disable-static \
+    --libdir=/usr/lib32
+  make
+}
+
+package() {
+  cd "${srcdir}/libXxf86dga-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }

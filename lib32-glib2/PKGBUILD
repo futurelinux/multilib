@@ -1,23 +1,39 @@
-# $Id: PKGBUILD 16637 2010-05-04 16:07:59Z ibiru $
-# Maintainer:  Ionut Biru <ibiru@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-# Contributor: Mikko Sepp‰l‰ <t-r-a-y@mbnet.fi>
-_pkgsourcename=glib2
-pkgname=lib32-$_pkgsourcename
-pkgver=2.26.0
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer (x86_64): Giuseppe Cal√† <jiveaxe@gmail.com>
+
+_pkgbasename=glib2
+pkgname=lib32-$_pkgbasename
+pkgver=2.26.1
 pkgrel=1
-pkgdesc="Common C routines used by GTK+ 2.4 and other libs"
-arch=('x86_64')
+pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
 url="http://www.gtk.org/"
+arch=('x86_64')
 license=('LGPL')
-groups=('lib32')
-depends=('lib32-glibc')
-source=(http://www.chakra-project.org/repo/core-testing/i686/$_pkgsourcename-$pkgver-$pkgrel-i686.pkg.tar.xz)
+depends=('lib32-pcre' 'lib32-zlib' 'lib32-dbus-core' $_pkgbasename)
+makedepends=('gcc-multilib')
+options=('!libtool' '!docs')
+source=(http://ftp.gnome.org/pub/GNOME/sources/glib/2.26/glib-${pkgver}.tar.bz2)
+sha256sums=('7a74ff12b6b9dee1f2d0e520b56b68b621920c4f4250bdf23468e515625c28d5')
 
 build() {
-	cd $srcdir
-	mkdir -p $pkgdir/opt/lib32/usr/lib
-	cp -dp usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
-}
-md5sums=('1b5784b37ed94361943751466115b5f3')
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
+  cd "${srcdir}/glib-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32 \
+      --enable-static --enable-shared --with-pcre=system --disable-fam
+  make
+}
+
+package() {
+  cd "${srcdir}/glib-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/{etc,usr/{share,include}}
+
+  cd "${pkgdir}"/usr/bin
+  mv gio-querymodules gio-querymodules-32
+  rm -f gdbus glib* gobject-query gsettings gtester*
+}
