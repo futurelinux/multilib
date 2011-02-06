@@ -90,6 +90,17 @@ sync_up()
 
 clear
 
+msg "_script_name=$_script_name"
+msg "_build_arch=$_build_arch"
+msg "_cur_repo=$_cur_repo"
+msg "_sync_folder=$_sync_folder"
+msg "_sync_user=$_sync_user"
+msg "_sync_server=$_sync_server"
+msg "_sync_dir=$_sync_dir"
+msg "_cur_repo=$_cur_repo"
+msg "_arch=$_arch"
+msg "_pkgz_to_remove=$_pkgz_to_remove"
+
 title "${_script_name} - $_cur_repo-$_build_arch"
 
 if [ "${_args}" = "" ] ; then
