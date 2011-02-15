@@ -5,7 +5,7 @@
 
 _pkgbasename=util-linux-ng
 pkgname=lib32-$_pkgbasename
-pkgver=2.17.2
+pkgver=2.19
 pkgrel=1
 pkgdesc="Miscellaneous system utilities for Linux (32-bit)"
 url="http://userweb.kernel.org/~kzak/util-linux-ng/"
@@ -14,17 +14,12 @@ depends=('lib32-glibc' $_pkgbasename)
 makedepends=('gcc-multilib')
 license=('GPL2')
 options=('!libtool' '!emptydirs')
-source=(ftp://ftp.kernel.org/pub/linux/utils/${_pkgbasename}/v2.17/${_pkgbasename}-${pkgver}.tar.bz2
-        fsck-static.patch)
+source=(ftp://ftp.kernel.org/pub/linux/utils/${_pkgbasename}/v${pkgver}/util-linux-${pkgver}.tar.bz2)
 
-md5sums=('4635725a3eef1c57090bac8ea5e082e6'
-         '499f80605a50d1c7b27894f3319343e8')
+md5sums=('590ca71aad0b254e2631d84401f28255')
 
 build() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-
-  # Provide static fsck
-  patch -Np1 -i "${srcdir}/fsck-static.patch" || return 1
+  cd "${srcdir}/util-linux-${pkgver}"
 
   # hardware clock
   sed -e 's%etc/adjtime%var/lib/hwclock/adjtime%' -i hwclock/hwclock.c
@@ -37,14 +32,18 @@ build() {
   automake
   ./configure --without-ncurses --libdir=/usr/lib32
 
-  make -C shlibs
+#  make -C shlibs
+   make
 }
 
 package() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${srcdir}/util-linux-${pkgver}"
 
-  make -C shlibs DESTDIR="${pkgdir}" install
+#  make -C shlibs DESTDIR="${pkgdir}" install
+   make DESTDIR="${pkgdir}" install
 
   # remove files
-  rm -rf "${pkgdir}"/usr/{include,share}
+  rm -rf "${pkgdir}"/{sbin,bin}
+  rm -rf "${pkgdir}"/usr/{include,share,sbin,bin}
 }
+
