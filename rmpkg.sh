@@ -19,23 +19,27 @@
 # global vars
 #
 _script_name="Remove Package(s)"
-_cur_repo=`pwd | awk -F '/' '{print $NF}'`
+_cur_repo=$(pwd | awk -F '/' '{print $NF}')
 _needed_functions="config_handling helpers messages"
-_args=`echo $1`
 _build_arch="$_arch"
+_sarch="x32"
+_args=`echo $1`
+[[ ${_arch} = *x*64* ]] && _sarch="x64"
 
 # helper functions
-
 for subroutine in ${_needed_functions} ; do
-    source _buildscripts/functions/${subroutine}
+	source _buildscripts/functions/${subroutine}
 done
 
 # Determine the sync folder
 if [[ ${_cur_repo} = *-testing ]] && [[ ${_cur_repo} != lib32-testing ]] ; then
-    _sync_folder="_testing/"
+	_sync_folder="_testing-${_sarch}/"
+elif [[ ${_cur_repo} = *-unstable ]] ; then
+	_sync_folder="_unstable-${_sarch}/"
 else
-    _sync_folder="_repo/remote/"
+	_sync_folder="_repo/remote/"
 fi
+
 
 #
 # main
@@ -43,44 +47,106 @@ fi
 
 sync_down()
 {
-    msg "syncing down"
-    export RSYNC_PASSWORD=$(echo ${_rsync_pass})
-    if [ "${_sync_folder}" == "_testing/" ] ; then 
-	rsync -avh --progress ${_rsync_user}@${_rsync_server}::dev/testing/$_build_arch/* ${_sync_folder}
-    else
-	rsync -avh --progress ${_rsync_user}@${_rsync_server}::${_rsync_dir}/* ${_sync_folder}
-    fi
+	msg "syncing down"
+	export RSYNC_PASSWORD=$(echo ${_rsync_pass})
+	if [ "${_sync_folder}" = "_testing-${_sarch}/" ] ; then 
+		rsync -avh --progress ${_rsync_user}@${_rsync_server}::dev/testing/$_build_arch/* ${_sync_folder}
+	elif [ "${_sync_folder}" = "_unstable-${_sarch}/" ] ; then 
+		rsync -avh --progress ${_rsync_user}@${_rsync_server}::dev/unstable/$_build_arch/* ${_sync_folder}
+	else
+		rsync -avh --progress ${_rsync_user}@${_rsync_server}::${_rsync_dir}/* ${_sync_folder}
+	fi
+}
+
+check_files()
+{
+	# Get the file list in the server
+	export RSYNC_PASSWORD=$(echo ${_rsync_pass})
+	if [ "${_sync_folder}" = "_testing-${_sarch}/" ] ; then 
+		repo_files=$(rsync -avh --list-only ${_rsync_user}@${_rsync_server}::dev/testing/$_arch/* | awk -F ' ' '{print $NF}')
+	elif [ "${_sync_folder}" = "_unstable-${_sarch}/" ] ; then
+		repo_files=$(rsync -avh --list-only ${_rsync_user}@${_rsync_server}::dev/unstable/$_arch/* | awk -F ' ' '{print $NF}')
+	else
+		repo_files=$(rsync -avh --list-only ${_rsync_user}@${_rsync_server}::${_rsync_dir}/* | awk -F ' ' '{print $NF}')
+	fi
+
+	# Get the file list in the sync folder
+	local_files=$(ls -a ${_sync_folder}* | awk -F '/' '{print $NF}')
+	remove_list=""
+
+	for parse_file in ${local_files} ; do
+		file_exist="false"
+		for compare_file in ${repo_files} ; do
+			if [ "${parse_file}" = "${compare_file}" ] ; then
+				file_exist="true"
+			fi
+		done
+		if [ "${file_exist}" = "false" ] ; then
+			remove_list="${remove_list} ${parse_file}"
+		fi
+	 done
+
+	if [ "$remove_list" != "" ] ; then
+		msg "The following packages in ${_sync_folder} don't exist in the sever:"
+		newline
+		echo "${remove_list}"
+		newline
+		question "Do you want to remove the package(s)? (y/n)"
+		while true ; do
+			read yn
+			case ${yn} in
+			[yY]* )
+				newline ;
+				remove_packages;
+				break
+			;;
+			[nN]* )
+				newline ;
+				title "The files will be keeped..." ;
+				newline ;
+				break
+			;;
+			* )
+				echo "Enter (y)es or (n)o"
+			;;
+			esac
+		done
+	fi
 }
 
 remove_packages()
 {
-    # remove the package(s) from sync folder
-    msg "removing the packages(s) from ${_sync_folder}"
-    pushd $_sync_folder &>/dev/null
-        rm -rf ${_pkgz_to_remove}
-    popd &>/dev/null
+	# remove the package(s) from sync folder
+	msg "removing the packages(s) from ${_sync_folder}"
+	pushd $_sync_folder &>/dev/null
+		rm -rf ${_pkgz_to_remove}
+	popd &>/dev/null
 }
 
 sync_up()
 {
-    # create new pacman database
-    msg "creating pacman database"
-    rm -rf ${_sync_folder}*.db.tar.*
-    pushd ${_sync_folder}
-	if [ "${_sync_folder}" == "_testing/" ] ; then 
-	    repo-add testing.db.tar.gz *.pkg.*
-	else
-	    repo-add ${_cur_repo}.db.tar.gz *.pkg.*
-	fi
-    popd
+	# create new pacman database
+	msg "creating pacman database"
+	rm -rf ${_sync_folder}*.db.tar.*
+	pushd ${_sync_folder} &>/dev/null
+		if [ "${_sync_folder}" = "_testing-${_sarch}/" ] ; then
+			repo-add testing.db.tar.gz *.pkg.*
+		elif [ "${_sync_folder}" = "_unstable-${_sarch}/" ] ; then 
+			repo-add unstable.db.tar.gz *.pkg.*
+		else
+			repo-add ${_cur_repo}.db.tar.gz *.pkg.*
+		fi
+	popd &>/dev/null
 
-    # sync local -> server, removing the packages
-    msg "sync local -> server"
-    if [ "${_sync_folder}" == "_testing/" ] ; then 
-	rsync -avh --progress --delay-updates --delete-after ${_sync_folder} ${_rsync_user}@${_rsync_server}::dev/testing/$_arch/
-    else
-	rsync -avh --progress --delay-updates --delete-after ${_sync_folder} ${_rsync_user}@${_rsync_server}::${_rsync_dir}
-    fi
+	# sync local -> server, removing the packages
+	msg "sync local -> server"
+	if [ "${_sync_folder}" = "_testing-${_sarch}/" ] ; then 
+		rsync -avh --progress --delay-updates --delete-after  ${_sync_folder} ${_rsync_user}@${_rsync_server}::dev/testing/$_arch/
+	elif [ "${_sync_folder}" = "_unstable-${_sarch}/" ] ; then 
+		rsync -avh --progress --delay-updates --delete-after  ${_sync_folder} ${_rsync_user}@${_rsync_server}::dev/unstable/$_arch/
+	else
+		rsync -avh --progress --delay-updates --delete-after  ${_sync_folder} ${_rsync_user}@${_rsync_server}::${_rsync_dir}
+	fi
 }
 
 
@@ -89,25 +155,13 @@ sync_up()
 #
 
 clear
-
-msg "_script_name=$_script_name"
-msg "_build_arch=$_build_arch"
-msg "_cur_repo=$_cur_repo"
-msg "_sync_folder=$_sync_folder"
-msg "_sync_user=$_sync_user"
-msg "_sync_server=$_sync_server"
-msg "_sync_dir=$_sync_dir"
-msg "_cur_repo=$_cur_repo"
-msg "_arch=$_arch"
-msg "_pkgz_to_remove=$_pkgz_to_remove"
-
 title "${_script_name} - $_cur_repo-$_build_arch"
 
 if [ "${_args}" = "" ] ; then
-    error " !! You need to specify a target to remove,"
-    error "    single names like \"attica\" or wildcards (*) are allowed."
-    newline
-    exit 1
+	error " !! You need to specify a target to remove,"
+	error "    single names like \"attica\" or wildcards (*) are allowed."
+	newline
+	exit 1
 fi
 
 check_configs
@@ -119,13 +173,17 @@ check_accounts
 # First get the actual packages from the repo
 sync_down
 
+# Check if there's any outdated file
+msg "Searching removed files"
+check_files
+
 # Generate the list of packages to remove
 newline
 _args=${_args}*
-_pkgz_to_remove=`ls ${_sync_folder}/${_args} | cut -d/ -f3`
+_pkgz_to_remove=$(ls ${_sync_folder}${_args} | awk -F '/' '{print $NF}')
 
 if [ "${_pkgz_to_remove}" = "" ] ; then
-    exit
+	exit
 fi
 
 warning "The following packages will be removed:"
@@ -133,32 +191,31 @@ newline
 echo "${_pkgz_to_remove}"
 
 newline
-question "Do you really want to remove the package(s)? (y/n)"
+question "Do you really want to remove the package(s)? (y/n) "
 
 while true ; do
-    read yn
+	read yn
+	case $yn in
+		[yY]* )
+			newline ;
+			remove_packages ;
+			sync_up ;
+			newline ;
+			title "All done" ;
+			newline ;
+			break
+		;;
 
-    case $yn in
-        [yY]* )
-            newline ;
-            remove_packages ;
-            sync_up ;
-            newline ;
-            title "All done" ;
-            newline ;
-            break
-        ;;
+		[nN]* )
+			exit
+		;;
 
-        [nN]* )
-            exit
-        ;;
+		q* )
+			exit
+		;;	
 
-        q* )
-            exit
-        ;;
-
-        * )
-            echo "Enter (y)es or (n)o"
-        ;;
-    esac
+		* )
+			echo "Enter (y)es or (n)o"
+		;;
+	esac
 done
