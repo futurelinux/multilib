@@ -24,6 +24,7 @@ sync-complete.sh
 sync-down.sh
 sync-up-nodb.sh
 sync-up.sh
+remove.sh
 
 *-cfg.conf
 *-makepkg.conf
