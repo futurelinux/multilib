@@ -6,7 +6,7 @@
 _pkgbasename=sdl_mixer
 pkgname=lib32-$_pkgbasename
 pkgver=1.2.10
-pkgrel=1
+pkgrel=2
 pkgdesc="A simple multi-channel audio mixer (32-bit)"
 arch=('x86_64')
 url="http://www.libsdl.org/projects/SDL_mixer/"
@@ -39,4 +39,6 @@ package() {
 
   make DESTDIR="${pkgdir}" install
   rm -rf "$pkgdir/usr/include"
+  cd "$pkgdir/usr/lib32/" || return 1
+  ln -sf libSDL_mixer-1.2.so.10.0.0 libSDL_mixer-1.2.so.0
 }
