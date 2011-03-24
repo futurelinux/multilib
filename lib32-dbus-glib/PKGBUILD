@@ -1,0 +1,42 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+_pkgbasename=dbus-glib
+
+pkgname=lib32-${_pkgbasename}
+pkgver=0.92
+pkgrel=1
+pkgdesc="GLib bindings for DBUS (32-bit)"
+arch=(x86_64)
+license=('GPL')
+url="http://www.freedesktop.org/wiki/Software/DBusBindings"
+depends=('lib32-dbus-core' 'lib32-glib2' ${_pkgbasename})
+makedepends=('gcc-multilib')
+options=(!libtool !emptydirs)
+source=(http://dbus.freedesktop.org/releases/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
+md5sums=('b595b36890c4f9f8f5d5dec131c495f8')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libdir=/usr/lib32 \
+      --enable-static=no --enable-bash-completion=no
+  make
+  make DESTDIR="${pkgdir}" install
+}
+
+package() {
+    cd "${srcdir}/dbus-glib-${pkgver}"
+    make DESTDIR=${pkgdir} install
+
+    rm -rf "${pkgdir}"/usr/{bin,include,lib,share}
+    rm -rf "${pkgdir}"/{etc,var}
+
+    mkdir -p "${pkgdir}/usr/share/licenses"
+    ln -s ${_pkgbasename} "${pkgdir}/usr/share/licenses/${pkgname}"
+}
