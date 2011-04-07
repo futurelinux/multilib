@@ -5,7 +5,7 @@
 
 _pkgbasename=nspr
 pkgname=lib32-$_pkgbasename
-pkgver=4.8.6
+pkgver=4.8.7
 pkgrel=1
 pkgdesc="Netscape Portable Runtime (32-bit)"
 arch=('x86_64')
@@ -16,7 +16,7 @@ makedepends=('zip' 'gcc-multilib')
 options=(!emptydirs)
 source=(ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${_pkgbasename}-${pkgver}.tar.gz
         nspr.pc.in)
-md5sums=('592c275728c29d193fdba8009165990b'
+md5sums=('97e30989a56ab813453b71261849c200'
          'bce1611f3117b53fc904cab549c09967')
 
 build() {
