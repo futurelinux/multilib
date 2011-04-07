@@ -5,13 +5,13 @@
 
 _pkgbasename=nss
 pkgname=lib32-$_pkgbasename
-pkgver=3.12.8
+pkgver=3.12.9
 pkgrel=1
 pkgdesc="Mozilla's Netscape Security Services Library that implements PKI support (32-bit)"
 arch=('x86_64')
 url="http://www.mozilla.org/projects/security/pki/nss/"
 license=('MPL' 'GPL')
-_nsprver=4.8.6
+_nsprver=4.8.7
 depends=("lib32-nspr>=${_nsprver}" 'lib32-sqlite3>=3.6.17' "$_pkgbasename" 'lib32-zlib')
 makedepends=('gcc-multilib' 'perl')
 source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${_pkgbasename}-${pkgver}.tar.gz
@@ -20,7 +20,7 @@ source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/s
         add_spi+cacert_ca_certs.patch
         ssl-renegotiate-transitional.patch)
 options=('!strip')
-md5sums=('40bf1bb0c7567827d3768d1fc6081100'
+md5sums=('bd32f183ca28440c1744650be31a9ccc'
          'e5c97db0c884d5f4cfda21e562dc9bba'
          'c547b030c57fe1ed8b77c73bf52b3ded'
          '7f39c19b1dfd62d7db7d8bf19f156fed'
