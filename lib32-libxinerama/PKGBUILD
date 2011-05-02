@@ -5,7 +5,7 @@
 
 _pkgbasename=libxinerama
 pkgname=lib32-$_pkgbasename
-pkgver=1.1
+pkgver=1.1.1
 pkgrel=1
 pkgdesc="X11 Xinerama extension library (32-bit)"
 arch=(x86_64)
@@ -15,7 +15,7 @@ depends=('lib32-libxext' 'xineramaproto' $_pkgbasename)
 makedepends=('xorg-util-macros' gcc-multilib)
 options=(!libtool)
 source=(${url}/releases/individual/lib/libXinerama-${pkgver}.tar.bz2)
-md5sums=('a2ac01fc0426cdbb713c5d59cf9955ed')
+md5sums=('ecd4839ad01f6f637c6fb5327207f89b')
 
 build() {
   export CC="gcc -m32"
@@ -23,7 +23,8 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/libXinerama-${pkgver}"
-  ./configure --prefix=/usr --libdir=/usr/lib32
+  ./configure --prefix=/usr \
+              --libdir=/usr/lib32
   make
 }
 

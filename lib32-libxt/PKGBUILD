@@ -5,7 +5,7 @@
 
 _pkgbasename=libxt
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.8
+pkgver=1.1.1
 pkgrel=1
 pkgdesc="X11 toolkit intrinsics library (32-bit)"
 arch=(x86_64)
@@ -15,7 +15,7 @@ depends=('lib32-libsm' 'lib32-libx11' $_pkgbasename)
 makedepends=('xorg-util-macros' 'gcc-multilib')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXt-${pkgver}.tar.bz2)
-sha1sums=('d5e3dfba90a12169771399b3e2ccae07243489c9')
+md5sums=('eb22c0a1f172b06b97a3f5ae89768412')
 
 build() {
   cd "${srcdir}/libXt-${pkgver}"
@@ -23,7 +23,10 @@ build() {
   export CC="gcc -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  ./configure --prefix=/usr --sysconfdir=/etc --disable-static --libdir=/usr/lib32
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc \
+              --disable-static \
+              --libdir=/usr/lib32
   make
 }
 
