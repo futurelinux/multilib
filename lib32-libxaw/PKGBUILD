@@ -1,0 +1,35 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+_pkgbasename=libxaw
+pkgname=lib32-$_pkgbasename
+pkgver=1.0.7
+pkgrel=1
+pkgdesc="X11 Athena Widget library (32 bit)"
+arch=('x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('lib32-libxmu' 'lib32-libxpm' "$_pkgbasename>=$pkgver")
+makedepends=('xorg-util-macros' 'gcc-multilib')
+options=('!libtool')
+source=(http://xorg.freedesktop.org/releases/individual/lib/libXaw-${pkgver}.tar.bz2)
+md5sums=('815e74de989ccda684e2baf8d12cf519')
+
+build() {
+  cd "${srcdir}/libXaw-${pkgver}"
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc \
+              --libdir=/usr/lib32 \
+              --disable-static CC='gcc -m32'
+  make
+}
+
+package() {
+  cd "${srcdir}/libXaw-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rf ${pkgdir}/usr/{include,share}
+  mkdir -p ${pkgdir}/usr/share/licenses
+  ln -s ${_pkgbasename} ${pkgdir}/usr/share/licenses/${pkgname}
+}
