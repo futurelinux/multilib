@@ -5,7 +5,7 @@
 
 pkgname=wine_gecko
 pkgver=1.2.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Wine's built-in replacement for Microsoft's Internet Explorer"
 arch=(i686 x86_64)
 url="http://wiki.winehq.org/Gecko"

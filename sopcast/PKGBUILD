@@ -10,7 +10,7 @@ source ../_buildscripts/${current_repo}-${_arch}-cfg.conf
 
 pkgname=sopcast
 pkgver=3.2.6
-pkgrel=1
+pkgrel=2
 pkgdesc="The Streaming Direct Broadcast System based on P2P"
 arch=('i686' 'x86_64')
 url="http://www.sopcast.org"

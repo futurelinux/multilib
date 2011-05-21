@@ -5,7 +5,7 @@
 
 pkgname=zsnes
 pkgver=1.51
-pkgrel=1
+pkgrel=2
 pkgdesc="Super Nintendo emulator"
 url="http://www.zsnes.com/"
 arch=('i686' 'x86_64')

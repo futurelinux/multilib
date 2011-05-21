@@ -6,7 +6,7 @@
 _pkgbasename=libmng
 pkgname=lib32-$_pkgbasename
 pkgver=1.0.10
-pkgrel=1
+pkgrel=2
 pkgdesc="A collection of routines used to create and manipulate MNG format graphics files (32-bit)"
 arch=('x86_64')
 url="http://www.libmng.com/"

@@ -5,8 +5,8 @@
 
 _pkgbasename=libxtst
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.0
-pkgrel=1
+pkgver=1.2.0
+pkgrel=2
 pkgdesc="X11 Testing -- Resource extension library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
@@ -15,7 +15,7 @@ depends=('lib32-libxext' 'lib32-libxi' 'recordproto' 'inputproto' $_pkgbasename)
 makedepends=('gcc-multilib' 'xorg-util-macros')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXtst-${pkgver}.tar.bz2)
-md5sums=('dd6f3e20b87310187121539f9605d977')
+sha1sums=('9fb06ed599caf7f9e7115cbbfadf02b47c17aa72')
 
 build() {
   cd "${srcdir}/libXtst-${pkgver}"

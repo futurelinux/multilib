@@ -6,7 +6,7 @@
 _pkgbasename=libjpeg
 pkgname=lib32-${_pkgbasename}6
 pkgver=6b
-pkgrel=2
+pkgrel=3
 _pkgrel32=6
 pkgdesc="An older version of a library of JPEG support functions (32-bit)"
 url="ftp://ftp.uu.net/graphics/jpeg/"

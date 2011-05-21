@@ -5,8 +5,8 @@
 
 _pkgbasename=qt
 pkgname=lib32-$_pkgbasename
-pkgver=4.7.2
-pkgrel=1
+pkgver=4.7.3
+pkgrel=2
 #kdeqtver=b427b5e64483612122e56104552a9704f6013680
 pkgdesc='A cross-platform application and UI framework (32-bit)'
 arch=('x86_64')
@@ -20,9 +20,9 @@ options=('!libtool')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
 source=("ftp://ftp.qt.nokia.com/qt/source/${_pkgfqn}.tar.gz"
 #		"http://chakra-project.org/sources/qt/kde-qt-${kdeqtver}.patch.gz"
-		"http://chakra-project.org/sources/qt/qt-${pkgver}-appmenu.patch")
+		"appmenu.patch")
 
-md5sums=('66b992f5c21145df08c99d21847f4fdb'
+md5sums=('49b96eefb1224cc529af6fe5608654fe'
 #	 'cc361e2dff48a56cff9a1649cfc004b2'
          '7ca519c824d67cfae0281ec50af24ad8')
 
@@ -36,8 +36,8 @@ _create-kdeqt-patch() {
 	  git checkout --track -b ${pkgver}-patched origin/${pkgver}-patched
 	  local kdeqtver=$(git --no-pager show --format='%H' "${pkgver}-patched" | head -1)
 	  git diff "v${pkgver}..${pkgver}-patched" | gzip > "${codir}/kde-qt-${kdeqtver}.patch.gz"
-          popd
-          mv "${codir}/kde-qt-${kdeqtver}.patch.gz" .
+      popd
+      mv "${codir}/kde-qt-${kdeqtver}.patch.gz" .
 	  rm -rf "${codir}"
 	  md5sum kde-qt-${kdeqtver}.patch.gz
 	  echo "change kdeqtver to $kdeqtver"
@@ -57,7 +57,7 @@ build() {
 
 	msg "apply other patches"
 	# apply appmenu patch from Aurelien Gateau
-	patch -Np1 -i ${srcdir}/qt-${pkgver}-appmenu.patch || return 1
+	patch -Np1 -i ${srcdir}/appmenu.patch || return 1
 	cp ${srcdir}/${_pkgfqn}/src/gui/widgets/qabstractmenubarimpl_p.h ${srcdir}/${_pkgfqn}/include/QtGui/private/  || return 1
 
 	sed -e "s|-O2|$CXXFLAGS -m32|" \

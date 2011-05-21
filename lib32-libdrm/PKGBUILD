@@ -6,7 +6,7 @@
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
 pkgver=2.4.23
-pkgrel=1
+pkgrel=2
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
 license=('custom')

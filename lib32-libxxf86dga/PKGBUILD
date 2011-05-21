@@ -5,8 +5,8 @@
 
 _pkgbasename=libxxf86dga
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.1
-pkgrel=1
+pkgver=1.1.2
+pkgrel=2
 pkgdesc="X11 Direct Graphics Access extension library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
@@ -15,7 +15,7 @@ depends=('lib32-libxext' 'xf86dgaproto' $_pkgbasename)
 makedepends=('xorg-util-macros' gcc-multilib)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXxf86dga-${pkgver}.tar.bz2)
-md5sums=('368837d3d7a4d3b4f70be48383e3544e')
+sha1sums=('333a9f5c61eba896f420969561606551174645cd')
 
 build() {
   export CC="gcc -m32"

@@ -8,8 +8,8 @@
 pkgbase=libtool-multilib
 _pkgbase=libtool
 pkgname=(libtool-multilib lib32-libtool)
-pkgver=2.2.6b
-pkgrel=1
+pkgver=2.4
+pkgrel=2
 pkgdesc="A generic library support script for multilib"
 arch=('x86_64')
 url="http://www.gnu.org/software/libtool"
@@ -17,7 +17,7 @@ license=('GPL')
 makedepends=(sh tar texinfo gcc-multilib)
 options=('!libtool')
 source=(ftp://ftp.gnu.org/pub/gnu/${_pkgbase}/${_pkgbase}-${pkgver}.tar.gz)
-md5sums=('07da460450490148c6d2df0f21481a25')
+md5sums=('b32b04148ecdd7344abc6fe8bd1bb021')
 
 build() {
   cd "$srcdir"
