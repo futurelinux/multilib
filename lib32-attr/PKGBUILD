@@ -5,8 +5,8 @@
 
 _pkgbasename=attr
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.44
-pkgrel=2
+pkgver=2.4.46
+pkgrel=1
 pkgdesc="Extended attribute support library for ACL support (32-bit)"
 arch=(x86_64)
 url="http://oss.sgi.com/projects/xfs/"
@@ -14,8 +14,8 @@ license=('LGPL')
 depends=('lib32-glibc' $_pkgbasename) 
 makedepends=('gcc-multilib' 'gettext')
 options=('!libtool')
-source=(ftp://ftp.archlinux.org/other/attr/attr-${pkgver}.src.tar.gz)
-sha256sums=('e01fa00686072a02dddf994e6217be950f51c1dc0852ad2e210c48b6e8de793a')
+source=(http://download.savannah.gnu.org/releases/${_pkgbasename}/${_pkgbasename}-${pkgver}.src.tar.gz)
+sha256sums=('dcd69bdca7ff166bc45141eddbcf21967999a6b66b0544be12a1cc2fd6340e1f')
 
 build() {
   cd $srcdir/attr-$pkgver 

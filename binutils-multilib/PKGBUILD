@@ -8,7 +8,7 @@
 pkgname=binutils-multilib
 _pkgname=binutils
 pkgver=2.21
-pkgrel=2
+pkgrel=3
 _date=20110421
 pkgdesc="A set of programs to assemble and manipulate binary and object files for multilib"
 arch=('x86_64')

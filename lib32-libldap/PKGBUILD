@@ -5,8 +5,8 @@
 
 _pkgbasename=libldap
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.23
-pkgrel=2
+pkgver=2.4.24
+pkgrel=1
 pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries (32-bit)"
 arch=('x86_64')
 license=('custom')
@@ -16,7 +16,7 @@ makedepends=(gcc-multilib)
 options=('!libtool')
 source=("ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-${pkgver}.tgz"
         'ntlm.patch')
-md5sums=('90150b8c0d0192e10b30157e68844ddf'
+md5sums=('116fe1e23a7b67686d5e62274367e6c0'
          'dfa9eb6f2fd9d0a3dab0e1860923489e')
 
 build() {
@@ -31,12 +31,12 @@ build() {
   ./configure --prefix=/usr \
               --libexecdir=/usr/sbin \
               --sysconfdir=/etc \
-	      --mandir=/usr/share/man \
+              --mandir=/usr/share/man \
               --localstatedir=/var/lib/openldap \
               --enable-crypt --enable-dynamic \
               --with-threads --disable-wrappers \
-	      --disable-spasswd --without-cyrus-sasl \
-	      --disable-bdb --disable-hdb --libdir=/usr/lib32
+              --disable-spasswd --without-cyrus-sasl \
+              --disable-bdb --disable-hdb --libdir=/usr/lib32
 
   cd include
   make

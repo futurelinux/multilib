@@ -9,7 +9,7 @@
 pkgbase='gcc-multilib'
 pkgname=('gcc-multilib' 'gcc-libs-multilib' 'lib32-gcc-libs' 'gcc-fortran-multilib' 'gcc-objc-multilib' 'gcc-ada-multilib')
 pkgver=4.5.3
-pkgrel=2
+pkgrel=3
 #_snapshot=4.5-20100610
 _libstdcppmanver=4.5.2    # Note: check source directory name when updating this
 pkgdesc="The GNU Compiler Collection for multilib"
@@ -31,7 +31,7 @@ md5sums=('318aa27364afc9e0109027007fada947' # gcc-ada-4.5.3.tar.bz2
          '9bb53e37e589515ba55979a19be9c036' # gcc-objc-4.5.3.tar.bz2
          'e7b2eeb71a001a88f0c8435a40c10073' # gcc-testsuite-4.5.3.tar.bz2
          '2776eab5ebb7f9cc62dd2199a3a24382'
-         '4030ee1c08dd1e843c0225b772360e76'
+         '62e60d76641383d24e30a64ddc0b6f55'
          '6fd395bacbd7b6e47c7b74854b478363')
 
 

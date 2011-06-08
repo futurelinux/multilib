@@ -5,8 +5,8 @@
 
 _pkgbasename=db
 pkgname=lib32-$_pkgbasename
-pkgver=4.8.26
-pkgrel=2
+pkgver=4.8.30
+pkgrel=1
 pkgdesc="The Berkeley DB embedded database system (32-bit)"
 arch=('x86_64')
 url="http://www.oracle.com/technology/software/products/berkeley-db/index.html"
@@ -15,7 +15,7 @@ depends=('lib32-gcc-libs' $_pkgbasename)
 makedepends=('gcc-multilib')
 options=('!libtool' 'force')
 source=(http://download-uk.oracle.com/berkeley-db/db-${pkgver}.tar.gz)
-md5sums=('3476bac9ec0f3c40729c8a404151d5e3')
+md5sums=('f80022099c5742cd179343556179aa8c')
 
 build() {
   export CC="gcc -m32"

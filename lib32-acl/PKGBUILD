@@ -3,9 +3,10 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
+_pkgbasename=acl
 pkgname=lib32-acl
-pkgver=2.2.49
-pkgrel=2
+pkgver=2.2.51
+pkgrel=1
 pkgdesc="Access control list libraries (32-bit)"
 arch=('x86_64')
 url="http://savannah.nongnu.org/projects/acl"
@@ -13,11 +14,11 @@ license=('LGPL')
 depends=('lib32-attr' 'acl')
 makedepends=('gcc-multilib')
 options=('!libtool')
-source=(http://mirrors.zerg.biz/nongnu/acl/acl-${pkgver}.src.tar.gz)
-sha256sums=('b9c7f4752e4ef4930a62fa5aa0d7efe1cba2b5a3a2d6ee2b45c0a70c72b7e5d5')
+source=(http://download.savannah.gnu.org/releases/${_pkgbasename}/${_pkgbasename}-${pkgver}.src.tar.gz)
+sha256sums=('06854521cf5d396801af7e54b9636680edf8064355e51c07657ec7442a185225')
 
 build() {
-  cd "${srcdir}/acl-${pkgver}"
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
   export CC="gcc -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
