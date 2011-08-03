@@ -5,21 +5,21 @@
 
 _pkgbasename=nvidia-utils
 pkgname=lib32-$_pkgbasename
-pkgver=275.09.07
+pkgver=275.21
 pkgrel=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
 url="http://www.nvidia.com/"
 depends=('lib32-libxvmc' 'lib32-zlib' 'lib32-gcc-libs' $_pkgbasename)
 conflicts=('lib32-libgl')
-provides=('lib32-libgl=7.10.2')
+provides=('lib32-libgl=7.10.3')
 license=('custom')
 options=('!strip')
 
 _filearch='x86'
 _pkg="NVIDIA-Linux-${_filearch}-${pkgver}"
-source=("ftp://download.nvidia.com/XFree86/Linux-${_filearch}/${pkgver}/${_pkg}.run")
-md5sums=('d779057af3a2f96a05ddda201606618b')
+source=("http://us.download.nvidia.com/XFree86/Linux-${_filearch}/${pkgver}/${_pkg}.run")
+md5sums=('8c0b4392c9222023d0827e2743c42d40')
 
 build() {
     cd $srcdir
@@ -59,7 +59,7 @@ package() {
         fi
     done
 
-  rm -rf "${pkgdir}"/usr/{include,share,bin}
-  mkdir -p "$pkgdir/usr/share/licenses"
-  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+    rm -rf "${pkgdir}"/usr/{include,share,bin}
+    mkdir -p "$pkgdir/usr/share/licenses"
+    ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }
