@@ -5,7 +5,7 @@
 
 _pkgsourcename=catalyst-utils
 pkgname=lib32-$_pkgsourcename
-pkgver=11.6
+pkgver=11.7
 pkgrel=1
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
 url="http://www.ati.amd.com"
@@ -17,7 +17,7 @@ replaces=('lib32-ati-fglrx-utils' 'lib32-fglrx-utils' 'lib32-libgl' 'lib32-ati-d
 provides=('lib32-libgl')
 source=(http://www2.ati.com/drivers/linux/ati-driver-installer-${pkgver/./-}-x86.x86_64.run
 		lib32-catalyst.sh)
-md5sums=('ff901cfa828006e25e9d6718a515b5c0'
+md5sums=('acebb812d4c057766828df0bf572e8ae'
 		 'af7fb8ee4fc96fd54c5b483e33dc71c4')
 
 build() {
@@ -55,4 +55,6 @@ package() {
   ln -sf libXvBAW.so.1.0 libXvBAW.so.1 || return 1
   ln -sf libatiuki.so.1.0 libatiuki.so.1 || return 1
   ln -sf libatiuki.so.1.0 libatiuki.so || return 1
+  install -dm755 "${pkgdir}/usr/lib32/dri" || return 1
+  ln -sf xorg/modules/dri/fglrx_dri.so dri/fglrx_dri.so || return 1
 }
