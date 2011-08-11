@@ -5,18 +5,18 @@
 
 _pkgbasename=gnutls
 pkgname=lib32-$_pkgbasename
-pkgver=2.8.6
-pkgrel=2
+pkgver=2.12.7
+pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer (32-bit)"
 arch=('x86_64')
 license=('GPL3' 'LGPL')
 url="http://www.gnu.org/software/gnutls/"
-options=('libtool')
+options=('!libtool')
 # uses built-in libtasn1 for the moment
 depends=(lib32-{gcc-libs,readline,libgcrypt,zlib})
 makedepends=('gcc-multilib')
 source=(ftp://ftp.gnu.org/gnu/gnutls/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('eb0a6d7d3cb9ac684d971c14f9f6d3ba')
+md5sums=('4b48aa3119f549d30d550bf4162c721b')
 
 build() {
   export CC="gcc -m32"
@@ -24,8 +24,12 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd ${srcdir}/${_pkgbasename}-${pkgver}
-  ./configure --prefix=/usr --libdir=/usr/lib32 \
-    --with-zlib --disable-guile
+  ./configure --prefix=/usr \
+              --libdir=/usr/lib32 \
+              --with-zlib \
+              --with-libgcrypt \
+              --disable-static\
+              --disable-guile
   make
 }
 
