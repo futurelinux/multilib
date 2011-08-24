@@ -45,7 +45,7 @@ msg2 "Building libtool-32..."
 }
 
 package_libtool-multilib() {
-  groups=('multilib-devel')
+  groups=('base-devel-multilib')
   depends=(sh tar texinfo "lib32-libtool=$pkgver-$pkgrel")
   provides=("libtool=$pkgver-$pkgrel")
   conflicts=(libtool)

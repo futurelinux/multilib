@@ -144,7 +144,7 @@ package_gcc-multilib()
   pkgdesc="The GNU Compiler Collection - C and C++ frontends for multilib"
   depends=('binutils-multilib>=2.20' 'libmpc>=0.8.1-2' 'cloog-ppl>=0.15.9-2' 'elfutils' \
            "gcc-libs-multilib=$pkgver-$pkgrel")
-  groups=('multilib-devel')
+  groups=('base-devel-multilib')
   provides=("gcc=$pkgver-$pkgrel")
   conflicts=('gcc')
   install=gcc.install

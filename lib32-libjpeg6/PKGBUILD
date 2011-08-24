@@ -12,7 +12,6 @@ pkgdesc="An older version of a library of JPEG support functions (32-bit)"
 url="ftp://ftp.uu.net/graphics/jpeg/"
 license=('custom')
 arch=(x86_64)
-groups=('lib32')
 depends=('lib32-glibc')
 source=("http://mirror.oscc.org.my/archlinux/extra/os/i686/$_pkgbasename-$pkgver-$_pkgrel32-i686.pkg.tar.gz")
 md5sums=('3cfb78bd9ac89bbf28130ec825187933')
