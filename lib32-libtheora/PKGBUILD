@@ -1,0 +1,48 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+_pkgbasename=libtheora
+pkgname=lib32-$_pkgbasename
+pkgver=1.1.1
+pkgrel=1
+pkgdesc="An open video codec developed by the Xiph.org (32bit)"
+arch=('x86_64')
+depends=('libtheora' 'lib32-libogg') 
+makedepends=('gcc-multilib' 'lib32-libvorbis' 'lib32-libpng')
+url="http://www.xiph.org"
+groups=lib32
+license=('BSD' 'custom')
+options=('!libtool')
+source=(http://downloads.xiph.org/releases/theora/${_pkgbasename}-${pkgver}.tar.bz2)
+md5sums=('292ab65cedd5021d6b7ddd117e07cd8e')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  # Hack preventing to use 64bit asembler optimisations, thanx to Rémy
+  sed -i -e "s/AC_DEFINE(\[OC_X86_64_ASM\]/#AC_DEFINE(\[OC_X86_64_ASM\]/" configure.ac
+  ./autogen.sh
+
+  ./configure --prefix=/usr \
+              --libdir=/usr/lib32 \
+	          --enable-shared \
+	          --disable-static
+  make
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}/usr/"{include,share}
+
+  # link the licence
+  install -dm755 "${pkgdir}/usr/share/licenses/"
+  cd "${pkgdir}/usr/share/licenses/"
+  ln -s "${_pkgbasename}" "${pkgname}"
+}
