@@ -6,8 +6,8 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: valgrind requires rebuild with each new glibc version
 
-_pkgbasename=glibc
-pkgname=lib32-$_pkgbasename
+_pkgname=glibc
+pkgname=lib32-$_pkgname
 pkgver=2.14
 pkgrel=1
 _glibcdate=20110908
@@ -19,7 +19,7 @@ depends=("glibc>=$pkgver")
 #makedepends=('gcc-multilib>=4.6')
 makedepends=('gcc-multilib')
 options=('!strip' '!emptydirs')
-source=(http://chakra-project.org/sources/${pkgbasename}/${pkgbasename}-${pkgver}_${_glibcdate}.tar.xz
+source=(http://chakra-project.org/sources/${_pkgename}/${_pkgname}-${pkgver}_${_glibcdate}.tar.xz
         glibc-2.10-dont-build-timezone.patch
         glibc-2.10-bz4781.patch
         glibc-__i686.patch
