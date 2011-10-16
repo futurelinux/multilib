@@ -6,8 +6,8 @@
 _pkgbasename=dbus-glib
 
 pkgname=lib32-${_pkgbasename}
-pkgver=0.92
-pkgrel=3
+pkgver=0.94
+pkgrel=1
 pkgdesc="GLib bindings for DBUS (32-bit)"
 arch=(x86_64)
 license=('GPL')
@@ -16,15 +16,19 @@ depends=('lib32-dbus-core' 'lib32-glib2' ${_pkgbasename})
 makedepends=('gcc-multilib' 'pkgconfig')
 options=(!libtool !emptydirs)
 source=(http://dbus.freedesktop.org/releases/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-md5sums=('b595b36890c4f9f8f5d5dec131c495f8')
+md5sums=('e1f1506a6f4941e67bffd614b1ad5af6')
 
 build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libdir=/usr/lib32 \
-      --enable-static=no --enable-bash-completion=no
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc \
+              --localstatedir=/var \
+              --libdir=/usr/lib32 \
+              --enable-static=no \
+              --enable-bash-completion=no
   make
   make DESTDIR="${pkgdir}" install
 }
