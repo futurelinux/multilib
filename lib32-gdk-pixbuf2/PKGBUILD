@@ -5,8 +5,8 @@
 
 _pkgbasename=gdk-pixbuf2
 pkgname=lib32-$_pkgbasename
-pkgver=2.22.1
-pkgrel=2
+pkgver=2.24.0
+pkgrel=1
 pkgdesc="An image loading library for gtk2 (32-bit)"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
@@ -17,8 +17,8 @@ depends=('lib32-glib2>=2.25.15'
 makedepends=(gcc-multilib)
 options=('!libtool' '!docs')
 install=gdk-pixbuf2.install
-source=(http://download.gnome.org/sources/gdk-pixbuf/2.22/gdk-pixbuf-${pkgver}.tar.bz2)
-sha256sums=('6ce87eda24af9362307b2593c154d0b660f4e26d0abf2e71d46d0ddd55fd953d')
+source=(http://download.gnome.org/sources/gdk-pixbuf/2.24/gdk-pixbuf-${pkgver}.tar.bz2)
+sha256sums=('38d2630314e6d91976bffd833236f84fefa440a9038f86dc422820a39f2e3700')
 
 build() {
   export CC="gcc -m32"
@@ -27,9 +27,10 @@ build() {
 
   cd "${srcdir}/gdk-pixbuf-${pkgver}"
 
-  ./configure --prefix=/usr  --libdir=/usr/lib32 \
-    --without-libjasper \
-    --with-included-loaders=png
+  ./configure --prefix=/usr \
+              --libdir=/usr/lib32 \
+              --without-libjasper \
+              --with-included-loaders=png
   make
 }
 
