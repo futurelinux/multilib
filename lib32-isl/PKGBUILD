@@ -10,7 +10,7 @@ makedepends=('gcc-multilib')
 license=('LGPL2.1')
 options=('!libtool')
 source=(http://www.kotnet.org/~skimo/isl/$_pkgbasename-$pkgver.tar.bz2)
-md5sums=('0d1a38db9f1c7d526758092b985827ea')
+md5sums=('6873f0b3c9f4d1fb8efae4aea53f2ab2')
 
 build() {
   cd "$srcdir/$_pkgbasename-$pkgver"
