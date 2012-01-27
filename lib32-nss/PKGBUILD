@@ -5,7 +5,7 @@
 
 _pkgbasename=nss
 pkgname=lib32-$_pkgbasename
-pkgver=3.12.10
+pkgver=3.13.1
 pkgrel=1
 pkgdesc="Mozilla's Netscape Security Services Library that implements PKI support (32-bit)"
 arch=('x86_64')
@@ -20,7 +20,7 @@ source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/s
         add_spi+cacert_ca_certs.patch
         ssl-renegotiate-transitional.patch)
 options=('!strip')
-md5sums=('027954e894f02732f4e66cd854261145'
+md5sums=('c500f96d33ba1390c8a35c667e05e542'
          'e5c97db0c884d5f4cfda21e562dc9bba'
          'c547b030c57fe1ed8b77c73bf52b3ded'
          '7f39c19b1dfd62d7db7d8bf19f156fed'
@@ -36,7 +36,7 @@ build() {
   patch -Np0 -i "${srcdir}/nss-no-rpath.patch"
 
   # copy linux 2.6 to linux 3.0
-  cp mozilla/security/coreconf/Linux2.6.mk mozilla/security/coreconf/Linux3.0.mk
+ #  cp mozilla/security/coreconf/Linux2.6.mk mozilla/security/coreconf/Linux3.0.mk
 
   make -C mozilla/security/nss/lib/ckfw/builtins generate
   
