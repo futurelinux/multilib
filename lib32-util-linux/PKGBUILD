@@ -3,7 +3,7 @@
 
 _pkgbasename=util-linux
 pkgname=lib32-$_pkgbasename
-pkgver=2.19.1
+pkgver=2.20.1
 pkgrel=1
 pkgdesc="Miscellaneous system utilities for Linux (32-bit)"
 url="http://userweb.kernel.org/~kzak/util-linux-ng/"
@@ -15,17 +15,15 @@ conflicts=('lib32-util-linux-ng')
 replaces=('lib32-util-linux-ng')
 license=('GPL2')
 options=('!libtool' '!emptydirs')
-source=(ftp://ftp.kernel.org/pub/linux/utils/${_pkgbasename}/v2.19/${_pkgbasename}-${pkgver}.tar.bz2
-        mount-segfault-2.19.1.patch)
-md5sums=('3eab06f05163dfa65479c44e5231932c'
-         '3247b52f0e4b8044f23f2f7218e2fdea')
+source=(ftp://ftp.kernel.org/pub/linux/utils/${_pkgbasename}/v2.20/${_pkgbasename}-${pkgver}.tar.bz2)
+md5sums=('079b37517fd4e002a2e6e992e8b4e361')
 
 shopt -s extglob
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
   # fix https://bugs.archlinux.org/task/24261
-  patch -Np1 -i ../mount-segfault-2.19.1.patch
+  #patch -Np1 -i ../mount-segfault-2.19.1.patch
 
   # hardware clock
   sed -e 's%etc/adjtime%var/lib/hwclock/adjtime%' -i hwclock/hwclock.c
@@ -37,10 +35,7 @@ build() {
   ./autogen.sh
   ./configure --without-ncurses --libdir=/usr/lib32
 
-  cd shlibs
-  for lib in *; do
-    make -C $lib
-  done
+    make 
 }
 
 package() {
