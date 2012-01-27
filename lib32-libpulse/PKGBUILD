@@ -6,22 +6,22 @@
 _pkgbasename=libpulse
 pkgname=lib32-$_pkgbasename
 pkgdesc="A featureful, general-purpose sound server (32-bit client libraries)"
-pkgver=0.9.22
-pkgrel=3
+pkgver=1.0
+pkgrel=1
 arch=(x86_64)
 url="http://pulseaudio.org/"
 license=(GPL LGPL)
-depends=(lib32-{dbus-core,xcb-util}
-         lib32-lib{asyncns,cap,xtst,sm,sndfile}
+depends=(lib32-{dbus-core,xcb-util,json-c}
+         lib32-lib{asyncns,cap,xtst,sm,sndfile,samplerate}
          $_pkgbasename)
-makedepends=(pkgconfig gcc-multilib libtool-multilib intltool lib32-glib2 lib32-speex)
+makedepends=(pkgconfig gcc-multilib lib32-libtool intltool lib32-glib2 lib32-speex)
 optdepends=('lib32-alsa-plugins: ALSA support')
 provides=("lib32-pulseaudio=$pkgver")
 conflicts=(lib32-pulseaudio)
 replaces=(lib32-pulseaudio)
 options=(!emptydirs !libtool !makeflags)
-source=("http://0pointer.de/lennart/projects/pulseaudio/pulseaudio-$pkgver.tar.gz")
-md5sums=('ca85ab470669b05e100861654cf5eb3c')
+source=("http://freedesktop.org/software/pulseaudio/releases/pulseaudio-$pkgver.tar.xz")
+md5sums=('538e0b55ab9ba2987a88047ae332f5f4')
 
 _libs="libpulsecommon-$pkgver.la libpulse.la libpulse-simple.la libpulse-mainloop-glib.la libpulsedsp.la"
 
