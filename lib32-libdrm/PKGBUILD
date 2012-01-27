@@ -5,19 +5,18 @@
 
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.26
+pkgver=2.4.27
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
 license=('custom')
-depends=('lib32-libpciaccess' $_pkgbasename)
+depends=('lib32-libpciaccess' 'lib32-cairo' $_pkgbasename)
 makedepends=(gcc-multilib)
 options=('!libtool')
 url="http://dri.freedesktop.org/"
 source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2
         no-pthread-stubs.patch)
-
-sha1sums=('e7215e804bbd30e42132d3df874122d2f6a9c929'
+sha1sums=('f5b40d30a7f2bfa369ab9b3bd9a0aa844a7f1e16'
           'ea97a698fa545b8b560c64015cc45efa7fe7417b')
 
 build() {
