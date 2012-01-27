@@ -5,8 +5,9 @@
 
 _pkgbasename=libidn
 pkgname=lib32-$_pkgbasename
-pkgver=1.22
+pkgver=1.16
 pkgrel=1
+_epoch=1
 pkgdesc="Implementation of the Stringprep, Punycode and IDNA specifications (32-bit)"
 arch=('x86_64')
 url="http://www.gnu.org/software/libidn/"
@@ -15,7 +16,8 @@ depends=('lib32-gcc-libs' $_pkgbasename)
 makedepends=('gcc-multilib')
 options=('!libtool')
 source=(http://ftp.gnu.org/gnu/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('8358e897c24d534438f6b5694c25e85889d860c3')
+sha1sums=('33ff88e7111f07f3bb8aa888fdc7848bb319d4ce')
+
 
 build() {
   export CC="gcc -m32"
