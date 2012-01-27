@@ -4,7 +4,7 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=('lib32-udev')
-pkgver=173
+pkgver=175
 pkgrel=1
 arch=('x86_64')
 pkgdesc="The userspace dev tools (udev) (32-bit)"
@@ -14,7 +14,7 @@ options=(!makeflags !libtool)
 depends=('lib32-glibc' 'lib32-glib2' 'lib32-acl' 'lib32-libusb-compat' 'udev')
 makedepends=('gcc-multilib' 'coreutils' 'util-linux' 'pciutils' 'kernel26' 'gperf' 'libxslt' 'gobject-introspection')
 source=(http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev-$pkgver.tar.bz2)
-sha256sums=('70a18315a12f8fc1131f7da5b4dae3606988b69d5c08f96f443b84b8486caaaf')
+sha256sums=('4c7937fe5a1521316ea571188745b9a00a9fdf314228cffc53a7ba9e5968b7ab')
 
 build() {
   export CC="gcc -m32"
