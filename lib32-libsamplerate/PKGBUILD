@@ -5,8 +5,8 @@
 
 _pkgbasename=libsamplerate
 pkgname=lib32-$_pkgbasename
-pkgver=0.1.7
-pkgrel=2
+pkgver=0.1.8
+pkgrel=1
 pkgdesc="Secret Rabbit Code - aka Sample Rate Converter for audio (32-bit)"
 arch=('x86_64')
 url="http://www.mega-nerd.com/SRC/index.html"
@@ -15,7 +15,7 @@ depends=('lib32-libsndfile' $_pkgbasename)
 makedepedns=('gcc-multilib')
 options=('!libtool')
 source=(http://www.mega-nerd.com/SRC/libsamplerate-${pkgver}.tar.gz)
-md5sums=('6731a81cb0c622c483b28c0d7f90867d')
+md5sums=('1c7fb25191b4e6e3628d198a66a84f47')
 
 build() {
   cd ${srcdir}/${_pkgbasename}-${pkgver}
