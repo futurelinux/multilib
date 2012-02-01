@@ -4,29 +4,30 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libpulse
-pkgname=lib32-$_pkgbasename
-pkgdesc="A featureful, general-purpose sound server (32-bit client libraries)"
-pkgver=0.9.22
+pkgname="lib32-${_pkgbasename}"
+pkgdesc="A featureful, general-purpose sound server. (32-bit client libraries)"
+pkgver=1.1
 pkgrel=1
-arch=(x86_64)
+arch=('x86_64')
 url="http://pulseaudio.org/"
-license=(GPL LGPL)
-depends=(lib32-{dbus-core,xcb-util}
-         lib32-lib{asyncns,cap,xtst,sm,sndfile}
-         $_pkgbasename)
-makedepends=(pkgconfig gcc-multilib libtool-multilib intltool lib32-glib2 lib32-speex)
+license=('GPL' 'LGPL')
+depends=(lib32-{dbus-core,xcb-util,json-c}
+         lib32-lib{asyncns,cap,xtst,sm,sndfile,samplerate}
+         "${_pkgbasename}")
+makedepends=('pkgconfig' 'gcc-multilib' 'lib32-libtool' 'intltool'
+		         'lib32-glib2' 'lib32-speex')
 optdepends=('lib32-alsa-plugins: ALSA support')
-provides=("lib32-pulseaudio=$pkgver")
-conflicts=(lib32-pulseaudio)
-replaces=(lib32-pulseaudio)
+provides=("lib32-pulseaudio=${pkgver}")
+conflicts=('lib32-pulseaudio')
+replaces=('lib32-pulseaudio')
 options=(!emptydirs !libtool !makeflags)
-source=("http://0pointer.de/lennart/projects/pulseaudio/pulseaudio-$pkgver.tar.gz")
-md5sums=('ca85ab470669b05e100861654cf5eb3c')
+source=("http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${pkgver}.tar.xz")
+md5sums=('17d21df798cee407b769c6355fae397a')
 
-_libs="libpulsecommon-$pkgver.la libpulse.la libpulse-simple.la libpulse-mainloop-glib.la libpulsedsp.la"
+_libs="libpulsecommon-${pkgver}.la libpulse.la libpulse-simple.la libpulse-mainloop-glib.la libpulsedsp.la"
 
 build() {
-  cd "$srcdir/pulseaudio-$pkgver"
+  cd "${srcdir}/pulseaudio-${pkgver}"
 
   # Don't break circular dependency between libpulse and libpulsecommon
   LDFLAGS="${LDFLAGS//-Wl,--as-needed}"
@@ -36,19 +37,21 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   ./configure --prefix=/usr \
-    --sysconfdir=/etc \
-    --libdir=/usr/lib32 \
-    --libexecdir=/usr/lib32 \
-    --localstatedir=/var \
-    --disable-hal \
-    --disable-rpath \
-    --disable-default-build-tests
+              --sysconfdir=/etc \
+              --libdir=/usr/lib32 \
+              --libexecdir=/usr/lib32 \
+              --localstatedir=/var \
+              --disable-hal \
+              --disable-rpath \
+              --disable-default-build-tests
 
-  make -C src $_libs
+  make -C src ${_libs}
 }
 
 package() {
-  cd "$srcdir/pulseaudio-$pkgver"
-  make -C src lib_LTLIBRARIES="$_libs" DESTDIR="$pkgdir" install-libLTLIBRARIES
-  make DESTDIR="$pkgdir" install-pkgconfigDATA
+  cd "${srcdir}/pulseaudio-${pkgver}"
+  make -C src lib_LTLIBRARIES="${_libs}" DESTDIR="${pkgdir}" install-libLTLIBRARIES
+  make DESTDIR="${pkgdir}" install-pkgconfigDATA
 }
+
+# vim:set ts=2 sw=2 et:
