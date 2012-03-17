@@ -4,17 +4,17 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.4
+pkgver=1.5.0
 pkgrel=1
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2)
-md5sums=('6594ab86a4b1fb2c09dadfb4ea7fc4af')
+md5sums=('c9242ff56223186124c1d42ceb03afe4')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
-categories=('accessories')
+categories=('system')
 arch=(i686 x86_64)
 license=(LGPL)
 install=wine.install
@@ -57,6 +57,7 @@ makedepends=(autoconf ncurses bison perl fontforge flex prelink
   v4l-utils       lib32-v4l-utils
   alsa-lib        lib32-alsa-lib
   oss
+  samba
 )
   
 optdepends=(
@@ -67,7 +68,8 @@ optdepends=(
   libcups         lib32-libcups
   gnutls          lib32-gnutls
   v4l-utils       lib32-v4l-utils
-  oss
+  oss             cups
+  samba
 )
 
 if [[ $CARCH == i686 ]]; then
@@ -76,10 +78,6 @@ if [[ $CARCH == i686 ]]; then
   makedepends=(${makedepends[@]/*32-*/})
   makedepends=(${makedepends[@]/*-multilib*/})
   optdepends=(${optdepends[@]/*32-*/})
-else
-  provides=("bin32-wine=$pkgver" "wine-wow64=$pkgver")
-  conflicts=('bin32-wine' 'wine-wow64')
-  replaces=('bin32-wine')
 fi
 
 build() {
