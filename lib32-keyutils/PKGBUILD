@@ -2,7 +2,7 @@
 _pkgbasename=keyutils
 pkgname=lib32-$_pkgbasename
 pkgver=1.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Linux Key Management Utilities (32-bit)"
 arch=(x86_64)
 url="http://www.kernel.org"
@@ -28,5 +28,10 @@ package() {
   make DESTDIR="$pkgdir" install
 
   rm -rf "${pkgdir}"/{usr/{include,share,bin,sbin},etc,{s,}bin}
+  
+  # Fix symlink
+  cd "${pkgdir}/usr/lib32/"
+  rm libkeyutils.so
+  ln -s libkeyutils.so.1 libkeyutils.so
 }
 
