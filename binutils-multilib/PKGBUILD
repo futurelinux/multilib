@@ -1,15 +1,17 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer: Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer: Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer: Manuel Tortosa <manutortosa@chakra-project.org>
 
-# toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
+# toolchain build order: 
+# lib32-glibc > binutils-multilib > gcc-multilib > binutils-multilib > lib32-glibc > gcc-multilib
 
 _pkgname=binutils
 pkgname=binutils-multilib
-pkgver=2.21.1
+pkgver=2.22
 pkgrel=1
-_date=20110627
+_date=20120109
 pkgdesc="A set of programs to assemble and manipulate binary and object files for multilib"
 arch=('x86_64')
 url="http://www.gnu.org/software/binutils/"
@@ -21,8 +23,8 @@ depends=('glibc>=2.14' 'zlib')
 makedepends=('dejagnu' 'gcc-multilib') # Make sure we compile this with gcc-multilib
 options=('!libtool' '!distcc' '!ccache')
 install=binutils.install
-source=(http://chakra-project.org/sources/${_pkgname}/${_pkgname}-${pkgver}_${_date}.tar.bz2)
-md5sums=('2face559e80d649ba148e42bb2d1fb0f')
+source=(http://chakra-linux.org/sources/${_pkgname}/${_pkgname}-${pkgver}_${_date}.tar.bz2)
+md5sums=('d6df201cbf66394defc603e1318061fd')
 
 build() {
   cd ${srcdir}

@@ -1,34 +1,37 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer: Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer: Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer: Manuel Tortosa <manutortosa@chakra-project.org>
 
-# toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
-# NOTE: libtool requires rebuilt with each new gcc version
+# toolchain build order:
+# lib32-glibc > binutils-multilib > gcc-multilib > binutils-multilib > lib32-glibc > gcc-multilib
+
+# NOTE: lib32-libtool requires rebuilt with each new gcc-multilib version
 
 pkgbase='gcc-multilib'
 pkgname=('gcc-multilib' 'gcc-libs-multilib' 'lib32-gcc-libs' 'gcc-fortran-multilib' 'gcc-objc-multilib' 'gcc-ada-multilib' 'gcc-go-multilib')
-pkgver=4.6.2
+pkgver=4.7.0
 pkgrel=1
-_snapshot= 
-_libstdcppmanver=20110814		# Note: check source directory name when updating this
+_snapshot=4.7-20120414
+_libstdcppmanver=20120307		# Note: check source directory name when updating this
 pkgdesc="The GNU Compiler Collection for multilib"
 arch=('x86_64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
 url="http://gcc.gnu.org"
-makedepends=('binutils-multilib>=2.21.1' 'libmpc' 'cloog' 'ppl' 'gcc-ada-multilib'
-             'lib32-glibc>=2.14.1')
+makedepends=('binutils-multilib>=2.22' 'libmpc' 'cloog' 'ppl' 'gcc-ada-multilib'
+             'lib32-glibc>=2.15')
 checkdepends=('dejagnu')
 options=('!libtool' '!emptydirs')
-source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
-	#ftp://gcc.gnu.org/pub/gcc/snapshots/${_snapshot}/gcc-${_snapshot}.tar.bz2
+source=(#ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
+	ftp://gcc.gnu.org/pub/gcc/snapshots/${_snapshot}/gcc-${_snapshot}.tar.bz2
 	ftp://gcc.gnu.org/pub/gcc/libstdc++/doxygen/libstdc++-api.${_libstdcppmanver}.man.tar.bz2
-	gcc_pure64.patch
-	gcc-hash-style-both.patch)
-md5sums=('028115c4fbfb6cfd75d6369f4a90d87e'
-         'ce920d2550ff7e042b9f091d27764d8f'
-         '22cec272f9cc2801d3cd348feaca888b'
-         '4df25b623799b148a0703eaeec8fdf3f')
+	gcc_pure64-multilib.patch
+	gcc-4.7.0-cloog-0.17.patch)
+md5sums=('9f9d082b64753d5908690500251fc52e'
+         '489d2f5311535800a120efd8d18db719'
+         '2be883cd6707c59c519b15517363ef08'
+         '488f11cf9822d110dde4a12add1d6e03')
 
 if [ -n "${_snapshot}" ]; then
   _basedir="${srcdir}/gcc-${_snapshot}"
@@ -45,8 +48,12 @@ build() {
   # Do not run fixincludes
   sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 
-  patch -Np1 -i ${srcdir}/gcc_pure64.patch
-  patch -Np0 -i ${srcdir}/gcc-hash-style-both.patch
+  if [ "${CARCH}" = "x86_64" ]; then
+    patch -p1 -i ${srcdir}/gcc_pure64-multilib.patch
+  fi
+
+  # compatibility with latest cloog
+  patch -p1 -i ${srcdir}/gcc-4.7.0-cloog-0.17.patch
 
   echo ${pkgver} > gcc/BASE-VER
 
@@ -82,10 +89,9 @@ check() {
   ${_basedir}/contrib/test_summary
 }
 
-package_gcc-libs-multilib()
-{
+package_gcc-libs-multilib() {
   pkgdesc="Runtime libraries shipped by GCC for multilib"
-  depends=('glibc>=2.14.1' "lib32-gcc-libs=$pkgver-$pkgrel")
+  depends=('glibc>=2.15' "lib32-gcc-libs=$pkgver-$pkgrel")
   provides=("gcc-libs=$pkgver-$pkgrel")
   conflicts=('gcc-libs')
   install=gcc-libs.install
@@ -116,10 +122,9 @@ package_gcc-libs-multilib()
     ${pkgdir}/usr/share/licenses/gcc-libs-multilib/RUNTIME.LIBRARY.EXCEPTION
 }
 
-package_lib32-gcc-libs()
-{
+package_lib32-gcc-libs() {
   pkgdesc="Runtime libraries shipped by GCC (32-bit)"
-  depends=('lib32-glibc>=2.14.1' "gcc-libs>=$pkgver")
+  depends=('lib32-glibc>=2.15' "gcc-libs>=$pkgver")
 
   cd gcc-build
   make -j1 -C $CHOST/32/libgcc DESTDIR=${pkgdir} install-shared
@@ -146,8 +151,7 @@ package_lib32-gcc-libs()
     ${pkgdir}/usr/share/licenses/lib32-gcc-libs/RUNTIME.LIBRARY.EXCEPTION
 }
 
-package_gcc-multilib()
-{
+package_gcc-multilib() {
   pkgdesc="The GNU Compiler Collection - C and C++ frontends for multilib"
   depends=("gcc-libs-multilib=$pkgver-$pkgrel" 'binutils-multilib>=2.21.1' 'libmpc' 'cloog' 'ppl')
   groups=('multilib-devel')
@@ -156,22 +160,26 @@ package_gcc-multilib()
   install=gcc.install
 
   cd gcc-build
+
+  make -j1 DESTDIR=${pkgdir} install
+
+  install -d $pkgdir/usr/share/gdb/auto-load
+  mv $pkgdir/usr/{lib/libstdc++.so.6.0.17-gdb.py,share/gdb/auto-load}
   
   # unfortunately it is much, much easier to install the lot and clean-up the mess...
-  make -j1 DESTDIR=${pkgdir} install
   rm $pkgdir/usr/bin/{{$CHOST-,}gfortran,{$CHOST-,}gccgo,gnat*}
   rm $pkgdir/usr/lib{,32}/*.so*
   rm $pkgdir/usr/lib{,32}/lib{ffi,gfortran,go{,begin},objc,quadmath}.a
   rm $pkgdir/usr/lib{,32}/libgfortran.spec
   rm -r $pkgdir/usr/lib/gcc/$CHOST/${pkgver}/{{,32/}ada{include,lib},finclude,include/objc}
   rm $pkgdir/usr/lib/gcc/$CHOST/${pkgver}/include/{ffi{,target}.h,quadmath{,_weak}.h}
-  rm $pkgdir/usr/lib/gcc/$CHOST/${pkgver}/{cc1obj{,plus},f951,gnat1,go1,{,32/}libgfortranbegin.a}
+  rm $pkgdir/usr/lib/gcc/$CHOST/${pkgver}/{cc1obj{,plus},f951,gnat1,go1}
+  rm $pkgdir/usr/lib/gcc/$CHOST/${pkgver}/{,32/}{libcaf_single,libgfortranbegin}.a
   rm -r $pkgdir/usr/lib{,32}/go
-  rm $pkgdir/usr/share/info/{gccgo,gfortran,gnat*,libgomp,libquadmath}.info
+  rm $pkgdir/usr/share/info/{gccgo,gfortran,gnat*,libgomp,libquadmath,libitm}.info
   rm $pkgdir/usr/share/locale/{de,fr}/LC_MESSAGES/libstdc++.mo
   rm $pkgdir/usr/share/man/man1/{gccgo,gfortran}.1
   rm $pkgdir/usr/share/man/man3/ffi*
-
   # many packages require these symlinks
   install -dm755 ${pkgdir}/lib
   ln -sf /usr/bin/cpp ${pkgdir}/lib/cpp
@@ -220,8 +228,7 @@ EOF
     ${pkgdir}/usr/share/licenses/gcc-multilib/RUNTIME.LIBRARY.EXCEPTION
 }
 
-package_gcc-fortran-multilib()
-{
+package_gcc-fortran-multilib() {
   pkgdesc="Fortran front-end for GCC for multilib"
   depends=("gcc-multilib=$pkgver-$pkgrel")
   provides=("gcc-fortran=$pkgver-$pkgrel")
@@ -244,8 +251,7 @@ package_gcc-fortran-multilib()
     ${pkgdir}/usr/share/licenses/gcc-fortran-multilib/RUNTIME.LIBRARY.EXCEPTION
 }
 
-package_gcc-objc-multilib()
-{
+package_gcc-objc-multilib() {
   pkgdesc="Objective-C front-end for GCC for multilib"
   depends=("gcc-multilib=$pkgver-$pkgrel")
   provides=("gcc-objc=$pkgver-$pkgrel")
@@ -264,8 +270,7 @@ package_gcc-objc-multilib()
     ${pkgdir}/usr/share/licenses/gcc-objc-multilib/RUNTIME.LIBRARY.EXCEPTION
 }
 
-package_gcc-ada-multilib()
-{
+package_gcc-ada-multilib() {
   pkgdesc="Ada front-end for GCC (GNAT) for multilib"
   depends=("gcc-multilib=$pkgver-$pkgrel")
   provides=("gcc-ada=$pkgver-$pkgrel")
@@ -285,8 +290,7 @@ package_gcc-ada-multilib()
     ${pkgdir}/usr/share/licenses/gcc-ada-multilib/RUNTIME.LIBRARY.EXCEPTION
 }
 
-package_gcc-go-multilib()
-{
+package_gcc-go-multilib() {
   pkgdesc="Go front-end for GCC for multilib"
   depends=("gcc-multilib=$pkgver-$pkgrel")
   provides=("gcc-go=$pkgver-$pkgrel")
