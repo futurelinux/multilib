@@ -5,17 +5,17 @@
 
 _pkgbasename=atk
 pkgname=lib32-$_pkgbasename
-pkgver=1.32.0
+pkgver=2.0.1
 pkgrel=1
 pkgdesc="A library providing a set of interfaces for accessibility (32-bit)"
 arch=('x86_64')
 license=('LGPL')
-depends=('lib32-glib2>=2.25.17' $_pkgbasename)
+depends=('lib32-glib2' $_pkgbasename)
 makedepends=('gcc-multilib')
 options=('!libtool')
-source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/1.32/${_pkgbasename}-${pkgver}.tar.bz2)
+source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver%.*}/${_pkgbasename}-${pkgver}.tar.bz2)
 url='http://www.gtk.org/'
-sha256sums=('e9a3e598f75c4db1af914f8b052dd9f7e89e920a96cc187c18eb06b8339cb16e')
+md5sums=('87f20b78deaedef858ac54358c0786b1')
 
 build() {
   export CC="gcc -m32"
@@ -23,8 +23,9 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  ./configure --prefix=/usr --libdir=/usr/lib32 \
-    --disable-introspection
+  ./configure --prefix=/usr \
+              --libdir=/usr/lib32 \
+              --disable-introspection
   make
 }
 

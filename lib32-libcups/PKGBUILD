@@ -5,16 +5,16 @@
 
 _pkgbasename=libcups
 pkgname=lib32-$_pkgbasename
-pkgver=1.4.5
+pkgver=1.5.2
 pkgrel=1
 pkgdesc="The CUPS Printing System - client libraries (32-bit)"
 arch=('x86_64')
 license=('GPL')
 url="http://www.cups.org/"
 depends=(lib32-glibc $_pkgbasename)
-makedepends=(gcc-multilib)
+makedepends=(gcc-multilib cups)
 source=(http://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2)
-md5sums=('50729f6fc46ba54223e0eaf5009f3419')
+md5sums=('9471d2a7c920cfbb17133c32d2e6866f')
 
 build() {
   export CC="gcc -m32"
@@ -22,14 +22,22 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd ${srcdir}/cups-${pkgver}
-  
+
   aclocal -I config-scripts
   autoconf -I config-scripts
 
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-     --disable-ldap --enable-raw-printing --disable-gssapi --disable-dbus \
-     --enable-ssl=no --disable-gnutls --disable-threads \
-     --with-optim="$CFLAGS" --libdir=/usr/lib32
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc \
+              --localstatedir=/var \
+              --disable-ldap \
+              --enable-raw-printing \
+              --disable-gssapi \
+              --disable-dbus \
+              --enable-ssl=no \
+              --disable-gnutls \
+              --enable-threads \
+              --with-optim="$CFLAGS" \
+              --libdir=/usr/lib32
   make
 }
 
