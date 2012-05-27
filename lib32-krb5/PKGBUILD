@@ -5,7 +5,7 @@
 
 _pkgbasename=krb5
 pkgname=lib32-$_pkgbasename
-pkgver=1.9.1
+pkgver=1.9.3
 pkgrel=1
 pkgdesc="The Kerberos network authentication system (32-bit)"
 arch=('x86_64')
@@ -16,20 +16,13 @@ makedepends=('perl' gcc-multilib)
 provides=('lib32-heimdal')
 replaces=('lib32-heimdal')
 conflicts=('lib32-heimdal')
-source=(http://web.mit.edu/kerberos/dist/${_pkgbasename}/1.9/${_pkgbasename}-${pkgver}-signed.tar
-        krb5-1.9.1-2011-007.patch)
-sha1sums=('e23a1795a237521493da9cf3443ac8b98a90c066'
-          '31a130542e92b70c807b2dbe6f9b182dc14f5e9f')
+source=(http://web.mit.edu/kerberos/dist/${_pkgbasename}/1.9/${_pkgbasename}-${pkgver}-signed.tar)
+sha1sums=('01a14c0cb59ae558451772d6700ea420ae8b0ab0')
 options=('!emptydirs')
 
 build() {
    tar zxvf ${_pkgbasename}-${pkgver}.tar.gz
    cd "${srcdir}/${_pkgbasename}-${pkgver}/src"
-
-   # Apply upstream patch to fix a null pointer dereference when processing TGS requests
-   # CVE-2011-1530
-   # see http://web.mit.edu/kerberos/advisories/MITKRB5-SA-2011-007.txt
-   patch -Np2 -i ${srcdir}/krb5-1.9.1-2011-007.patch
 
    export CC="gcc -m32"
    export CXX="g++ -m32"
