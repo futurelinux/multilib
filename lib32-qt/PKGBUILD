@@ -19,10 +19,8 @@ depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl}
 makedepends=(cups gcc-multilib lib32-{mesa,libcups,libxfixes})
 options=('!libtool')
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
-source=("http://releases.qt-project.org/qt4/source/${_pkgfqn}.tar.gz"
-        'appmenu.patch')
-md5sums=('3c1146ddf56247e16782f96910a8423b'
-         '7ca519c824d67cfae0281ec50af24ad8')
+source=("http://releases.qt-project.org/qt4/source/${_pkgfqn}.tar.gz")
+md5sums=('3c1146ddf56247e16782f96910a8423b')
 
 build() {
   cd $srcdir/$_pkgfqn
