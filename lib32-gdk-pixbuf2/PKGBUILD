@@ -6,13 +6,13 @@
 _pkgbasename=gdk-pixbuf2
 pkgname=lib32-$_pkgbasename
 pkgver=2.26.1
-pkgrel=1
+pkgrel=2
 pkgdesc="An image loading library for gtk2 (32-bit)"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 license=('GPL2')
 depends=('lib32-glib2'
-          lib32-lib{'png>=1.4.3','tiff>=3.9.4','jpeg>=8.0.2',x11}
+          lib32-lib{'png','tiff','jpeg','ffi','x11'}
           $_pkgbasename)
 makedepends=(gcc-multilib)
 options=('!libtool' '!docs')

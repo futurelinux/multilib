@@ -5,7 +5,7 @@
 
 pkgname=('lib32-udev')
 pkgver=181
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 pkgdesc="The userspace dev tools (udev) (32-bit)"
 url="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html"
@@ -38,6 +38,7 @@ package() {
   cd $srcdir/udev-$pkgver
 
   make DESTDIR=${pkgdir} install
-  rm -rf ${pkgdir}/usr/{etc,include,lib,libexec,sbin,share}
-  rm -rf ${pkgdir}/usr/lib32/girepository*
+  #rm -rf ${pkgdir}/usr/{etc,include,lib,libexec,sbin,share}
+  #rm -rf ${pkgdir}/usr/lib32/girepository*
+  rm -rf "${pkgdir}"/{etc,lib32,lib,usr/{include,lib,bin,share}}
 }

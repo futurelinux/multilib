@@ -7,7 +7,7 @@
 _pkgbasename=alsa-plugins
 pkgname=lib32-$_pkgbasename
 pkgver=1.0.25
-pkgrel=1
+pkgrel=2
 pkgdesc="Extra alsa plugins (32-bit)"
 arch=(x86_64)
 url="http://www.alsa-project.org"
@@ -35,4 +35,5 @@ build() {
 package() {
   cd "$srcdir/$_pkgbasename-$pkgver"
   make DESTDIR="$pkgdir" install
+  rm -r "$pkgdir/usr/share"
 }
