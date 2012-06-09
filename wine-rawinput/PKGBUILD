@@ -5,14 +5,14 @@
 
 _pkgbasename=wine
 pkgname=wine-rawinput
-pkgver=1.5.5
+pkgver=1.5.6
 pkgrel=1
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://ibiblio.org/pub/linux/system/emulators/$_pkgbasename/$_pkgbasename-$_pkgbasever.tar.bz2
         rawinput3.patch)
-md5sums=('63639cfe9addb75cd40726cac36bcf8a'
+md5sums=('83bc2532cef560a21cad7dda979cadda'
          'b68cad68f5cd75241e5c89b25114cf6e')
 
 pkgdesc="A compatibility layer for running Windows programs with RawInput patch"
