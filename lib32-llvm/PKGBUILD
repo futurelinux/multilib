@@ -5,7 +5,7 @@
 
 pkgname=('lib32-llvm')
 pkgver=3.1
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
@@ -48,7 +48,7 @@ build() {
     --disable-debug-runtime \
     --disable-assertions \
     --with-binutils-include=/usr/include \
-    --with-cxx-include-arch=$CHOST \
+    --with-cxx-include-arch="${CHOST}" \
     "--${_optimized_switch}-optimized"
 
   make REQUIRES_RTTI=1
@@ -86,7 +86,8 @@ depends=('perl' 'lib32-libffi' 'llvm')
 
   install -D -m644 LICENSE.TXT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 
-  rm -r "${pkgdir}"/usr/{bin,include,share/{doc,man}}
+  rm -r "${pkgdir}"/usr/{bin,lib,include,share/{doc,man}}
+
   mkdir "${pkgdir}"/usr/bin
   mv "${pkgdir}/usr/lib32/llvm-config" "${pkgdir}/usr/bin/llvm-config32"
 }
