@@ -6,7 +6,7 @@
 _pkgbasename=gdk-pixbuf2
 pkgname=lib32-$_pkgbasename
 pkgver=2.26.1
-pkgrel=2
+pkgrel=3
 pkgdesc="An image loading library for gtk2 (32-bit)"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
@@ -29,6 +29,7 @@ build() {
 
   ./configure --prefix=/usr  --libdir=/usr/lib32 \
     --without-libjasper \
+    --with-x11 \
     --with-included-loaders=png
   make
 }
