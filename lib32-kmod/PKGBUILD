@@ -2,7 +2,7 @@
 # Contributor: Jesse Jaara <gmail.com: jesse.jaara>
 
 pkgname=lib32-kmod
-pkgver=5
+pkgver=8
 pkgrel=1
 pkgdesc="Linux kernel module handling"
 arch=('x86_64')
@@ -12,7 +12,7 @@ depends=('lib32-zlib' 'kmod')
 makedepends=('gcc-multilib')
 options=('!libtool')
 source=("ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-$pkgver.tar.xz")
-md5sums=('95eb4df400550ca31006f0819c8864cb')
+md5sums=('d4e3d038b5370b1e8ff237c55666aa64')
 
 build() {
   export CC="gcc -m32"
