@@ -5,16 +5,16 @@
 
 _pkgbasename=libcups
 pkgname=lib32-$_pkgbasename
-pkgver=1.5.2
+pkgver=1.5.3
 pkgrel=1
 pkgdesc="The CUPS Printing System - client libraries (32-bit)"
 arch=('x86_64')
 license=('GPL')
 url="http://www.cups.org/"
 depends=(lib32-glibc $_pkgbasename)
-makedepends=(gcc-multilib cups)
+makedepends=(gcc-multilib cups lib32-libusb)
 source=(http://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2)
-md5sums=('9471d2a7c920cfbb17133c32d2e6866f')
+md5sums=('e1ad15257aa6f162414ea3beae0c5df8')
 
 build() {
   export CC="gcc -m32"
