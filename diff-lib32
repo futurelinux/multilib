@@ -1,0 +1,34 @@
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+my @lib32_pkgs = `pacman -Sl lib32-testing lib32`;
+
+foreach (@lib32_pkgs) {
+    chomp;
+    next if (! /(?<repo>.+) (?<lib32_pkgname>.+) (?<lib32_pkgver>.+)-(?<lib32_pkgrel>\d+)/);
+
+    my $lib32_repo = $+{repo};
+    my $lib32_pkgname = $+{lib32_pkgname};
+    my $lib32_pkgver = $+{lib32_pkgver};
+    my $lib32_pkgrel = $+{lib32_pkgrel};
+
+    next if $lib32_pkgname !~ /lib32-/;
+
+
+    my $pkgname = $lib32_pkgname;
+    $pkgname =~ s/lib32-//;
+
+    my $pkg = `pacman -Ss "^$pkgname\$" | grep -v '^ ' | head -n1`;
+    chomp $pkg;
+
+    next if ( $pkg !~ /(?<repo>.+)\/(?<pkgname>.+) (?<pkgver>.+)-(?<pkgrel>\d+)/ );
+
+    my $repo = $+{repo};
+    my $pkgver = $+{pkgver};
+    my $pkgrel = $+{pkgrel};
+
+    if ("$lib32_pkgver-$lib32_pkgrel" lt "$pkgver-$pkgrel") {
+        print "$lib32_repo/$lib32_pkgname is older than $repo/$pkgname\n";
+    }
+}
