@@ -6,7 +6,7 @@
 _pkgbasename=v4l-utils
 pkgname=lib32-$_pkgbasename
 pkgver=0.8.8
-pkgrel=1
+pkgrel=2
 pkgdesc="Userspace tools and conversion library for Video 4 Linux (32-bit)"
 arch=('x86_64')
 url="http://freshmeat.net/projects/libv4l"
@@ -34,5 +34,5 @@ build() {
 package() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
   make install PREFIX=/usr LIBDIR=/usr/lib32 DESTDIR="${pkgdir}/"
-  rm -rf "${pkgdir}"/usr/{include,share,bin,sbin}
+  rm -rf "${pkgdir}"/{etc,lib,usr/{include,share,bin,sbin}}
 }
