@@ -4,13 +4,13 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.5.10
+pkgver=1.5.11
 pkgrel=1
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2)
-md5sums=('7bf0345d31e23111ab6ae69e153bc961')
+md5sums=('930485c8df59edcf0a6e3fd87cca8b39')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
