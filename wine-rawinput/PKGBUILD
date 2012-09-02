@@ -5,14 +5,14 @@
 
 _pkgbasename=wine
 pkgname=wine-rawinput
-pkgver=1.5.11
-pkgrel=1
+pkgver=1.5.12
+pkgrel=2
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://ibiblio.org/pub/linux/system/emulators/$_pkgbasename/$_pkgbasename-$_pkgbasever.tar.bz2
         rawinput3.patch)
-md5sums=('930485c8df59edcf0a6e3fd87cca8b39'
+md5sums=('42d8a0b933768447aa73447c4f0ec2ed'
          'b68cad68f5cd75241e5c89b25114cf6e')
 
 pkgdesc="A compatibility layer for running Windows programs with RawInput patch"
@@ -25,6 +25,7 @@ install=wine.install
 depends=(
   fontconfig      lib32-fontconfig
   mesa            lib32-mesa 
+  libglapi        lib32-libglapi
   libxcursor      lib32-libxcursor
   libxrandr       lib32-libxrandr
   libxdamage      lib32-libxdamage
@@ -87,15 +88,15 @@ provides=("wine=$pkgver")
 conflicts=('wine')
 
 build() {
+  cd "$srcdir/$_pkgbasename-$pkgver"
+  patch -Np1 -i ../rawinput3.patch
+  ./tools/make_requests
+  
   cd "$srcdir"
-
+  
   # Allow ccache to work
   mv $_pkgbasename-$_pkgbasever $_pkgbasename
   
-  cd "$_pkgbasename"
-  patch -Np1 -i ../rawinput3.patch
-  ./tools/make_requests
-  cd "$srcdir"
   # Get rid of old build dirs
   rm -rf $_pkgbasename-{32,64}-build
   mkdir $_pkgbasename-32-build
@@ -134,8 +135,8 @@ build() {
     --with-x \
     "${_wine32opts[@]}"
  
-  # These additional CFLAGS solve FS#27560
-  make CFLAGS+="-mstackrealign" CXXFLAGS+="-mstackrealign"
+  # These additional CFLAGS solve FS#27560 and FS#23277
+  make CFLAGS+="-mstackrealign -mincoming-stack-boundary=2" CXXFLAGS+="-mstackrealign -mincoming-stack-boundary=2"
 }
  
 package() {
