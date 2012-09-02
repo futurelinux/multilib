@@ -5,7 +5,7 @@
 
 pkgname=wine
 pkgver=1.5.12
-pkgrel=1
+pkgrel=3
 
 _pkgbasever=${pkgver/rc/-rc}
 
@@ -23,6 +23,7 @@ install=wine.install
 depends=(
   fontconfig      lib32-fontconfig
   mesa            lib32-mesa
+  libglapi        lib32-libglapi
   libxcursor      lib32-libxcursor
   libxrandr       lib32-libxrandr
   libxdamage      lib32-libxdamage
@@ -125,8 +126,8 @@ build() {
     --with-x \
     "${_wine32opts[@]}"
 
-  # These additional CFLAGS solve FS#27560
-  make CFLAGS+="-mstackrealign" CXXFLAGS+="-mstackrealign"
+  # These additional CFLAGS solve FS#27560 and FS#23277
+  make CFLAGS+="-mstackrealign -mincoming-stack-boundary=2" CXXFLAGS+="-mstackrealign -mincoming-stack-boundary=2"
 }
 
 package() {
