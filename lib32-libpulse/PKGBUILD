@@ -10,14 +10,15 @@
 _pkgbasename=libpulse
 pkgname="lib32-${_pkgbasename}"
 pkgdesc="A featureful, general-purpose sound server. (32-bit client libraries)"
-pkgver=2.0
+pkgver=2.1
 pkgrel=1
 arch=('x86_64')
 url="http://pulseaudio.org/"
 license=('GPL' 'LGPL')
 depends=(lib32-{dbus-core,xcb-util,json-c}
          lib32-lib{asyncns,cap,xtst,sm,sndfile,samplerate}
-         "${_pkgbasename}")
+         'webrtc-audio-processing' 'systemd>=189'
+         "${_pkgbasename}=${pkgver}")
 makedepends=('pkgconfig' 'gcc-multilib' 'lib32-libtool' 'intltool'
 		         'lib32-glib2' 'lib32-speex')
 optdepends=('lib32-alsa-plugins: ALSA support')
@@ -26,7 +27,7 @@ conflicts=('lib32-pulseaudio')
 replaces=('lib32-pulseaudio')
 options=(!emptydirs !libtool)
 source=("http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${pkgver}.tar.xz")
-md5sums=('9bbde657c353fe675c3b693054175a8e')
+sha256sums=('ef6b347bf47abfb98080795f1583018ac959b4aeb4df916b879f9e1eaba0ca7f')
 
 _libs="libpulse.la libpulse-simple.la libpulse-mainloop-glib.la"
 _pkglibs="libpulsecommon-$pkgver.la libpulsedsp.la"
@@ -52,13 +53,13 @@ build() {
   # fight unused direct deps
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
-  make -C src $_libs $_pkglibs
+  make -C src ${_libs} ${_pkglibs}
 }
 
 package() {
-  cd "$srcdir/pulseaudio-$pkgver"
-  make -j1 -C src DESTDIR="$pkgdir" \
-    lib_LTLIBRARIES="$_libs" pkglib_LTLIBRARIES="$_pkglibs" \
+  cd "${srcdir}/pulseaudio-${pkgver}"
+  make -j1 -C src DESTDIR="${pkgdir}" \
+    lib_LTLIBRARIES="${_libs}" pkglib_LTLIBRARIES="${_pkglibs}" \
     install-libLTLIBRARIES install-pkglibLTLIBRARIES
-  make -j1 DESTDIR="$pkgdir" install-pkgconfigDATA
+  make -j1 DESTDIR="${pkgdir}" install-pkgconfigDATA
 }

@@ -5,17 +5,17 @@
 
 _pkgbasename=libsndfile
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.21
-pkgrel=1
+pkgver=1.0.25
+pkgrel=2
 pkgdesc="A C library for reading and writing files containing sampled sound (32-bit)"
 arch=('x86_64')
 url="http://www.mega-nerd.com/libsndfile"
 license=('LGPL')
-depends=('lib32-flac>=1.2.1' 'lib32-libvorbis' $_pkgbasename)
+depends=('lib32-flac' 'lib32-libvorbis' $_pkgbasename)
 makedepends=('lib32-alsa-lib' 'gcc-multilib')
 options=('!libtool')
 source=(http://www.mega-nerd.com/libsndfile/files/${_pkgbasename}-${pkgver}.tar.gz)
-md5sums=('880a40ec636ab2185b97f8927299b292')
+md5sums=('e2b7bb637e01022c7d20f95f9c3990a2')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
