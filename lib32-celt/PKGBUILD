@@ -2,6 +2,10 @@
 # Chakra Packages for Chakra, part of chakra-project.org
 #
 # Maintainer: Michael Haesel <michael[dot]haesel[at]gmail[dot]com>
+# Contributor: Ray Rashif <schiv@archlinux.org>
+# Contributor: SpepS <dreamspepser at yahoo dot it>
+# Contributor: Thomas Dziedzic < gostrc at gmail >
+# Contributor: Lauri Niskanen <ape@ape3000.com>
 
 _realname=celt
 pkgname=lib32-$_realname
@@ -15,7 +19,7 @@ depends=('lib32-glibc' "${_realname}=${pkgver}")
 makedepends=('gcc-multilib')
 options=('!libtool')
 source=("http://downloads.xiph.org/releases/${_realname}/${_realname}-${pkgver}.tar.gz")
-md5sums=('94fe4acd241da8702c295bcd13a555e6')
+sha256sums=('01c2579fba8b283c9068cb704a70a6e654aa74ced064c091cafffbe6fb1d4cbf')
 
 build() {
   cd "${srcdir}/${_realname}-${pkgver}"
