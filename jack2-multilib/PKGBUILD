@@ -2,7 +2,8 @@
 # Chakra Packages for Chakra, part of chakra-project.org
 #
 # Maintainer: Michael Haesel <michael[dot]haesel[at]gmail[dot]com>
-#
+# Contributor: Ray Rashif <schiv@archlinux.org>
+# Contributor: SpepS <dreamspepser at yahoo dot it>
 
 # This one is in response to a need for an equivalent to lib32-jack for
 # jack2. A lib32-jack2 would require much patching and invading the pure
@@ -28,9 +29,9 @@ makedepends=('python2' 'doxygen' 'libffado'
 source=("http://www.grame.fr/~letz/${_tarname}-${pkgver}.tgz"
         '99-audio.conf'
         '40-hpet-permissions.rules')
-md5sums=('1dd2ff054cab79dfc11d134756f27165'
-         'ae65b7c9ebe0fff6c918ba9d97ae342d'
-         '471aad533ff56c5d3cbbf65ce32cadef')
+sha256sums=('4c712eac54bdf5b4c0245f728654459d0437e5cdab84e7ac633be6fe4502081d'
+            'f6ef5910d8f13ad117851729b396802f8ea4cffa7786b2eea53ce8cbac8f7c15'
+            '08beea3d5594cdb9f78ad9302b6c4d8e89003a9fbd401c9f7b10f2cba23edecb')
 
 _pyfix() {
   sed -i 's:bin/env python:bin/env python2:' \
