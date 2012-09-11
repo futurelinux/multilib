@@ -5,7 +5,7 @@
 
 _pkgsourcename=catalyst-utils
 pkgname=lib32-$_pkgsourcename
-pkgver=11.10
+pkgver=12.8
 pkgrel=1
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
 url="http://www.ati.amd.com"
@@ -13,16 +13,16 @@ arch=(x86_64)
 license=('custom')
 depends=('lib32-libxext' 'lib32-libdrm' "catalyst-utils>=${pkgver}")
 conflicts=('lib32-libgl' 'lib32-nvidia-utils' 'lib32-ati-dri')
-replaces=('lib32-ati-fglrx-utils' 'lib32-fglrx-utils' 'lib32-ati-dri')
+replaces=('lib32-ati-fglrx-utils' 'lib32-fglrx-utils')
 provides=('lib32-libgl')
-source=(http://www2.ati.com/drivers/linux/ati-driver-installer-${pkgver/./-}-x86.x86_64.run
+source=(http://www2.ati.com/drivers/linux/amd-driver-installer-${pkgver/./-}-x86.x86_64.run
 		lib32-catalyst.sh)
-md5sums=('d33cada9b3a23726fbd41ffd02636358'
-		 'af7fb8ee4fc96fd54c5b483e33dc71c4')
+md5sums=(''
+         'af7fb8ee4fc96fd54c5b483e33dc71c4')
 
 build() {
   # Extract Catalyst driver installer
-  /bin/sh ./ati-driver-installer-${pkgver/./-}-x86.x86_64.run --extract archive_files
+  /bin/sh ./amd-driver-installer-${pkgver/./-}-x86.x86_64.run --extract archive_files
 }
 
 package() {
