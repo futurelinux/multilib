@@ -5,7 +5,7 @@
 
 _pkgbasename=libcups
 pkgname=lib32-$_pkgbasename
-pkgver=1.5.3
+pkgver=1.6.1
 pkgrel=1
 pkgdesc="The CUPS Printing System - client libraries (32-bit)"
 arch=('x86_64')
@@ -14,7 +14,7 @@ url="http://www.cups.org/"
 depends=(lib32-glibc $_pkgbasename)
 makedepends=(gcc-multilib cups lib32-libusb)
 source=(http://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2)
-md5sums=('e1ad15257aa6f162414ea3beae0c5df8')
+md5sums=('87ade07e3d1efd03c9c3add949cf9c00')
 
 build() {
   export CC="gcc -m32"
@@ -37,6 +37,7 @@ build() {
               --disable-gnutls \
               --enable-threads \
               --with-optim="$CFLAGS" \
+              --disable-avahi \
               --libdir=/usr/lib32
   make
 }
