@@ -4,7 +4,7 @@
 # Maintainer: Adrián Chaves Fernández (Gallaecio) <adriyetichaves gmail.com>
 
 pkgname=winetricks
-pkgver=20120308
+pkgver=20120912
 pkgrel=1
 pkgdesc='Script to install various redistributable runtime libraries in Wine.'
 url='http://wiki.winehq.org/winetricks'
@@ -13,7 +13,7 @@ arch=('any')
 depends=('wine' 'cabextract' 'unzip' 'xorg-utils')
 optdepends=('kdebase-kdialog: graphical interface.')
 source=($pkgname-$pkgver::http://www.kegel.com/wine/$pkgname)
-md5sums=('47aeb72765c09e51dc72f66b2f293d73')
+md5sums=('f9b05806f393f55e809556103f219fbe')
 
 package() {
   install -Dm755 $srcdir/$pkgname-$pkgver $pkgdir/usr/bin/$pkgname
