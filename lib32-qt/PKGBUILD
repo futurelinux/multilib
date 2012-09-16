@@ -1,59 +1,35 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Daniele Cocca <jmc@chakra-project.org>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=qt
-pkgname=lib32-$_pkgbasename
-pkgver=4.8.0
+pkgname="lib32-${_pkgbasename}"
+pkgver=4.8.2
 pkgrel=1
-#kdeqtver=b427b5e64483612122e56104552a9704f6013680
-pkgdesc='A cross-platform application and UI framework (32-bit)'
+pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
-url='http://qt.nokia.com/'
+url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
 depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl}
-         lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes} $_pkgbasename)
-
+         lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi}
+         "${_pkgbasename}=${pkgver}")
 makedepends=(cups gcc-multilib lib32-{mesa,libcups,libxfixes})
 options=('!libtool')
-_pkgfqn="qt-everywhere-opensource-src-${pkgver}"
-source=("ftp://ftp.qt.nokia.com/qt/source/${_pkgfqn}.tar.gz")
-#		"http://chakra-project.org/sources/qt/kde-qt-${kdeqtver}.patch.gz"
-
-md5sums=('e8a5fdbeba2927c948d9f477a6abe904')
-
-_create-kdeqt-patch() {
-	  #Create patches
-	  echo "creating kde-qt patches"
-	  local codir=$(mktemp -d)
-	  mkdir -p "${codir}/kde-qt"
-	  git clone git://gitorious.org/+kde-developers/qt/kde-qt.git "${codir}/kde-qt"
-	  pushd "${codir}/kde-qt"
-	  git checkout --track -b ${pkgver}-patched origin/${pkgver}-patched
-	  local kdeqtver=$(git --no-pager show --format='%H' "${pkgver}-patched" | head -1)
-	  git diff "v${pkgver}..${pkgver}-patched" | gzip > "${codir}/kde-qt-${kdeqtver}.patch.gz"
-      popd
-      mv "${codir}/kde-qt-${kdeqtver}.patch.gz" .
-	  rm -rf "${codir}"
-	  md5sum kde-qt-${kdeqtver}.patch.gz
-	  echo "change kdeqtver to $kdeqtver"
-}
+_pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
+source=("http://releases.qt-project.org/qt4/source/${_pkgfqn}.tar.gz"
+        'qt-webkit-4.8.1+glib-2.31.patch')
+md5sums=('3c1146ddf56247e16782f96910a8423b'
+         '1258b22d53a3d0a217d316e91cadc236')
 
 build() {
-  unset QMAKESPEC
-  export QT4DIR=$srcdir/$_pkgfqn
-  export PATH=${QT4DIR}/bin:${PATH}
-  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
+  cd "${srcdir}/${_pkgfqn}"
+
+  export QT4DIR="${srcdir}/${_pkgfqn}"
+  export LD_LIBRARY_PATH="${QT4DIR}/lib:${LD_LIBRARY_PATH}"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  cd $srcdir/$_pkgfqn
-
-#	msg "applying kde-qt patches"
-#	patch -p1 -i $srcdir/kde-qt-${kdeqtver}.patch || return 1
-
-
-# some of those are likely unnecessary, but I'm too lazy to find and remove them
+  # some of those are likely unnecessary, but I'm too lazy to find and remove them
   sed -i "/^QMAKE_LINK\s/s|g++|g++ -m32|g" mkspecs/common/g++-base.conf
   sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/g++-base.conf
   sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/gcc-base.conf
@@ -66,59 +42,60 @@ build() {
       -e "/^QMAKE_LFLAGS\s/s|+=|+= $LDFLAGS|g" \
       -i mkspecs/common/g++.conf
 
+  # apply the needed patches
+  patch -Np1 -i "${srcdir}/qt-webkit-4.8.1+glib-2.31.patch"
 
   ./configure -confirm-license -opensource -v -platform linux-g++-32 \
-    -prefix /usr \
-    -libdir /usr/lib32 \
-    -plugindir /usr/lib32/qt/plugins \
-    -importdir /usr/lib32/qt/imports \
-    -datadir /usr/share/qt \
-    -translationdir /usr/share/qt/translations \
-    -sysconfdir /etc \
-    -largefile \
-    -system-sqlite \
-    -xmlpatterns \
-    -no-phonon \
-    -no-phonon-backend \
-    -no-webkit \
-    -script \
-    -scripttools \
-    -system-zlib \
-    -system-libtiff \
-    -system-libpng \
-    -system-libmng \
-    -system-libjpeg \
-    -nomake demos \
-    -nomake examples \
-    -nomake docs \
-    -nomake tools \
-    -no-rpath \
-    -openssl-linked \
-    -optimized-qmake \
-    -dbus \
-    -reduce-relocations \
-    -no-separate-debug-info \
-    -no-gtkstyle \
-    -opengl \
-    -no-openvg \
-    -glib
+              -prefix /usr \
+              -libdir /usr/lib32 \
+              -plugindir /usr/lib32/qt/plugins \
+              -importdir /usr/lib32/qt/imports \
+              -datadir /usr/share/qt \
+              -translationdir /usr/share/qt/translations \
+              -sysconfdir /etc \
+              -system-sqlite \
+              -no-phonon \
+              -no-phonon-backend \
+              -webkit \
+              -openssl-linked \
+              -nomake demos \
+              -nomake examples \
+              -nomake docs \
+              -nomake tools \
+              -optimized-qmake \
+              -no-rpath \
+              -dbus-linked \
+              -reduce-relocations \
+              -no-openvg \
+              -xcursor \
+  || return 1
 
-	msg "starting the build"
-	make
+  # disable "warnings are errors" for some source directories
+  sed -e 's,-Werror,,' \
+      -i src/3rdparty/webkit/Source/WebCore/Makefile \
+      -i src/3rdparty/webkit/Source/WebCore/Makefile.WebKit \
+      -i src/3rdparty/webkit/Source/JavaScriptCore/Makefile \
+      -i src/3rdparty/webkit/Source/JavaScriptCore/Makefile.WebKit \
+      -i src/3rdparty/webkit/Source/WebKit/qt/Makefile.WebKit.QtWebKit \
+  || return
+
+  make
 }
 
 package() {
-  cd $srcdir/$_pkgfqn
-  make INSTALL_ROOT=$pkgdir install
+  cd "${srcdir}/${_pkgfqn}"
+  make install INSTALL_ROOT="${pkgdir}"
 
   # Fix wrong path in pkgconfig files
-  find ${pkgdir}/usr/lib32/pkgconfig -type f -name '*.pc' \
-    -exec perl -pi -e "s, -L${srcdir}/?\S+,,g" {} \;
+  find "${pkgdir}/usr/lib32/pkgconfig" -type f -name '*.pc' \
+       -exec perl -pi -e "s, -L${srcdir}/?\S+,,g" {} \;
   # Fix wrong path in prl files
-  find ${pkgdir}/usr/lib32 -type f -name '*.prl' \
-    -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
+  find "${pkgdir}/usr/lib32" -type f -name '*.prl' \
+       -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
 
-  rm -rf "${pkgdir}"/usr/{include,share,bin}
-  mkdir -p "$pkgdir/usr/share/licenses"
-  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+  rm -rf "${pkgdir}/usr"/{include,share,bin}
+  mkdir -p "${pkgdir}/usr/share/licenses"
+  ln -s "${_pkgbasename}" "${pkgdir}/usr/share/licenses/${pkgname}"
 }
+
+# vim:set ts=2 sw=2 et:
