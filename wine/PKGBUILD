@@ -4,13 +4,13 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.5.13
+pkgver=1.5.14
 pkgrel=1
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2)
-md5sums=('a03d2feafdf6ece0a1cdd6d0daf6a8ae')
+md5sums=('f84c54bd7422328e96b6cf14ee6e163c')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
@@ -74,14 +74,6 @@ optdepends=(
   samba
 )
 
-if [[ $CARCH == i686 ]]; then
-  # Strip lib32 etc. on i686
-  depends=(${depends[@]/*32-*/})
-  makedepends=(${makedepends[@]/*32-*/})
-  makedepends=(${makedepends[@]/*-multilib*/})
-  optdepends=(${optdepends[@]/*32-*/})
-fi
-
 build() {
   cd "$srcdir"
 
@@ -96,27 +88,25 @@ build() {
   export CFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
   export CXXFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
 
-  if [[ $CARCH == x86_64 ]]; then
-    msg2 "Building Wine-64..."
+  msg2 "Building Wine-64..."
 
-    mkdir $pkgname-64-build
-    cd "$srcdir/$pkgname-64-build"
-    ../$pkgname/configure \
-      --prefix=/usr \
-      --sysconfdir=/etc \
-      --libdir=/usr/lib \
-      --with-x \
-      --enable-win64
+  mkdir $pkgname-64-build
+  cd "$srcdir/$pkgname-64-build"
+  ../$pkgname/configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libdir=/usr/lib \
+    --with-x \
+    --enable-win64
 
-    make
+  make
 
-    _wine32opts=(
-      --libdir=/usr/lib32
-      --with-wine64="$srcdir/$pkgname-64-build"
-    )
+  _wine32opts=(
+    --libdir=/usr/lib32
+    --with-wine64="$srcdir/$pkgname-64-build"
+  )
 
-    export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-  fi
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   msg2 "Building Wine-32..."
   cd "$srcdir/$pkgname-32-build"
@@ -134,18 +124,14 @@ package() {
   msg2 "Packaging Wine-32..."
   cd "$srcdir/$pkgname-32-build"
 
-  if [[ $CARCH == i686 ]]; then
-    make prefix="$pkgdir/usr" install
-  else
-    make prefix="$pkgdir/usr" \
+  make prefix="$pkgdir/usr" \
       libdir="$pkgdir/usr/lib32" \
       dlldir="$pkgdir/usr/lib32/wine" install
 
-    msg2 "Packaging Wine-64..."
-    cd "$srcdir/$pkgname-64-build"
-    make prefix="$pkgdir/usr" \
+  msg2 "Packaging Wine-64..."
+  cd "$srcdir/$pkgname-64-build"
+  make prefix="$pkgdir/usr" \
       libdir="$pkgdir/usr/lib" \
       dlldir="$pkgdir/usr/lib/wine" install
-  fi
 }
 
