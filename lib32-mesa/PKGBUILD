@@ -5,20 +5,21 @@
 
 pkgbase=lib32-mesa
 pkgname=('lib32-mesa' 'lib32-libgl' 'lib32-libglapi' 'lib32-libgles' 'lib32-libegl' 'lib32-ati-dri' 'lib32-intel-dri'  'lib32-svga-dri')
-pkgver=8.0.3
-pkgrel=6
+pkgver=8.0.4
+pkgrel=1
 arch=('x86_64')
 makedepends=('glproto>=1.4.12' 'pkgconfig' 'lib32-libdrm>=2.4.37' 'lib32-libxxf86vm>=1.1.0' 'lib32-libxdamage>=1.1.3' 'lib32-expat>=2.0.1' 'lib32-libx11>=1.3.5' 'lib32-libxt>=1.0.8' 'lib32-gcc-libs>=4.5' 'lib32-llvm>=3.0' 'dri2proto>=2.6' 'python2' 'libxml2' 'gcc-multilib' imake 'lib32-udev')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 source=("ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2"
-  'mesa-8.0.3-llvm-3.1-fixes.patch')
-md5sums=('cc5ee15e306b8c15da6a478923797171'
+        'mesa-8.0.3-llvm-3.1-fixes.patch')
+md5sums=('d546f988adfdf986cff45b1efa2d8a46'
          '0082f4d17674155aa13bc611a5687788')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CFLAGS="-m32"
+  export CXXFLAGS="-m32"
+  export LDFLAGS="-m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   # for our llvm-config for 32 bit
   export LLVM_CONFIG="/usr/bin/llvm-config32"
@@ -36,25 +37,33 @@ build() {
                --with-dri-drivers="i915,i965,r200,radeon,swrast" \
                --enable-gallium-llvm \
                --enable-gallium-egl \
-               --enable-shared-glapi\
+               --with-egl-platforms=x11,drm \
+               --enable-shared-glapi \
                --enable-glx-tls \
                --enable-dri \
                --enable-glx \
+               --enable-osmesa \
                --enable-gles1 \
                --enable-gles2 \
                --enable-egl \
                --enable-texture-float \
                --enable-shared-dricore \
+               --enable-xa \
+               --enable-vdpau \
                --enable-32-bit \
-               --enable-osmesa \
+               --disable-64-bit \
   || return 1
+
+  sed -e 's,XA_CFLAGS = \(.*\)s,XA_CFLAGS = -m32 \1,' \
+      -e '42s,\$(CC),$(CC) -m32,' \
+      -i src/gallium/state_trackers/xa/Makefile
 
   make
 }
 
 package_lib32-libgl() {
-  depends=('lib32-libdrm>=2.4.33' 'lib32-libxxf86vm>=1.1.0' 'lib32-libxdamage>=1.1.3' 'lib32-expat>=2.0.1' 'lib32-gcc-libs>=4.5' 'libgl')
-  pkgdesc="Mesa 3-D graphics library and DRI software rasterizer (32-bit)"
+depends=('lib32-libdrm>=2.4.33' 'lib32-libxxf86vm>=1.1.0' 'lib32-libxdamage>=1.1.3' 'lib32-expat>=2.0.1' 'lib32-gcc-libs>=4.5' 'libgl')
+pkgdesc="Mesa 3-D graphics library and DRI software rasterizer. (ELF32)"
 
   cd "${srcdir}/Mesa-${pkgver}" 
 
@@ -74,8 +83,8 @@ package_lib32-libgl() {
 }
 
 package_lib32-libglapi() {
-  depends=('glibc')
-  pkgdesc="free implementation of the GL API -- shared library. The Mesa GL API module is responsible for dispatching all the gl* functions"
+depends=('glibc')
+pkgdesc="free implementation of the GL API -- shared library. The Mesa GL API module is responsible for dispatching all the gl* functions"
 
   cd ${srcdir}/?esa-*   
   install -m755 -d "${pkgdir}/usr/lib32"
@@ -86,8 +95,8 @@ package_lib32-libglapi() {
 }
 
 package_lib32-libgles() {
-  depends=('libgles')
-  pkgdesc="Mesa GLES libraries (32-bit)"
+depends=('libgles')
+pkgdesc="Mesa GLES libraries. (ELF32)"
 
   cd "${srcdir}/Mesa-${pkgver}" 
 
@@ -102,8 +111,8 @@ package_lib32-libgles() {
 }
 
 package_lib32-libegl() {
-  depends=('lib32-udev' 'libegl')
-  pkgdesc="Mesa libEGL libraries (32-bit)"
+depends=('lib32-udev' 'libegl')
+pkgdesc="Mesa libEGL libraries. (ELF32)"
 
   cd "${srcdir}/Mesa-${pkgver}" 
 
@@ -119,8 +128,8 @@ package_lib32-libegl() {
 }
 
 package_lib32-mesa() {
-  depends=('lib32-libgl' 'lib32-libx11>=1.3.5' 'lib32-libxt>=1.0.8' 'mesa')
-  pkgdesc="Mesa 3-D graphics libraries and include files (32-bit)"
+depends=('lib32-libgl' 'lib32-libx11>=1.3.5' 'lib32-libxt>=1.0.8' 'mesa')
+pkgdesc="Mesa 3-D graphics libraries and include files. (ELF32)"
 
   cd "${srcdir}/Mesa-${pkgver}" 
 
@@ -139,9 +148,9 @@ package_lib32-mesa() {
 }
 
 package_lib32-ati-dri() {
-  depends=("lib32-libgl=${pkgver}")
-  pkgdesc="Mesa DRI + Gallium3D for r300 and later chipsets drivers for AMD/ATI Radeon (32-bit)"
-  conflicts=('xf86-video-ati<6.9.0-6')
+depends=("lib32-libgl=${pkgver}")
+pkgdesc="Mesa DRI + Gallium3D for r300 and later chipsets drivers for AMD/ATI Radeon. (ELF32)"
+conflicts=('xf86-video-ati<6.9.0-6')
 
   cd ${srcdir}/?esa-*/src/mesa/drivers/dri
   # classic mesa drivers for radeon,r200
@@ -153,15 +162,15 @@ package_lib32-ati-dri() {
 }
 
 package_lib32-intel-dri() {
-  depends=("lib32-libgl=${pkgver}")
-  pkgdesc="Mesa DRI drivers for Intel (32-bit)"
+depends=("lib32-libgl=${pkgver}")
+pkgdesc="Mesa DRI drivers for Intel. (ELF32)"
 
   make -C ${srcdir}/?esa-*/src/mesa/drivers/dri/i915 DESTDIR="${pkgdir}" install
   make -C ${srcdir}/?esa-*/src/mesa/drivers/dri/i965 DESTDIR="${pkgdir}" install
 }
 package_lib32-svga-dri() {
-  depends=("mesa=${pkgver}")
-  pkgdesc="Gallium3D VMware guest GL driver"
+depends=("mesa=${pkgver}")
+pkgdesc="Gallium3D VMware guest GL driver."
 
   make -C ${srcdir}/?esa-*/src/gallium/targets/dri-vmwgfx DESTDIR="${pkgdir}" install
 }
