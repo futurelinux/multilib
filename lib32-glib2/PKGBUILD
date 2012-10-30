@@ -4,38 +4,68 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 
 _pkgbasename=glib2
-pkgname=lib32-$_pkgbasename
+pkgname="lib32-${_pkgbasename}"
 pkgver=2.32.1
 _pkgver=2.32
-pkgrel=1
-pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
+pkgrel=2
+pkgdesc="Common C routines used by GTK+ 2.4 and other libs. (ELF32)"
 url="http://www.gtk.org/"
 arch=('x86_64')
 license=('LGPL')
-depends=('lib32-pcre' 'lib32-zlib' 'lib32-dbus-core' $_pkgbasename)
+depends=('lib32-pcre' 'lib32-zlib' 'lib32-dbus-core' "${_pkgbasename}")
 makedepends=('python2' 'lib32-libffi' 'gcc-multilib')
 options=('!libtool' '!docs')
-source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${_pkgver}/glib-${pkgver}.tar.xz)
+source=("http://ftp.gnome.org/pub/GNOME/sources/glib/${_pkgver}/glib-${pkgver}.tar.xz")
 sha256sums=('484d5b7fc09f3fa398355adaf74b369768f5859866c299f229c99721990f8398')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CC="gcc -m32 -march=i686"
+  export CXX="g++ -m32 -march=i686"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/glib-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32 \
-      --enable-static --enable-shared --with-pcre=system --disable-fam
+
+  #############################################################################
+  # Generate an autoconfig cache file.
+  # This is needed to properly cross-compile GLib.
+  #
+  # See:
+  #   http://developer.gnome.org/glib/stable/glib-cross-compiling.html
+
+  cat > i686.cache <<EOF
+glib_cv_long_long_format=ll
+glib_cv_stack_grows=no
+glib_cv_uscore=no
+ac_cv_func_posix_getpwuid_r=yes
+ac_cv_func_nonposix_getpwuid_r=no
+ac_cv_func_posix_getgrgid_r=yes
+EOF
+
+  ./configure \
+    --cache-file="i686.cache" \
+    --build="${CARCH}-unknown-linux-gnu" \
+    --host="i686-unknown-linux-gnu" \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libdir=/usr/lib32 \
+    --enable-static \
+    --enable-shared \
+    --with-pcre=system \
+    --disable-fam \
+  || return 1
+
   make
 }
 
 package() {
   cd "${srcdir}/glib-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  make install DESTDIR="${pkgdir}"
   rm -rf "${pkgdir}"/{etc,usr/{share,include}}
 
-  cd "${pkgdir}"/usr/bin
+  cd "${pkgdir}/usr/bin"
   mv gio-querymodules gio-querymodules-32
   rm -f gdbus glib* gobject-query gsettings gtester*
-  rm -rf "$pkgdir"/usr/{bin,lib32/gdbus-2.0}
+  rm -rf "${pkgdir}/usr"/{bin,lib32/gdbus-2.0}
 }
+
+# vim:set ts=2 sw=2 et:
