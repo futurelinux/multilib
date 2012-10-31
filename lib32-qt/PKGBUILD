@@ -2,34 +2,35 @@
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# contributor: Florian Pritz <flo@xssn.at>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 _pkgbasename=qt
-pkgname=lib32-$_pkgbasename
-pkgver=4.8.2
+pkgname="lib32-${_pkgbasename}"
+pkgver=4.8.3
 pkgrel=1
-pkgdesc='A cross-platform application and UI framework (32-bit)'
+pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
-depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl}
-         lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi} $_pkgbasename)
+depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gstreamer0.10,gstreamer0.10-base}
+         lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi,xml2}
+         "${_pkgbasename}=${pkgver}")
 makedepends=(cups gcc-multilib lib32-{mesa,libcups,libxfixes})
 options=('!libtool')
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
 source=("http://releases.qt-project.org/qt4/source/${_pkgfqn}.tar.gz")
-md5sums=('3c1146ddf56247e16782f96910a8423b')
+md5sums=('a663b6c875f8d7caa8ac9c30e4a4ec3b')
 
 build() {
-  cd $srcdir/$_pkgfqn
+  cd "${srcdir}/${_pkgfqn}"
 
-  export QT4DIR=$srcdir/$_pkgfqn
-  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-# some of those are likely unnecessary, but I7ca519c824d67cfae0281ec50af24ad8'm too lazy to find and remove them
+  export QT4DIR="${srcdir}/${_pkgfqn}"
+  export LD_LIBRARY_PATH="${QT4DIR}/lib:${LD_LIBRARY_PATH}"
+
+  # some of those are likely unnecessary, but I'm too lazy to find and remove them
   sed -i "/^QMAKE_LINK\s/s|g++|g++ -m32|g" mkspecs/common/g++-base.conf
   sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/g++-base.conf
   sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/gcc-base.conf
@@ -43,45 +44,55 @@ build() {
       -i mkspecs/common/g++.conf
 
   ./configure -confirm-license -opensource -v -platform linux-g++-32 \
-    -prefix /usr \
-    -libdir /usr/lib32 \
-    -plugindir /usr/lib32/qt/plugins \
-    -importdir /usr/lib32/qt/imports \
-    -datadir /usr/share/qt \
-    -translationdir /usr/share/qt/translations \
-    -sysconfdir /etc \
-    -system-sqlite \
-    -no-phonon \
-    -no-phonon-backend \
-    -no-webkit \
-    -graphicssystem raster \
-    -openssl-linked \
-    -nomake demos \
-    -nomake examples \
-    -nomake docs \
-    -nomake tools \
-    -optimized-qmake \
-    -no-rpath \
-    -dbus-linked \
-    -reduce-relocations \
-    -no-openvg \
-    -xcursor
+              -prefix /usr \
+              -libdir /usr/lib32 \
+              -plugindir /usr/lib32/qt/plugins \
+              -importdir /usr/lib32/qt/imports \
+              -datadir /usr/share/qt \
+              -translationdir /usr/share/qt/translations \
+              -sysconfdir /etc \
+              -system-sqlite \
+              -no-phonon \
+              -no-phonon-backend \
+              -no-webkit \
+              -no-javascript-jit \
+              -openssl-linked \
+              -nomake demos \
+              -nomake examples \
+              -nomake docs \
+              -nomake tools \
+              -optimized-qmake \
+              -no-rpath \
+              -dbus-linked \
+              -reduce-relocations \
+              -no-openvg \
+              -xcursor \
+  || return 1
+
+  # disable "warnings are errors" for some source directories
+  sed -e 's,-Werror,,' \
+      -i src/3rdparty/webkit/Source/WebCore/Makefile* \
+      -i src/3rdparty/webkit/Source/JavaScriptCore/Makefile* \
+      -i src/3rdparty/webkit/Source/WebKit/qt/Makefile* \
+  || return 1
 
   make
 }
 
 package() {
-  cd $srcdir/$_pkgfqn
-  make INSTALL_ROOT=$pkgdir install
+  cd "${srcdir}/${_pkgfqn}"
+  make install INSTALL_ROOT="${pkgdir}"
 
   # Fix wrong path in pkgconfig files
-  find ${pkgdir}/usr/lib32/pkgconfig -type f -name '*.pc' \
-    -exec perl -pi -e "s, -L${srcdir}/?\S+,,g" {} \;
+  find "${pkgdir}/usr/lib32/pkgconfig" -type f -name '*.pc' \
+       -exec perl -pi -e "s, -L${srcdir}/?\S+,,g" {} \;
   # Fix wrong path in prl files
-  find ${pkgdir}/usr/lib32 -type f -name '*.prl' \
-    -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
+  find "${pkgdir}/usr/lib32" -type f -name '*.prl' \
+       -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
 
-  rm -rf "${pkgdir}"/usr/{include,share,bin}
-  mkdir -p "$pkgdir/usr/share/licenses"
-  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+  rm -rf "${pkgdir}/usr"/{include,share,bin}
+  mkdir -p "${pkgdir}/usr/share/licenses"
+  ln -s "${_pkgbasename}" "${pkgdir}/usr/share/licenses/${pkgname}"
 }
+
+# vim:set ts=2 sw=2 et:
