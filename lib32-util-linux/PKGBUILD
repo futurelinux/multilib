@@ -10,7 +10,7 @@ pkgrel=1
 pkgdesc="Miscellaneous system utilities for Linux (32-bit)"
 url="http://userweb.kernel.org/~kzak/util-linux-ng/"
 arch=('x86_64')
-depends=('lib32-glibc' $_pkgbasename)
+depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 license=('GPL2')
 options=('!libtool' '!emptydirs')

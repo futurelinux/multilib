@@ -11,7 +11,7 @@ pkgdesc="XML stylesheet transformation library (32-bit)"
 arch=('x86_64')
 url="http://xmlsoft.org/XSLT/"
 license=('custom')
-depends=('lib32-libxml2>=2.7.7' 'lib32-libgcrypt>=1.4.4' $_pkgbasename)
+depends=('lib32-libxml2>=2.7.7' 'lib32-libgcrypt>=1.4.4' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 options=('!libtool')
 source=(ftp://xmlsoft.org/libxslt/${_pkgbasename}-${pkgver}.tar.gz)

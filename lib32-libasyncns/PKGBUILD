@@ -12,7 +12,7 @@ arch=(x86_64)
 url="http://0pointer.de/lennart/projects/libasyncns"
 license=('LGPL')
 options=('!libtool')
-depends=('lib32-glibc' $_pkgbasename)
+depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 source=(http://0pointer.de/lennart/projects/libasyncns/${_pkgbasename}-${pkgver}.tar.gz)
 md5sums=('1f553d6ce1ad255bc83b3d8e9384f515')

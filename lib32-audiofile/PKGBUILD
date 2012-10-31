@@ -11,7 +11,7 @@ pkgdesc="Silicon Graphics Audio File Library (32-bit)"
 arch=('x86_64')
 url="http://www.68k.org/~michael/audiofile/"
 license=('LGPL')
-depends=('lib32-glibc' $_pkgbasename)
+depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 options=('!libtool')
 source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/0.2/${_pkgbasename}-${pkgver}.tar.bz2)

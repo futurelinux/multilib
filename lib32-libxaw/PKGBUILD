@@ -11,7 +11,7 @@ pkgdesc="X11 Athena Widget library (32 bit)"
 arch=('x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('lib32-libxmu' 'lib32-libxpm' "$_pkgbasename>=$pkgver")
+depends=('lib32-libxmu' 'lib32-libxpm' "$_pkgbasename=$pkgver>=$pkgver")
 makedepends=('xorg-util-macros' 'gcc-multilib')
 options=('!libtool')
 source=(http://xorg.freedesktop.org/releases/individual/lib/libXaw-${pkgver}.tar.bz2)

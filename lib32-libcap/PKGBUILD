@@ -11,7 +11,7 @@ pkgdesc="POSIX 1003.1e capabilities (32-bit)"
 arch=(x86_64)
 url="http://www.kernel.org/pub/linux/libs/security/linux-privs/"
 license=('GPL')
-depends=('lib32-attr' $_pkgbasename)
+depends=('lib32-attr' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 #source=(http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/${_pkgbasename}-${pkgver}.tar.gz)
 source=(ftp://ftp.archlinux.org/other/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)

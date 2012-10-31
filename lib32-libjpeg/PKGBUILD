@@ -12,7 +12,7 @@ pkgdesc="Library of JPEG support functions (32-bit)"
 arch=('x86_64')
 url="http://www.ijg.org/"
 license=('custom')
-depends=('lib32-glibc' $_pkgbasename)
+depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('libtool' 'gcc-multilib')
 options=('!libtool')
 source=(http://www.ijg.org/files/jpegsrc.v${_pkgver}.tar.gz)

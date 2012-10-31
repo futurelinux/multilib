@@ -11,7 +11,7 @@ pkgdesc="Vorbis codec library (32-bit)"
 arch=('x86_64')
 license=('custom')
 url="http://www.xiph.org/ogg/vorbis/"
-depends=('lib32-libogg' $_pkgbasename)
+depends=('lib32-libogg' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 options=('!libtool')
 source=(http://downloads.xiph.org/releases/vorbis/${_pkgbasename}-${pkgver}.tar.gz)

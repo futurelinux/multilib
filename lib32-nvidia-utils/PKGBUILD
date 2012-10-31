@@ -10,7 +10,7 @@ pkgrel=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
 url="http://www.nvidia.com/"
-depends=('lib32-libxvmc' 'lib32-zlib' 'lib32-gcc-libs' $_pkgbasename=$pkgver)
+depends=('lib32-libxvmc' 'lib32-zlib' 'lib32-gcc-libs' $_pkgbasename=$pkgver=$pkgver)
 conflicts=('lib32-libgl')
 provides=('lib32-libgl=7.11')
 license=('custom')

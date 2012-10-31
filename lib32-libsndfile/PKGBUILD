@@ -11,7 +11,7 @@ pkgdesc="A C library for reading and writing files containing sampled sound (32-
 arch=('x86_64')
 url="http://www.mega-nerd.com/libsndfile"
 license=('LGPL')
-depends=('lib32-flac' 'lib32-libvorbis' $_pkgbasename)
+depends=('lib32-flac' 'lib32-libvorbis' $_pkgbasename=$pkgver)
 makedepends=('lib32-alsa-lib' 'gcc-multilib')
 options=('!libtool')
 source=(http://www.mega-nerd.com/libsndfile/files/${_pkgbasename}-${pkgver}.tar.gz)

@@ -13,7 +13,7 @@ pkgdesc="Abstraction library that comes between applications and audio visualisa
 arch=('x86_64')
 url="http://sourceforge.net/projects/libvisual/"
 license=('LGPL')
-depends=('lib32-glibc' "$_pkgbasename")
+depends=('lib32-glibc' "$_pkgbasename=$pkgver")
 makedepends=('gcc-multilib')
 options=('!libtool')
 source=("http://downloads.sourceforge.net/sourceforge/libvisual/libvisual-${pkgver}.tar.gz")

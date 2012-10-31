@@ -12,7 +12,7 @@ pkgdesc="GNU readline library (32-bit)"
 arch=(x86_64)
 url="http://tiswww.case.edu/php/chet/readline/rltop.html"
 license=('GPL')
-depends=('lib32-glibc' 'lib32-ncurses' $_pkgbasename)
+depends=('lib32-glibc' 'lib32-ncurses' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 source=(http://ftp.gnu.org/gnu/readline/readline-6.1.tar.gz)
 if [ $_patchlevel -gt 00 ]; then

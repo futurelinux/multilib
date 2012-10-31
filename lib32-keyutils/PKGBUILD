@@ -11,7 +11,7 @@ pkgdesc="Linux Key Management Utilities (32-bit)"
 arch=(x86_64)
 url="http://www.kernel.org"
 license=('GPL2' 'LGPL2.1')
-depends=(lib32-glibc $_pkgbasename)
+depends=(lib32-glibc $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 source=(http://people.redhat.com/~dhowells/$_pkgbasename/$_pkgbasename-$pkgver.tar.bz2)
 md5sums=('e168c1bdaf5aa93c2cbf8a5e7f8ef27b')

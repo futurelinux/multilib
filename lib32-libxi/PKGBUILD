@@ -10,7 +10,7 @@ pkgrel=1
 pkgdesc="X11 Input extension library (32-bit)"
 arch=('x86_64')
 url="http://xorg.freedesktop.org"
-depends=('lib32-libxext' 'inputproto' $_pkgbasename)
+depends=('lib32-libxext' 'inputproto' $_pkgbasename=$pkgver)
 makedepends=('pkgconfig' 'xorg-util-macros' gcc-multilib)
 options=(!libtool)
 license=('custom')

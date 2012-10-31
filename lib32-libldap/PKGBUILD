@@ -11,7 +11,7 @@ pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries (32-bit)"
 arch=('x86_64')
 license=('custom')
 url="http://www.openldap.org/"
-depends=('lib32-openssl' $_pkgbasename)
+depends=('lib32-openssl' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 options=('!libtool')
 source=("ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-${pkgver}.tgz"

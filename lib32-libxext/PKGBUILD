@@ -11,7 +11,7 @@ pkgdesc="X11 miscellaneous extensions library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('lib32-libx11' 'xextproto' $_pkgbasename)
+depends=('lib32-libx11' 'xextproto' $_pkgbasename=$pkgver)
 makedepends=('xorg-util-macros' 'gcc-multilib')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXext-${pkgver}.tar.bz2)

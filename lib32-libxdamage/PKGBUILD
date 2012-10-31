@@ -11,7 +11,7 @@ pkgdesc="X11 damaged region extension library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('lib32-libxfixes>=4.0.4' $_pkgbasename)
+depends=('lib32-libxfixes>=4.0.4' $_pkgbasename=$pkgver)
 makedepends=('pkg-config' 'damageproto>=1.2.0' gcc-multilib)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXdamage-${pkgver}.tar.bz2)

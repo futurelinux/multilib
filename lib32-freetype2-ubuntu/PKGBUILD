@@ -12,7 +12,7 @@ pkgdesc="TrueType font rendering library (32-bit) with infinality patch"
 arch=(x86_64)
 license=('GPL')
 url="http://freetype.sourceforge.net"
-depends=('lib32-zlib' $_pkgbasename)
+depends=('lib32-zlib' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 conflicts=('lib32-freetype2')
 provides=("lib32-freetype2=$pkgver")

@@ -12,7 +12,7 @@ arch=('x86_64')
 url="http://www.mozilla.org/projects/security/pki/nss/"
 license=('MPL' 'GPL')
 _nsprver=4.9
-depends=("lib32-nspr>=${_nsprver}" 'lib32-sqlite3>=3.6.17' "$_pkgbasename" 'lib32-zlib')
+depends=("lib32-nspr>=${_nsprver}" 'lib32-sqlite3>=3.6.17' "$_pkgbasename=$pkgver" 'lib32-zlib')
 makedepends=('gcc-multilib' 'perl')
 source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${_pkgbasename}-${pkgver}.tar.gz
         nss-no-rpath.patch

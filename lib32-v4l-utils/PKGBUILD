@@ -15,7 +15,7 @@ replaces=('lib32-libv4l')
 conflicts=('lib32-libv4l')
 license=('LGPL')
 makedepends=('gcc-multilib')
-depends=('lib32-gcc-libs' $_pkgbasename 'lib32-libjpeg-turbo')
+depends=('lib32-gcc-libs' $_pkgbasename=$pkgver 'lib32-libjpeg-turbo')
 source=(http://linuxtv.org/downloads/v4l-utils/${_pkgbasename}-${pkgver}.tar.bz2)
 sha256sums=('5fa4c6f4b6f5410de57271a03cc9a15f15195ef3fc05a8e42ecf507d6d70a87f')
 

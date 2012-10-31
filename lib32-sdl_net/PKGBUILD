@@ -11,7 +11,7 @@ pkgdesc="A small sample cross-platform networking library (32 bit)"
 arch=('x86_64')
 url="http://www.libsdl.org/projects/SDL_net/"
 license=('LGPL')
-depends=('lib32-sdl' $_pkgbasename)
+depends=('lib32-sdl' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 options=('!libtool')
 source=(http://www.libsdl.org/projects/SDL_net/release/SDL_net-${pkgver}.tar.gz)

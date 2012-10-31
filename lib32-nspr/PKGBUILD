@@ -11,7 +11,7 @@ pkgdesc="Netscape Portable Runtime (32-bit)"
 arch=('x86_64')
 url="http://www.mozilla.org/projects/nspr/"
 license=('MPL' 'GPL')
-depends=('lib32-glibc' $_pkgbasename)
+depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('zip' 'gcc-multilib')
 options=(!emptydirs)
 source=(ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${_pkgbasename}-${pkgver}.tar.gz
