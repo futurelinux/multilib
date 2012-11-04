@@ -4,33 +4,19 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=skype
-pkgver=2.2.0.35
-pkgrel=3
-arch=(i686 x86_64)
+pkgver=4.0.0.8
+pkgrel=2
+arch=(x86_64)
 pkgdesc="P2P software for high-quality voice communication"
 url="http://www.skype.com/"
 license=('custom')
 options=('!strip')
 install=skype.install
-depends=(xdg-utils hicolor-icon-theme)
-conflicts=('skype-staticqt')
-
-if [[ $CARCH == i686 ]]; then
-  depends+=(qt alsa-lib libxss libxv)
-  optdepends=('v4l-utils: webcam support'
-              'libcanberra: XDG sound support'
-              'pulseaudio: PulseAudio support')
-else
-  depends+=(lib32-{qt,alsa-lib,libxss,libxv,v4l-utils})
-  optdepends=('lib32-libcanberra: XDG sound support'
-              'lib32-libpulse: PulseAudio support')
-  conflicts+=(bin32-skype bin32-skype-staticqt)
-  provides=("bin32-skype=$pkgver")
-  replaces=(bin32-skype)
-fi
-
+depends=(xdg-utils hicolor-icon-theme lib32-{qt,alsa-lib,libxss,libxv,libxcursor})
+optdepends=('lib32-libcanberra: XDG sound support'
+            'lib32-libpulse: PulseAudio support')
 source=(http://download.skype.com/linux/$pkgname-$pkgver.tar.bz2 PERMISSION)
-md5sums=('b60a19345ee7b3522b5fe4047150aaf8'
+md5sums=('fa9b4f0ac110349a2480071875068a99'
          '26e1772379d4d4df9471b6ed660a6d97')
 
 package() {
@@ -54,6 +40,7 @@ package() {
     install -Dm 644 icons/SkypeBlue_${_i}x${_i}.png \
       "$pkgdir/usr/share/icons/hicolor/${_i}x${_i}/skype.png"
   done
+
   install -Dm 644 icons/SkypeBlue_48x48.png \
     "$pkgdir/usr/share/pixmaps/skype.png"
 
