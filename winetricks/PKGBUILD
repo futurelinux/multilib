@@ -11,7 +11,6 @@ url='http://wiki.winehq.org/winetricks'
 license=('LGPL')
 arch=('any')
 depends=('wine' 'cabextract' 'unzip' 'xorg-utils')
-optdepends=('kdebase-kdialog: graphical interface.')
 source=($pkgname-$pkgver::http://www.kegel.com/wine/$pkgname)
 md5sums=('f9b05806f393f55e809556103f219fbe')
 
