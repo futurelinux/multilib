@@ -10,14 +10,14 @@
 _pkgname=glibc
 pkgname=lib32-$_pkgname
 pkgver=2.15
-pkgrel=1
+pkgrel=2
 _glibcdate=20120419
 pkgdesc="GNU C Library for multilib"
 arch=('x86_64')
 url="http://www.gnu.org/software/libc"
 license=('GPL' 'LGPL')
 depends=("glibc>=$pkgver")
-#makedepends=('gcc-multilib>=4.6')
+#makedepends=('gcc-multilib>=4.7')
 makedepends=('gcc-multilib')
 options=('!strip' '!emptydirs')
 source=(http://chakra.sourceforge.net/sources/${_pkgname}/${_pkgname}-${pkgver}_${_glibcdate}.tar.xz
@@ -213,7 +213,7 @@ build() {
       --libdir=/usr/lib32 --libexecdir=/usr/lib32 \
       --with-headers=/usr/include \
       --enable-add-ons=nptl,libidn \
-      --enable-kernel=2.6.27 \
+      --enable-kernel=2.6.32 \
       --with-tls --with-__thread \
       --enable-bind-now --without-gd \
       --without-cvs --disable-profile \
