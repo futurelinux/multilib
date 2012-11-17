@@ -5,7 +5,7 @@
 
 _pkgbasename=qtwebkit
 pkgname="lib32-${_pkgbasename}"
-pkgver=2.2.1
+pkgver=2.2.2
 pkgrel=1
 pkgdesc="Standalone QtWebKit version. (ELF32)"
 arch=('i686' 'x86_64')
@@ -14,51 +14,35 @@ license=('GPL3' 'LGPL')
 depends=('lib32-qt' 'lib32-gstreamer0.10' 'lib32-gstreamer0.10-base'
          "${_pkgbasename}=${pkgver}")
 makedepends=('gperf' 'phonon' 'perl' 'python'
-             'lib32-sqlite3' 'lib32-fontconfig' 'lib32-mesa' 'lib32-libglapi' 'lib32-qt')
+             'lib32-sqlite3' 'lib32-fontconfig' 'lib32-mesa' 'lib32-libglapi')
 #source=("http://get.qt.nokia.com/qtwebkit/QtWebKit-${pkgver}.tar.gz")
-source=("http://chakra-linux.org/sources/${_pkgbasename}/QtWebKit-${pkgver}.tar.gz"
+source=("http://chakra-linux.org/sources/${_pkgbasename}/qtwebkit-${pkgver}-source.tar.gz"
         "http://chakra-linux.org/sources/${_pkgbasename}/qwebview-4.8.0.tar.bz2"
-        'gentoo-qt-webkit-4.8.1+glib-2.31.patch')
-md5sums=('1a77037379369ba151bb8a2d6bc6122a'
+        'glib.patch')
+md5sums=('86702e3a908e2968e87baa6600cbf31f'
          '13a4ac75d98452c2bf7ef710353e91d8'
-         '1258b22d53a3d0a217d316e91cadc236')
+         'dece50d952593e301007432962ba3000')
 
 build() {
-  cd "${srcdir}/QtWebKit-${pkgver}"
+  cd "${srcdir}/qtwebkit-${pkgver}-source"
+  
+  patch -p1 -i "${srcdir}"/glib.patch
 
-  unset MAKEFLAGS CXXFLAGS CFLAGS LDFLAGS
+  # move headers
+  mv include Source/
 
-  export CFLAGS="-m32" LDFLAGS="-m32" CXXFLAGS="-m32"
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  cd Source
+  qmake
+  cd ../
 
-  export QT4DIR="${srcdir}/${pkgname}"
-  export PATH="${QT4DIR}/bin:${PATH}"
-  export BUILD_WEBKIT_ARGS="DEFINES=QT_NO_UITOOLS"
+  make -C Source
 
-  # Make QtWebKit compile with a recent glib
-  patch -Np4 -i "${srcdir}/gentoo-qt-webkit-4.8.1+glib-2.31.patch"
-
-  # Remove -Werror from CXXFLAGS
-  sed -e '/QMAKE_CXXFLAGS\s*+=/ s:-Werror:-Wno-error=delete-non-virtual-dtor:g' \
-      -i Source/WebKit.pri
-
-  Tools/Scripts/build-webkit \
-    --qt \
-    --qmakearg="-platform linux-g++-32 -Wnone" \
-    --3d-canvas \
-  || return 1
- 
-  cd "${srcdir}/QtWebKit-${pkgver}/qwebview-4.8.0/plugins/qwebview"
-  qmake -platform "linux-g++-32"
-  make
 }
 
 package() {
-  cd "${srcdir}/QtWebKit-${pkgver}/WebKitBuild/Release"
-  make install INSTALL_ROOT="${pkgdir}"
+  cd "${srcdir}/qtwebkit-${pkgver}-source"
+  make INSTALL_ROOT="${pkgdir}" -C Source install
 
-  cd "${srcdir}/QtWebKit-${pkgver}/qwebview-4.8.0/plugins/qwebview"
-  make install INSTALL_ROOT="${pkgdir}"
 }
 
 # vim:set ts=2 sw=2 et:
