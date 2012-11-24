@@ -6,7 +6,7 @@
 _pkgbasename=qtwebkit
 pkgname="lib32-${_pkgbasename}"
 pkgver=2.2.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone QtWebKit version. (ELF32)"
 arch=('i686' 'x86_64')
 url="http://trac.webkit.org/wiki/QtWebKit"
@@ -25,7 +25,7 @@ md5sums=('86702e3a908e2968e87baa6600cbf31f'
 
 build() {
   cd "${srcdir}/qtwebkit-${pkgver}-source"
-  
+
   patch -p1 -i "${srcdir}"/glib.patch
 
   # move headers
@@ -42,7 +42,5 @@ build() {
 package() {
   cd "${srcdir}/qtwebkit-${pkgver}-source"
   make INSTALL_ROOT="${pkgdir}" -C Source install
-
+  rm -rf "${pkgdir}"/usr/{include,share,lib}
 }
-
-# vim:set ts=2 sw=2 et:
