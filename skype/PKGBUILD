@@ -1,22 +1,21 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=skype
-pkgver=4.0.0.8
-pkgrel=3
-arch=(x86_64)
+pkgver=4.1.0.20
+pkgrel=1
+arch=('x86_64')
 pkgdesc="P2P software for high-quality voice communication"
 url="http://www.skype.com/"
 license=('custom')
 options=('!strip')
 install=skype.install
-depends=(xdg-utils hicolor-icon-theme lib32-{qt,alsa-lib,libxss,libxv,libxcursor})
+depends=('xdg-utils' 'hicolor-icon-theme' lib32-{qt,alsa-lib,libxss,libxv,libxcursor})
 optdepends=('lib32-libcanberra: XDG sound support'
             'lib32-libpulse: PulseAudio support')
-source=(http://download.skype.com/linux/$pkgname-$pkgver.tar.bz2 PERMISSION)
-md5sums=('fa9b4f0ac110349a2480071875068a99'
+source=("http://download.skype.com/linux/$pkgname-$pkgver.tar.bz2" 'PERMISSION')
+md5sums=('fe41f6b36e96730161c0f9332b001575'
          '26e1772379d4d4df9471b6ed660a6d97')
 
 package() {

@@ -1,12 +1,11 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=qt
 pkgname="lib32-${_pkgbasename}"
 pkgver=4.8.3
-pkgrel=2
+pkgrel=3
 pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
 url='http://qt-project.org/'
@@ -14,7 +13,7 @@ license=('GPL3' 'LGPL')
 depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gstreamer0.10,gstreamer0.10-base}
          lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi,xml2}
          "${_pkgbasename}=${pkgver}")
-makedepends=(cups gcc-multilib lib32-{mesa,libcups,libxfixes})
+makedepends=('cups' 'gcc-multilib' lib32-{mesa,libcups,libxfixes})
 options=('!libtool')
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
 source=("http://releases.qt-project.org/qt4/source/${_pkgfqn}.tar.gz")
@@ -54,7 +53,7 @@ build() {
               -system-sqlite \
               -no-phonon \
               -no-phonon-backend \
-              -no-webkit \
+              -webkit \
               -no-javascript-jit \
               -openssl-linked \
               -nomake demos \
@@ -66,15 +65,13 @@ build() {
               -dbus-linked \
               -reduce-relocations \
               -no-openvg \
-              -xcursor \
-  || return 1
+              -xcursor 
 
   # disable "warnings are errors" for some source directories
   sed -e 's,-Werror,,' \
       -i src/3rdparty/webkit/Source/WebCore/Makefile* \
       -i src/3rdparty/webkit/Source/JavaScriptCore/Makefile* \
       -i src/3rdparty/webkit/Source/WebKit/qt/Makefile* \
-  || return 1
 
   make
 }
@@ -95,4 +92,3 @@ package() {
   ln -s "${_pkgbasename}" "${pkgdir}/usr/share/licenses/${pkgname}"
 }
 
-# vim:set ts=2 sw=2 et:
