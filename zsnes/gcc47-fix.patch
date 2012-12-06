@@ -1,0 +1,10 @@
+ --- /src/tools/depbuild.cpp	2012-05-27 23:33:13.681858365 +0300
++++ /src/tools/depbuild.cpp	2012-05-27 23:36:37.105674828 +0300
+@@ -28,6 +28,7 @@
+
+ #include "fileutil.h"
+ #include "strutil.h"
++#include "unistd.h"
+
+ string cc;
+ string nasm;
