@@ -6,8 +6,8 @@
 
 _pkgbasename=alsa-plugins
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.25
-pkgrel=2
+pkgver=1.0.26
+pkgrel=1
 pkgdesc="Extra alsa plugins (32-bit)"
 arch=(x86_64)
 url="http://www.alsa-project.org"
@@ -19,8 +19,9 @@ optdepends=('lib32-libpulse: PulseAudio plugin'
             'lib32-libsamplerate: libsamplerate resampling plugin'
             'lib32-speex: libspeexdsp resampling plugin')
 options=('!libtool')
-source=("ftp://ftp.alsa-project.org/pub/plugins/$_pkgbasename-$pkgver.tar.bz2")
-md5sums=('038c023eaa51171f018fbf7141255185')
+#source=("ftp://ftp.alsa-project.org/pub/plugins/$_pkgbasename-$pkgver.tar.bz2")
+source=("http://alsa.cybermirror.org//plugins/$_pkgbasename-$pkgver.tar.bz2")
+md5sums=('4facd408326ef5567a7d4ceb6589e6b0')
 
 build() {
   cd "$srcdir/$_pkgbasename-$pkgver"

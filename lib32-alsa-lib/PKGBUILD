@@ -5,7 +5,7 @@
 
 _pkgbasename=alsa-lib
 pkgname=lib32-${_pkgbasename}
-pkgver=1.0.25
+pkgver=1.0.26
 pkgrel=1
 pkgdesc="An alternative implementation of Linux sound support (32 bit)"
 arch=('x86_64')
@@ -14,8 +14,9 @@ makedepends=('gcc-multilib')
 depends=('lib32-glibc' 'alsa-lib')
 license=('GPL')
 options=(!libtool)
-source=(ftp://ftp.alsa-project.org/pub/lib/${_pkgbasename}-$pkgver.tar.bz2)
-md5sums=('06fe5819020c6684b991dcffc5471304')
+#source=(ftp://ftp.alsa-project.org/pub/lib/${_pkgbasename}-$pkgver.tar.bz2)
+source=(http://alsa.cybermirror.org/lib/alsa-lib-$pkgver.tar.bz2)
+md5sums=('2dfa35d28471d721e592b616beedf965')
 
 build() {
   cd $srcdir/${_pkgbasename}-$pkgver
