@@ -5,7 +5,7 @@
 
 _pkgbasename=libldap
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.23
+pkgver=2.4.33
 pkgrel=1
 pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries (32-bit)"
 arch=('x86_64')
@@ -16,8 +16,8 @@ makedepends=(gcc-multilib)
 options=('!libtool')
 source=("ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-${pkgver}.tgz"
         'ntlm.patch')
-md5sums=('90150b8c0d0192e10b30157e68844ddf'
-         'dfa9eb6f2fd9d0a3dab0e1860923489e')
+md5sums=('5adae44897647c15ce5abbff313bc85a'
+         'b75109064236048da33c7bbd5b48196f')
 
 build() {
   export CC="gcc -m32"

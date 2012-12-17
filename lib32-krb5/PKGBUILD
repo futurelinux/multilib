@@ -5,7 +5,7 @@
 
 _pkgbasename=krb5
 pkgname=lib32-$_pkgbasename
-pkgver=1.9.3
+pkgver=1.10.3
 pkgrel=1
 pkgdesc="The Kerberos network authentication system (32-bit)"
 arch=('x86_64')
@@ -16,13 +16,22 @@ makedepends=('perl' gcc-multilib)
 provides=('lib32-heimdal')
 replaces=('lib32-heimdal')
 conflicts=('lib32-heimdal')
-source=(http://web.mit.edu/kerberos/dist/${_pkgbasename}/1.9/${_pkgbasename}-${pkgver}-signed.tar)
-sha1sums=('01a14c0cb59ae558451772d6700ea420ae8b0ab0')
+source=("http://web.mit.edu/kerberos/dist/${_pkgbasename}/1.10/${_pkgbasename}-${pkgver}-signed.tar"
+        'krb5-1.10.1-gcc47.patch')
+sha1sums=('04ab9837e5d1958158bcb30bd6480201089a0cbb'
+          '36ac2f3a4541f2afbc4625a8ce7fb7c7936a76a7')
+
 options=('!emptydirs')
 
 build() {
    tar zxvf ${_pkgbasename}-${pkgver}.tar.gz
    cd "${srcdir}/${_pkgbasename}-${pkgver}/src"
+
+   # With gcc47 : deltat.c:1694:12: error: 'yylval' may be used uninitialized
+   # in this function [-Werror=maybe-uninitialized]
+   # As this is generated code, just ignore the complaint.
+   patch -Np2 -i ../../krb5-1.10.1-gcc47.patch
+   rm lib/krb5/krb/deltat.c
 
    export CC="gcc -m32"
    export CXX="g++ -m32"
