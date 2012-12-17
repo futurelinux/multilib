@@ -5,19 +5,16 @@
 
 _pkgbasename=e2fsprogs
 pkgname=lib32-e2fsprogs
-pkgver=1.41.11
+pkgver=1.42.5
 pkgrel=1
 pkgdesc="Ext2 filesystem libraries (32-bit)"
 arch=(x86_64)
 license=('GPL' 'LGPL' 'MIT')
 url="http://e2fsprogs.sourceforge.net"
-depends=('lib32-util-linux-ng>=2.16' $_pkgbasename=$pkgver)
+depends=('lib32-util-linux>=2.22.1' $_pkgbasename=$pkgver)
 makedepends=('bc' 'gcc-multilib')
-source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz"
-		"makefile.in.patch")
-md5sums=('fb507a40c2706bc38306f150d069e345'
-		 '3f28ffba24868e9da9ff24364a3cd40e')
-
+source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz")
+md5sums=('aca828bb4bcca20991a442deb950b670')
 
 build() {
   export CC="gcc -m32"
@@ -25,9 +22,6 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
-
-  # Fix for lib/ext2fs/Makefile.in
-  patch -Np1 -i ../makefile.in.patch
 
   ./configure --prefix=/usr --libdir=/usr/lib32 --with-root-prefix="" --enable-elf-shlibs \
       --disable-{debugfs,imager,resizer,fsck,uuidd,libuuid,libblkid}
