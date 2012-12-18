@@ -1,16 +1,9 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# contributor: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
-# Contributor: Corrado Primier <bardo@aur.archlinux.org>
-# Contributor: William Rea <sillywilly@gmail.com>
 
-_pkgbasename=libpulse
+_pkgbasename=pulseaudio
 pkgname="lib32-${_pkgbasename}"
 pkgdesc="A featureful, general-purpose sound server. (32-bit client libraries)"
-pkgver=2.1
+pkgver=3.0
 pkgrel=1
 arch=('x86_64')
 url="http://pulseaudio.org/"
@@ -18,16 +11,16 @@ license=('GPL' 'LGPL')
 depends=(lib32-{dbus-core,xcb-util,json-c}
          lib32-lib{asyncns,cap,xtst,sm,sndfile,samplerate}
          'webrtc-audio-processing' 'systemd>=189'
-         "${_pkgbasename}=${pkgver}")
+         "pulseaudio=${pkgver}")
 makedepends=('pkgconfig' 'gcc-multilib' 'lib32-libtool' 'intltool'
 		         'lib32-glib2' 'lib32-speex')
 optdepends=('lib32-alsa-plugins: ALSA support')
-provides=("lib32-pulseaudio=${pkgver}")
-conflicts=('lib32-pulseaudio')
-replaces=('lib32-pulseaudio')
+provides=("lib32-libpulse=${pkgver}")
+conflicts=('lib32-libpulse')
+replaces=('lib32-libpulse')
 options=(!emptydirs !libtool)
 source=("http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${pkgver}.tar.xz")
-sha256sums=('ef6b347bf47abfb98080795f1583018ac959b4aeb4df916b879f9e1eaba0ca7f')
+sha256sums=('c90bfda29605942d08e3e218ef10e3c660506a06651a616bfbb6a6df8392836d')
 
 _libs="libpulse.la libpulse-simple.la libpulse-mainloop-glib.la"
 _pkglibs="libpulsecommon-$pkgver.la libpulsedsp.la"

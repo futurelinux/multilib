@@ -4,19 +4,16 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.5.12
+pkgver=1.5.19
 pkgrel=2
-
 _pkgbasever=${pkgver/rc/-rc}
-
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2)
-md5sums=('42d8a0b933768447aa73447c4f0ec2ed')
-
+md5sums=('713ad4e383abf4288c48c3cf9743a503')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
 screenshot=('http://wstaw.org/m/2012/04/28/wine.png')
-arch=(i686 x86_64)
+arch=(x86_64)
 license=(LGPL)
 install=wine.install
 
@@ -73,14 +70,6 @@ optdepends=(
   samba
 )
 
-if [[ $CARCH == i686 ]]; then
-  # Strip lib32 etc. on i686
-  depends=(${depends[@]/*32-*/})
-  makedepends=(${makedepends[@]/*32-*/})
-  makedepends=(${makedepends[@]/*-multilib*/})
-  optdepends=(${optdepends[@]/*32-*/})
-fi
-
 build() {
   cd "$srcdir"
 
@@ -95,7 +84,6 @@ build() {
   export CFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
   export CXXFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
 
-  if [[ $CARCH == x86_64 ]]; then
     msg2 "Building Wine-64..."
 
     mkdir $pkgname-64-build
@@ -115,7 +103,6 @@ build() {
     )
 
     export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-  fi
 
   msg2 "Building Wine-32..."
   cd "$srcdir/$pkgname-32-build"
@@ -133,9 +120,6 @@ package() {
   msg2 "Packaging Wine-32..."
   cd "$srcdir/$pkgname-32-build"
 
-  if [[ $CARCH == i686 ]]; then
-    make prefix="$pkgdir/usr" install
-  else
     make prefix="$pkgdir/usr" \
       libdir="$pkgdir/usr/lib32" \
       dlldir="$pkgdir/usr/lib32/wine" install
@@ -145,6 +129,5 @@ package() {
     make prefix="$pkgdir/usr" \
       libdir="$pkgdir/usr/lib" \
       dlldir="$pkgdir/usr/lib/wine" install
-  fi
 }
 
