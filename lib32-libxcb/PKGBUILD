@@ -6,13 +6,13 @@
 _pkgbasename=libxcb
 pkgname=lib32-libxcb
 pkgver=1.9
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 client-side library (32-bit)"
 arch=(x86_64)
 url="http://xcb.freedesktop.org/"
 depends=('lib32-libxdmcp' 'lib32-libxau'
          $_pkgbasename=$pkgver)
-makedepends=('pkgconfig' 'libxslt' 'python2' 'gcc-multilib' 'libtool-multilib'
+makedepends=('pkg-config' 'libxslt' 'python2' 'gcc-multilib' 'libtool-multilib'
              'autoconf')
 conflicts=('libx11<1.1.99.2')
 options=('!libtool')
