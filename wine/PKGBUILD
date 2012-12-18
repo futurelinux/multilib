@@ -1,14 +1,16 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=wine
 pkgver=1.5.19
 pkgrel=2
+
 _pkgbasever=${pkgver/rc/-rc}
+
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2)
 md5sums=('713ad4e383abf4288c48c3cf9743a503')
+
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
@@ -20,6 +22,7 @@ install=wine.install
 depends=(
   fontconfig      lib32-fontconfig
   mesa            lib32-mesa
+  libglapi        lib32-libglapi
   libxcursor      lib32-libxcursor
   libxrandr       lib32-libxrandr
   libxdamage      lib32-libxdamage
@@ -32,6 +35,7 @@ depends=(
   libxi           lib32-libxi
   gettext         lib32-gettext
   desktop-file-utils
+  gstreamer0.10-base lib32-gstreamer0.10-base
 )
 
 makedepends=(autoconf ncurses bison perl fontforge flex prelink
@@ -84,25 +88,25 @@ build() {
   export CFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
   export CXXFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
 
-    msg2 "Building Wine-64..."
+  msg2 "Building Wine-64..."
 
-    mkdir $pkgname-64-build
-    cd "$srcdir/$pkgname-64-build"
-    ../$pkgname/configure \
-      --prefix=/usr \
-      --sysconfdir=/etc \
-      --libdir=/usr/lib \
-      --with-x \
-      --enable-win64
+  mkdir $pkgname-64-build
+  cd "$srcdir/$pkgname-64-build"
+  ../$pkgname/configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libdir=/usr/lib \
+    --with-x \
+    --enable-win64
 
-    make
+  make
 
-    _wine32opts=(
-      --libdir=/usr/lib32
-      --with-wine64="$srcdir/$pkgname-64-build"
-    )
+  _wine32opts=(
+    --libdir=/usr/lib32
+    --with-wine64="$srcdir/$pkgname-64-build"
+  )
 
-    export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   msg2 "Building Wine-32..."
   cd "$srcdir/$pkgname-32-build"
@@ -112,21 +116,21 @@ build() {
     --with-x \
     "${_wine32opts[@]}"
 
-  # These additional CFLAGS solve FS#27560
-  make CFLAGS+="-mstackrealign" CXXFLAGS+="-mstackrealign"
+  # These additional CFLAGS solve FS#27560 and FS#23277
+  make CFLAGS+="-mstackrealign -mincoming-stack-boundary=2" CXXFLAGS+="-mstackrealign -mincoming-stack-boundary=2"
 }
 
 package() {
   msg2 "Packaging Wine-32..."
   cd "$srcdir/$pkgname-32-build"
 
-    make prefix="$pkgdir/usr" \
+  make prefix="$pkgdir/usr" \
       libdir="$pkgdir/usr/lib32" \
       dlldir="$pkgdir/usr/lib32/wine" install
 
-    msg2 "Packaging Wine-64..."
-    cd "$srcdir/$pkgname-64-build"
-    make prefix="$pkgdir/usr" \
+  msg2 "Packaging Wine-64..."
+  cd "$srcdir/$pkgname-64-build"
+  make prefix="$pkgdir/usr" \
       libdir="$pkgdir/usr/lib" \
       dlldir="$pkgdir/usr/lib/wine" install
 }
