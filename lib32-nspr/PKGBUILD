@@ -1,11 +1,10 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=nspr
 pkgname=lib32-$_pkgbasename
-pkgver=4.9
+pkgver=4.9.4
 pkgrel=1
 pkgdesc="Netscape Portable Runtime (32-bit)"
 arch=('x86_64')
@@ -16,7 +15,7 @@ makedepends=('zip' 'gcc-multilib')
 options=(!emptydirs)
 source=(ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${_pkgbasename}-${pkgver}.tar.gz
         nspr.pc.in)
-md5sums=('aa0c960b23a9d66a3c30c3e6ba80a99a'
+md5sums=('cf58772702b3abbdcff14e22014eeeaf'
          'bce1611f3117b53fc904cab549c09967')
 
 build() {
@@ -56,3 +55,4 @@ package() {
 
   rm -rf "${pkgdir}"/usr/{bin,share,include}
 }
+

@@ -1,13 +1,12 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 
 _pkgbasename=glib2
 pkgname="lib32-${_pkgbasename}"
 pkgver=2.32.1
 _pkgver=2.32
-pkgrel=4
+pkgrel=5
 pkgdesc="Common C routines used by GTK+ 2.4 and other libs. (ELF32)"
 url="http://www.gtk.org/"
 arch=('x86_64')
@@ -19,53 +18,24 @@ source=("http://ftp.gnome.org/pub/GNOME/sources/glib/${_pkgver}/glib-${pkgver}.t
 sha256sums=('484d5b7fc09f3fa398355adaf74b369768f5859866c299f229c99721990f8398')
 
 build() {
-  export CC="gcc -m32 -march=i686"
-  export CXX="g++ -m32 -march=i686"
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/glib-${pkgver}"
-
-  #############################################################################
-  # Generate an autoconfig cache file.
-  # This is needed to properly cross-compile GLib.
-  #
-  # See:
-  #   http://developer.gnome.org/glib/stable/glib-cross-compiling.html
-
-  cat > i686.cache <<EOF
-glib_cv_long_long_format=ll
-glib_cv_stack_grows=no
-glib_cv_uscore=no
-ac_cv_func_posix_getpwuid_r=yes
-ac_cv_func_nonposix_getpwuid_r=no
-ac_cv_func_posix_getgrgid_r=yes
-EOF
-
-  ./configure \
-    --cache-file="i686.cache" \
-    --build="${CARCH}-unknown-linux-gnu" \
-    --host="i686-unknown-linux-gnu" \
-    --prefix=/usr \
-    --sysconfdir=/etc \
-    --libdir=/usr/lib32 \
-    --enable-static \
-    --enable-shared \
-    --with-pcre=system \
-    --disable-fam \
-  || return 1
-
+  PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32 \
+      --enable-static --enable-shared --with-pcre=system --disable-fam
   make
 }
 
 package() {
   cd "${srcdir}/glib-${pkgver}"
-  make install DESTDIR="${pkgdir}"
+  make DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}"/{etc,usr/{share,include}}
 
-  cd "${pkgdir}/usr/bin"
+  cd "${pkgdir}"/usr/bin
   mv gio-querymodules gio-querymodules-32
   rm -f gdbus glib* gobject-query gsettings gtester*
-  rm -rf "${pkgdir}/usr"/{bin,lib32/gdbus-2.0}
+  rm -rf "$pkgdir"/usr/lib32/gdbus-2.0
+  find "$pkgdir/usr/bin" -type f -not -name gio-querymodules-32 -delete
 }
-
-# vim:set ts=2 sw=2 et:

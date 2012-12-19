@@ -1,27 +1,24 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=nss
 pkgname=lib32-$_pkgbasename
-pkgver=3.13.3
+pkgver=3.14
 pkgrel=1
 pkgdesc="Mozilla's Netscape Security Services Library that implements PKI support (32-bit)"
 arch=('x86_64')
 url="http://www.mozilla.org/projects/security/pki/nss/"
 license=('MPL' 'GPL')
-_nsprver=4.9
-depends=("lib32-nspr>=${_nsprver}" 'lib32-sqlite3>=3.6.17' "$_pkgbasename=$pkgver" 'lib32-zlib')
+_nsprver=4.9.4
+depends=("lib32-nspr>=${_nsprver}" 'lib32-sqlite3>=3.7.11' "$_pkgbasename=$pkgver" 'lib32-zlib')
 makedepends=('gcc-multilib' 'perl')
 source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${_pkgbasename}-${pkgver}.tar.gz
-        nss-no-rpath.patch
         nss.pc.in
         add_spi+cacert_ca_certs.patch
         ssl-renegotiate-transitional.patch)
 options=('!strip')
-md5sums=('006cb82fa900e9e664b4b14a9b7810ca'
-         'e5c97db0c884d5f4cfda21e562dc9bba'
+md5sums=('3918d5f9eb2996271cf62d52f084fd45'
          'c547b030c57fe1ed8b77c73bf52b3ded'
          '7f39c19b1dfd62d7db7d8bf19f156fed'
          'd83c7b61abb7e9f8f7bcd157183d1ade')
@@ -32,11 +29,6 @@ build() {
   patch -Np1 -i "${srcdir}/add_spi+cacert_ca_certs.patch"
   # Adds transitional SSL renegotiate support - patch from Debian
   patch -Np1 -i "${srcdir}/ssl-renegotiate-transitional.patch"
-  # Removes rpath
-  patch -Np0 -i "${srcdir}/nss-no-rpath.patch"
-
-  # copy linux 2.6 to linux 3.0
- #  cp mozilla/security/coreconf/Linux2.6.mk mozilla/security/coreconf/Linux3.0.mk
 
   make -C mozilla/security/nss/lib/ckfw/builtins generate
 
@@ -82,5 +74,4 @@ package() {
 
   install -m644 mozilla/dist/*.OBJ/lib/libcrmf.a "${pkgdir}/usr/lib32/"
   install -m644 mozilla/dist/*.OBJ/lib/*.chk "${pkgdir}/usr/lib32/"
-
 }

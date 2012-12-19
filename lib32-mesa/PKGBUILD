@@ -8,9 +8,11 @@ pkgname=('lib32-mesa' 'lib32-libgl' 'lib32-libglapi' 'lib32-libgles' 'lib32-libe
 
 pkgver=8.0.3
 
-pkgrel=2
+pkgrel=3
 arch=(x86_64)
-makedepends=('glproto>=1.4.12' 'pkgconfig' 'lib32-libdrm>=2.4.37' 'lib32-libxxf86vm>=1.1.0' 'lib32-libxdamage>=1.1.3' 'lib32-expat>=2.0.1' 'lib32-libx11>=1.3.5' 'lib32-libxt>=1.0.8' 'lib32-gcc-libs>=4.5' 'lib32-llvm>=3.0' 'dri2proto>=2.6' 'python2' 'libxml2' 'gcc-multilib' imake 'lib32-udev')
+makedepends=('glproto>=1.4.12' 'pkgconfig' 'lib32-libdrm>=2.4.37' 'lib32-libxxf86vm>=1.1.0' 'lib32-libxdamage>=1.1.3' 
+             'lib32-expat>=2.0.1' 'lib32-libx11>=1.3.5' 'lib32-libxt>=1.0.8' 'lib32-gcc-libs>=4.5' 'lib32-llvm>=3.0' 
+             'dri2proto>=2.6' 'python2' 'libxml2' 'gcc-multilib' imake)
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 source=("ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2"
