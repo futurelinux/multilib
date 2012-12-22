@@ -2,19 +2,20 @@
 use warnings;
 use strict;
 
-my @lib32_pkgs = `pacman -Sl lib32-testing lib32`;
+my @lib32_pkgs = `pacman -Sl testing lib32`;
+my %lib32;
 
 foreach (@lib32_pkgs) {
     chomp;
-    next if (! /(?<repo>.+) (?<lib32_pkgname>.+) (?<lib32_pkgver>.+)-(?<lib32_pkgrel>\d+)/);
+    next if (! /(?<repo>.+) (?<lib32_pkgname>lib32-.+) (?<lib32_pkgver>.+)-(?<lib32_pkgrel>\d+)/);
 
     my $lib32_repo = $+{repo};
     my $lib32_pkgname = $+{lib32_pkgname};
     my $lib32_pkgver = $+{lib32_pkgver};
     my $lib32_pkgrel = $+{lib32_pkgrel};
 
-    next if $lib32_pkgname !~ /lib32-/;
-
+    next if exists $lib32{$lib32_pkgname};
+    $lib32{$lib32_pkgname}="";
 
     my $pkgname = $lib32_pkgname;
     $pkgname =~ s/lib32-//;
@@ -28,7 +29,7 @@ foreach (@lib32_pkgs) {
     my $pkgver = $+{pkgver};
     my $pkgrel = $+{pkgrel};
 
-    if ("$lib32_pkgver-$lib32_pkgrel" lt "$pkgver-$pkgrel") {
+    if ("$lib32_pkgver" lt "$pkgver") {
         print "$lib32_repo/$lib32_pkgname is older than $repo/$pkgname\n";
     }
 }
