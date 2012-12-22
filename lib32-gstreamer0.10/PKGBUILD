@@ -1,0 +1,47 @@
+#
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# Maintainer: kote <koteccr at gmail dot com>
+# Arch linux maintainer:
+# Maintainer : josephgbr <rafael.f.f1 at gmail.com>
+
+_pkgbase=gstreamer0.10
+pkgname=lib32-${_pkgbase}
+pkgver=0.10.36
+pkgrel=1
+pkgdesc="GStreamer Multimedia Framework (32 bit)"
+arch=('x86_64')
+license=('LGPL')
+url="http://gstreamer.freedesktop.org/"
+depends=('lib32-libxml2' 'lib32-glib2' 'gstreamer0.10')
+makedepends=('intltool' 'gcc-multilib')
+options=('!libtool')
+source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
+md5sums=('15389c73e091b1dda915279c388b9cb2')
+ 
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  cd "${srcdir}/gstreamer-${pkgver}"
+  
+  ./configure \
+	--prefix=/usr \
+	--sysconfdir=/etc \
+	--localstatedir=/var \
+	--libdir=/usr/lib32 \
+	--libexecdir=/usr/lib32 \
+	--enable-introspection=no \
+	--disable-{gtk-doc,static} \
+	--with-package-name="GStreamer (Chakra GNU/Linux)" \
+	--with-package-origin="http://www.chakra-project.org/"
+  make
+}
+
+package() {
+  cd "${srcdir}/gstreamer-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}/usr"/{bin,include,share}
+}
+

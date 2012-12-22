@@ -5,8 +5,8 @@
 
 _pkgbasename=pango
 pkgname=lib32-$_pkgbasename
-pkgver=1.29.3
-pkgrel=1
+pkgver=1.30.0
+pkgrel=2
 pkgdesc="A library for layout and rendering of text (32-bit)"
 arch=('x86_64')
 license=('LGPL')
@@ -15,10 +15,10 @@ depends=('lib32-glib2>=2.25.15' 'lib32-cairo>=1.10.0' 'lib32-libxft>=2.1.14'
 makedepends=("gcc-multilib")
 options=('!libtool' '!emptydirs')
 install=pango.install
-source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/1.29/${_pkgbasename}-${pkgver}.tar.bz2
+source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/1.30/${_pkgbasename}-${pkgver}.tar.xz
         pango-modules-conffile.patch)
 url="http://www.pango.org/"
-sha256sums=('a177f455f358a9b075e3b5d7e04891d90380c551e3ec28125e3d9aacca7dd43b'
+sha256sums=('7c6d2ab024affaed0e942f9279b818235f9c6a36d9fc50688f48d387f4102dff'
             '4a178b60dd420ae53baeabbecfaaeca4070a4b777b2b3f36d137cd70b5a270c3')
 
 build() {
@@ -29,13 +29,10 @@ build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
   patch -p0 < ${srcdir}/pango-modules-conffile.patch
   # No libthai support yet
-  ./configure --prefix=/usr \
-              --libdir=/usr/lib32 \
-              --sysconfdir=/etc \
-              --localstatedir=/var \
-              --with-included-modules=basic-fc \
-              --with-dynamic-modules=arabic-fc,arabic-lang,basic-fc,basic-win32,basic-x,basic-atsui,hangul-fc,hebrew-fc,indic-fc,indic-lang,khmer-fc,syriac-fc,tibetan-fc \
-              --disable-introspection
+  ./configure --prefix=/usr --libdir=/usr/lib32 --sysconfdir=/etc \
+      --localstatedir=/var --with-included-modules=basic-fc \
+      --with-dynamic-modules=arabic-fc,arabic-lang,basic-fc,basic-win32,basic-x,basic-atsui,hangul-fc,hebrew-fc,indic-fc,indic-lang,khmer-fc,syriac-fc,tibetan-fc \
+      --disable-introspection
   make
 }
 

@@ -6,7 +6,7 @@
 _pkgbasename=smpeg
 pkgname=lib32-${_pkgbasename}
 pkgver=0.4.4
-pkgrel=2
+pkgrel=3
 pkgdesc="SDL MPEG Player Library (32-bit)"
 arch=('x86_64')
 url="http://icculus.org/smpeg/"
@@ -33,10 +33,10 @@ build() {
 package() {
   cd ${srcdir}/${_pkgbasename}-${pkgver}
   make DESTDIR=${pkgdir} install
- 
+
   #fix aclocal warnings
   sed -i "s#(AM_PATH_SMPEG#([AM_PATH_SMPEG]#" ${pkgdir}/usr/share/aclocal/smpeg.m4
-  
+
   rm -rf "${pkgdir}"/usr/{bin,include,share,man,info}
 }
 

@@ -4,8 +4,8 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=lib32-libffi
-pkgver=3.0.9
-pkgrel=1
+pkgver=3.0.10
+pkgrel=2
 pkgdesc="A portable, high level programming interface to various calling conventions (32 bits version)."
 arch=('x86_64')
 license=('MIT')
@@ -13,7 +13,7 @@ url="http://sourceware.org/libffi"
 depends=('lib32-glibc')
 options=('!libtool')
 source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz)
-md5sums=('1f300a7a7f975d4046f51c3022fa5ff1')
+md5sums=('79390673f5d07a8fb342bc09b5055b6f')
 
 build() {
   cd "${srcdir}/libffi-${pkgver}"

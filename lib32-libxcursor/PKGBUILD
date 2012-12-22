@@ -11,7 +11,7 @@ pkgdesc="X cursor management library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('lib32-libxfixes' 'lib32-libxrender' $_pkgbasename)
+depends=('lib32-libxfixes' 'lib32-libxrender' $_pkgbasename=$pkgver)
 makedepends=('xorg-util-macros' gcc-multilib)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXcursor-${pkgver}.tar.bz2)

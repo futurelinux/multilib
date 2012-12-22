@@ -11,7 +11,7 @@ pkgdesc="X11 Testing -- Resource extension library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('lib32-libxext' 'lib32-libxi' 'recordproto' 'inputproto' $_pkgbasename)
+depends=('lib32-libxext' 'lib32-libxi' 'recordproto' 'inputproto' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib' 'xorg-util-macros')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXtst-${pkgver}.tar.bz2)

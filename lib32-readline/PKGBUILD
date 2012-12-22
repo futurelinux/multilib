@@ -5,14 +5,14 @@
 
 _pkgbasename=readline
 pkgname=lib32-$_pkgbasename
-_patchlevel=001 #prepare for some patches
+_patchlevel=004 #prepare for some patches
 pkgver=6.2.$_patchlevel
-pkgrel=3
+pkgrel=1
 pkgdesc="GNU readline library (32-bit)"
 arch=(x86_64)
 url="http://tiswww.case.edu/php/chet/readline/rltop.html"
 license=('GPL')
-depends=('lib32-glibc' 'lib32-ncurses' $_pkgbasename)
+depends=('lib32-glibc' 'lib32-ncurses' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 source=(http://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz)
 if [ $_patchlevel -gt 00 ]; then
@@ -21,7 +21,10 @@ if [ $_patchlevel -gt 00 ]; then
     done
 fi
 md5sums=('67948acb2ca081f23359d0256e9a271c'
-         '83287d52a482f790dfb30ec0a8746669')
+         '83287d52a482f790dfb30ec0a8746669'
+         '0665020ea118e8434bd145fb71f452cc'
+         'c9d5d79718856e711667dede87cb7622'
+         'c08e787f50579ce301075c523fa660a4')
 
 build() {
   export CC="gcc -m32"

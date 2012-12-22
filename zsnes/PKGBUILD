@@ -1,39 +1,42 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
+#
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# Contributions from Arch: https://projects.archlinux.org/svntogit/community.git/tree/trunk?h=packages/zsnes
 
 pkgname=zsnes
 pkgver=1.51
 pkgrel=4
 pkgdesc="Super Nintendo emulator"
 url="http://www.zsnes.com/"
-arch=('i686' 'x86_64')
+arch=('x86_64')
 license=('GPL')
-depends=('gcc-libs-multilib' 'lib32-sdl' 'lib32-libpng' 'lib32-libgl' 'lib32-ncurses' 'lib32-mesa')
+
+depends=('gcc-libs-multilib' 'lib32-sdl' 'lib32-libpng>=1.5.0' 'lib32-libgl' 'lib32-ncurses' 'lib32-mesa')
 makedepends=('nasm' 'gcc-multilib')
+
 source=(http://downloads.sourceforge.net/${pkgname}/zsnes151src.tar.bz2
 	zsnes.patch
-	zsnes.desktop
-	zsnes_icon.png
 	gcc47-fix.patch
-	libpng15.patch)
+	zsnes.desktop
+	zsnes-1.51-libpng15.patch
+	zsnes.png)
 md5sums=('7071186bf80632ae88a153239498d8c9'
-	'3af40c7d674ebfce1bb1ab6b7e9a8fe4'
-	'b100b2aa342c551167d7c5dcdcde9dd4'
-	'b5260c02adfc3b7ff725041214b00bfd'
-	'951a54e05e4436fe1114308e4466ad74'
-	'd9a9956bf8b709eaccb0f68132b8693a')
+         '3af40c7d674ebfce1bb1ab6b7e9a8fe4'
+         '951a54e05e4436fe1114308e4466ad74'
+         'f28707c568cec5c9a4440ec70f2b123e'
+         'b2df7ab745719e86c44f2e95b93874b9'
+         'b5260c02adfc3b7ff725041214b00bfd')
 
 build() {
   cd ${srcdir}/${pkgname}_1_51/
   patch -p1 -i ../zsnes.patch
   patch -p1 -i ../gcc47-fix.patch
-  patch -p0 -i ../libpng15.patch
+  patch -p0 -i ../zsnes-1.51-libpng15.patch
 
   cd ${srcdir}/${pkgname}_1_51/src
   export CC="gcc -m32"
   export CXX="g++ -m32"
+
   ./autogen.sh --prefix=/usr \
     x_libraries=/usr/lib \
     force_arch=i686 \
@@ -43,14 +46,14 @@ build() {
 }
 
 package() {
-  cd ${srcdir}/${pkgname}_1_51/src
+  cd "$srcdir/${pkgname}_1_51/src"
   make DESTDIR=${pkgdir} install
 
   # adding --mandir= to autoconf line fails
   install -dm755 ${pkgdir}/usr/share
 
   install -Dm644 ${srcdir}/zsnes.desktop ${pkgdir}/usr/share/applications/zsnes.desktop
-  install -Dm644 ${srcdir}/zsnes_icon.png ${pkgdir}/usr/share/pixmaps/zsnes_icon.png
+  install -Dm644 ${srcdir}/zsnes.png ${pkgdir}/usr/share/pixmaps/zsnes.png
 
   mv ${pkgdir}/usr/man ${pkgdir}/usr/share
 }

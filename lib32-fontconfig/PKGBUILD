@@ -6,12 +6,12 @@
 _pkgbasename=fontconfig
 pkgname=lib32-$_pkgbasename
 pkgver=2.8.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A library for configuring and customizing font access (32-bit)"
 arch=(x86_64)
 url="http://www.fontconfig.org/release/"
 license=('custom')
-depends=('lib32-expat>=2.0.1' 'lib32-freetype2>=2.3.11' $_pkgbasename)
+depends=('lib32-expat>=2.0.1' 'lib32-freetype2>=2.3.11' $_pkgbasename=$pkgver 'lib32-bzip2')
 makedepends=(gcc-multilib)
 options=('!libtool')
 source=(http://www.fontconfig.org/release/${_pkgbasename}-${pkgver}.tar.gz

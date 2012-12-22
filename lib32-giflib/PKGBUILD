@@ -11,7 +11,7 @@ pkgdesc="A library for reading and writing gif images (32-bit)"
 url="http://sourceforge.net/projects/giflib/"
 arch=('x86_64')
 license=('MIT')
-depends=('lib32-libx11' 'lib32-libsm' $_pkgbasename)
+depends=('lib32-libx11' 'lib32-libsm' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 provides=("lib32-libungif=${pkgver}")
 conflicts=('lib32-libungif')

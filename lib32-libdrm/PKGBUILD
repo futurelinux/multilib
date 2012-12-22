@@ -5,19 +5,20 @@
 
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.27
+pkgver=2.4.37
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
 license=('custom')
-depends=('lib32-libpciaccess' 'lib32-cairo' $_pkgbasename)
+depends=('lib32-libpciaccess' 'lib32-glibc' 'lib32-cairo' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 options=('!libtool')
 url="http://dri.freedesktop.org/"
 source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2
         no-pthread-stubs.patch)
-sha1sums=('f5b40d30a7f2bfa369ab9b3bd9a0aa844a7f1e16'
-          'ea97a698fa545b8b560c64015cc45efa7fe7417b')
+
+sha1sums=('fa8463e390eee9b589dc369abc4cbe3e4ef16d16'
+          'd7b0e03185a4edd322925440286c9e71e6fcef30')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
@@ -27,16 +28,14 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   patch -Np1 -i "${srcdir}/no-pthread-stubs.patch"
-  
+
   autoreconf --force --install
-  ./configure --prefix=/usr \
-              --libdir=/usr/lib32 \
-              --enable-udev \
-              --enable-intel \
-              --enable-radeon \
-              --enable-vmwgfx-experimental-api \
-              --enable-nouveau-experimental-api
-              
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+      --enable-udev \
+      --enable-intel \
+      --enable-radeon \
+      --enable-vmwgfx-experimental-api \
+      --enable-nouveau-experimental-api
   make
 }
 

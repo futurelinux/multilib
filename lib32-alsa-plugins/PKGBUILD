@@ -6,21 +6,22 @@
 
 _pkgbasename=alsa-plugins
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.24
-pkgrel=2
+pkgver=1.0.26
+pkgrel=1
 pkgdesc="Extra alsa plugins (32-bit)"
 arch=(x86_64)
 url="http://www.alsa-project.org"
 license=(GPL)
-depends=(lib32-alsa-lib $_pkgbasename)
+depends=(lib32-alsa-lib $_pkgbasename=$pkgver)
 makedepends=(lib32-{libpulse,jack,speex,libsamplerate} gcc-multilib)
 optdepends=('lib32-libpulse: PulseAudio plugin'
             'lib32-jack: Jack plugin'
             'lib32-libsamplerate: libsamplerate resampling plugin'
             'lib32-speex: libspeexdsp resampling plugin')
 options=('!libtool')
-source=("ftp://ftp.alsa-project.org/pub/plugins/$_pkgbasename-$pkgver.tar.bz2")
-md5sums=('e4d4c90e11ab9d1a117afbbc1edd2b16')
+#source=("ftp://ftp.alsa-project.org/pub/plugins/$_pkgbasename-$pkgver.tar.bz2")
+source=("http://alsa.cybermirror.org//plugins/$_pkgbasename-$pkgver.tar.bz2")
+md5sums=('4facd408326ef5567a7d4ceb6589e6b0')
 
 build() {
   cd "$srcdir/$_pkgbasename-$pkgver"
@@ -35,4 +36,5 @@ build() {
 package() {
   cd "$srcdir/$_pkgbasename-$pkgver"
   make DESTDIR="$pkgdir" install
+  rm -r "$pkgdir/usr/share"
 }

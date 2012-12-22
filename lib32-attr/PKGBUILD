@@ -11,7 +11,7 @@ pkgdesc="Extended attribute support library for ACL support (32-bit)"
 arch=(x86_64)
 url="http://oss.sgi.com/projects/xfs/"
 license=('LGPL')
-depends=('lib32-glibc' $_pkgbasename) 
+depends=('lib32-glibc' $_pkgbasename=$pkgver) 
 makedepends=('gcc-multilib' 'gettext')
 options=('!libtool')
 source=(http://download.savannah.gnu.org/releases/${_pkgbasename}/${_pkgbasename}-${pkgver}.src.tar.gz)

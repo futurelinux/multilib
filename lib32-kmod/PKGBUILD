@@ -1,0 +1,40 @@
+# Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
+# Contributor: Jesse Jaara <gmail.com: jesse.jaara>
+
+pkgname=lib32-kmod
+pkgver=11
+pkgrel=1
+pkgdesc="Linux kernel module handling"
+arch=('x86_64')
+url="http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary"
+license=('GPL2')
+depends=('lib32-zlib' 'kmod')
+makedepends=('gcc-multilib')
+options=('!libtool')
+source=("ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-$pkgver.tar.xz")
+md5sums=('607e33b0144625c2e5221e5a7df49c7a')
+
+build() {
+  export CC="gcc -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/kmod-${pkgver}"
+
+  ./configure \
+    --libdir=/usr/lib32 \
+    --sysconfdir=/etc \
+    --disable-tools \
+    --with-zlib \
+    --with-rootprefix=/usr
+
+  make
+}
+
+package() {
+  cd "${srcdir}/kmod-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  # nuke manpages and headers
+  rm -rf "${pkgdir}"/usr/{share,include,bin}
+}

@@ -12,10 +12,10 @@ arch=('x86_64')
 url="http://www.libsdl.org/projects/SDL_ttf/"
 license=('LGPL')
 options=('!libtool')
-depends=('lib32-sdl' 'lib32-freetype2' $_pkgbasename)
+depends=('lib32-sdl' 'lib32-freetype2' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 source=(http://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-$pkgver.tar.gz)
-sha256sums=('7d38704bcc7c34029c2dcb73b2d4857e8ad76341c6e0faed279eb9f743c66c6a')
+md5sums=('814e6e17e8879254208d23b3b7e0354b')
 
 build() {
   cd "${srcdir}"/SDL_ttf-${pkgver}

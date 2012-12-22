@@ -1,0 +1,58 @@
+#
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# Maintainer: kote <koteccr at gmail dot com>
+# Arch linux maintainer:
+# Maintainer: josephgbr <rafael.f.f1@gmail.com>
+
+_pkgbase=gstreamer0.10-base
+pkgname=lib32-${_pkgbase}
+pkgver=0.10.36
+pkgrel=1
+pkgdesc="GStreamer Multimedia Framework Base plugin libraries (32 bit)"
+arch=('x86_64')
+license=('LGPL')
+depends=("lib32-gstreamer0.10" 'lib32-orc' 'lib32-libxv' ${_pkgbase})
+makedepends=('gcc-multilib' 'lib32-alsa-lib' 'cdparanoia' 'lib32-libvisual'
+             'lib32-libvorbis' 'lib32-libtheora' 'lib32-pango' 'lib32-gtk3')
+options=('!libtool' '!emptydirs')
+url="http://gstreamer.freedesktop.org/"
+source=(${url}/src/gst-plugins-base/gst-plugins-base-${pkgver}.tar.xz)
+sha256sums=('1fe45c3894903001d4d008b0713dab089f53726dcb5842d5b40c2595a984e64a')
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+  
+  cd "gst-plugins-base-${pkgver}"
+
+  sed -i '/AC_PATH_XTRA/d' configure.ac
+  autoreconf
+  
+  sed -i configure \
+    -e 's#HAVE_QT=yes#HAVE_QT=no#g' \
+    -e 's#HAVE_QT_GV=yes#HAVE_QT_GV=no#g'
+  
+  ./configure \
+  	--prefix=/usr \
+  	--sysconfdir=/etc \
+  	--localstatedir=/var \
+  	--disable-static \
+  	--enable-experimental \
+  	--disable-gnome_vfs \
+  	--with-package-name="GStreamer Base Plugins (Chakra GNU/Linux)" \
+	--with-package-origin="http://www.chakra-project.org/" \
+	--libdir=/usr/lib32 \
+	--enable-introspection=no \
+	--without-libtiger
+
+  make
+  sed -e 's/^SUBDIRS_EXT =.*/SUBDIRS_EXT =/' -i Makefile
+}
+
+package() {
+  cd "gst-plugins-base-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
+}

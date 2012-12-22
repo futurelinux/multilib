@@ -5,17 +5,17 @@
 
 pkgname=lib32-dbus-core
 _pkgbasename=dbus-core
-pkgver=1.4.14
-pkgrel=1
+pkgver=1.6.4
+pkgrel=2
 pkgdesc="Freedesktop.org message bus system (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/Software/dbus"
 license=('GPL' 'custom')
-depends=('lib32-glibc' 'lib32-expat' 'dbus-core')
+depends=('lib32-glibc' 'lib32-expat' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 options=(!libtool)
 source=(http://dbus.freedesktop.org/releases/dbus/dbus-${pkgver}.tar.gz)
-md5sums=('ae6de2562a57516cfabaf56903375ba9')
+md5sums=('5ec43dc4554cba638917317b2b4f7640')
 
 build() {
     export CC="gcc -m32"
@@ -24,20 +24,15 @@ build() {
 
     cd "${srcdir}/dbus-${pkgver}"
 
-    ./configure --prefix=/usr \
-                --sysconfdir=/etc \
-                --localstatedir=/var \
-                --libdir=/usr/lib32 \
-                --libexecdir=/usr/lib/dbus-1.0 \
-                --with-dbus-user=81 \
-                --with-system-pid-file=/var/run/dbus.pid \
-                --enable-inotify \
-                --disable-dnotify \
-                --disable-verbose-mode \
-                --disable-static \
-                --disable-tests \
-                --disable-asserts \
-                --without-x
+    ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libdir=/usr/lib32 \
+        --libexecdir=/usr/lib/dbus-1.0 --with-dbus-user=81 \
+        --with-system-pid-file=/var/run/dbus.pid \
+        --with-system-socket=/run/dbus/system_bus_socket \
+        --with-console-auth-dir=/run/console/ \
+        --enable-inotify --disable-dnotify \
+        --disable-verbose-mode --disable-static \
+        --disable-tests --disable-asserts --without-x \
+        --disable-systemd
     make
 }
 package() {

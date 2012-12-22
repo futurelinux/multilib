@@ -1,25 +1,37 @@
-# Maintainer: Radu Andries <admiral0@chakra-project.org>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=krb5
 pkgname=lib32-$_pkgbasename
-pkgver=1.9.1
+pkgver=1.10.3
 pkgrel=1
 pkgdesc="The Kerberos network authentication system (32-bit)"
 arch=('x86_64')
 url="http://web.mit.edu/kerberos/"
 license=('custom')
-depends=('lib32-e2fsprogs' 'lib32-libldap' lib32-keyutils $_pkgbasename)
+depends=('lib32-e2fsprogs' 'lib32-libldap' lib32-keyutils $_pkgbasename=$pkgver)
 makedepends=('perl' gcc-multilib)
 provides=('lib32-heimdal')
 replaces=('lib32-heimdal')
 conflicts=('lib32-heimdal')
-source=(http://web.mit.edu/kerberos/dist/${_pkgbasename}/1.9/${_pkgbasename}-${pkgver}-signed.tar)
-md5sums=('b9f237015fbb83f75d17941588b12b7d')
+source=("http://web.mit.edu/kerberos/dist/${_pkgbasename}/1.10/${_pkgbasename}-${pkgver}-signed.tar"
+        'krb5-1.10.1-gcc47.patch')
+sha1sums=('04ab9837e5d1958158bcb30bd6480201089a0cbb'
+          '36ac2f3a4541f2afbc4625a8ce7fb7c7936a76a7')
+
 options=('!emptydirs')
 
 build() {
    tar zxvf ${_pkgbasename}-${pkgver}.tar.gz
    cd "${srcdir}/${_pkgbasename}-${pkgver}/src"
+
+   # With gcc47 : deltat.c:1694:12: error: 'yylval' may be used uninitialized
+   # in this function [-Werror=maybe-uninitialized]
+   # As this is generated code, just ignore the complaint.
+   patch -Np2 -i ../../krb5-1.10.1-gcc47.patch
+   rm lib/krb5/krb/deltat.c
 
    export CC="gcc -m32"
    export CXX="g++ -m32"
@@ -28,8 +40,9 @@ build() {
    export CFLAGS+=" -fPIC -fno-strict-aliasing -fstack-protector-all"
    export CPPFLAGS+=" -I/usr/include/et"
    ./configure --prefix=/usr \
+               --sysconfdir=/etc/krb5 \
                --mandir=/usr/share/man \
-               --localstatedir=/var/lib \
+               --localstatedir=/var/lia \
                --libdir=/usr/lib32 \
                --enable-shared \
                --with-system-et \
@@ -56,4 +69,3 @@ package() {
    mkdir -p "$pkgdir/usr/share/licenses"
    ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }
-

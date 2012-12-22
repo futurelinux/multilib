@@ -11,7 +11,7 @@ pkgdesc="X11 pixmap library (32-bit)"
 arch=(x86_64)
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('lib32-libxt' 'lib32-libxext' $_pkgbasename)
+depends=('lib32-libxt' 'lib32-libxext' $_pkgbasename=$pkgver)
 makedepends=('xorg-util-macros' gcc-multilib)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXpm-${pkgver}.tar.bz2)

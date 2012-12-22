@@ -5,20 +5,20 @@
 
 _pkgbasename=libjpeg-turbo
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.1
+pkgver=1.2.1
 pkgrel=1
 pkgdesc="libjpeg derivative with accelerated baseline JPEG compression and decompression (32-bit)"
 arch=('x86_64')
 url="http://libjpeg-turbo.virtualgl.org/"
 license=('GPL' 'custom')
-depends=('lib32-glibc' $_pkgbasename)
+depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('nasm' gcc-multilib)
 provides=('lib32-libjpeg=8.0.2')
 conflicts=('lib32-libjpeg')
 replaces=('lib32-libjpeg')
 options=('!libtool')
 source=(http://sourceforge.net/projects/$_pkgbasename/files/$pkgver/$_pkgbasename-$pkgver.tar.gz)
-md5sums=('03b9c1406c7bfdc204313c2917ce6962')
+md5sums=('f61e60ff01381ece4d2fe65eeb52669e')
 
 build() {
   cd "$srcdir/$_pkgbasename-$pkgver"

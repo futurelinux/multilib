@@ -10,7 +10,7 @@ pkgrel=2
 pkgdesc="Lightweight color management development library/engine (32-bit)"
 arch=(x86_64)
 license=('custom')
-depends=('lib32-libtiff>=3.9.4' $_pkgbasename)
+depends=('lib32-libtiff>=3.9.4' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 url="http://www.littlecms.com"
 options=('!libtool')

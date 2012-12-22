@@ -5,17 +5,17 @@
 
 _pkgbasename=libxext
 pkgname=lib32-$_pkgbasename
-pkgver=1.2.0
-pkgrel=2
+pkgver=1.3.1
+pkgrel=1
 pkgdesc="X11 miscellaneous extensions library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('lib32-libx11' 'xextproto' $_pkgbasename)
+depends=('lib32-libx11' 'xextproto' $_pkgbasename=$pkgver)
 makedepends=('xorg-util-macros' 'gcc-multilib')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXext-${pkgver}.tar.bz2)
-md5sums=('9bb236ff0193e9fc1c1fb504dd840331')
+sha1sums=('764ac472ae19a0faade193717a9e0938d3430aaa')
 
 build() {
   cd "${srcdir}/libXext-${pkgver}"
@@ -35,5 +35,5 @@ package() {
   rm -rf "${pkgdir}"/usr/{include,share}
 
   mkdir -p "$pkgdir/usr/share/licenses"
-  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname" 
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }

@@ -1,0 +1,45 @@
+#
+# Chakra Packages for Chakra, part of chakra-project.org
+#
+# Maintainer: Michael Haesel <michael[dot]haesel[at]gmail[dot]com>
+# Contributor: Ray Rashif <schiv@archlinux.org>
+# Contributor: SpepS <dreamspepser at yahoo dot it>
+# Contributor: Thomas Dziedzic < gostrc at gmail >
+# Contributor: Lauri Niskanen <ape@ape3000.com>
+
+_realname=celt
+pkgname=lib32-$_realname
+pkgver=0.11.1
+pkgrel=1
+pkgdesc='Low-latency audio communication codec (32 bit)'
+arch=('x86_64')
+url='http://www.celt-codec.org'
+license=('BSD')
+depends=('lib32-glibc' "${_realname}=${pkgver}")
+makedepends=('gcc-multilib')
+options=('!libtool')
+source=("http://downloads.xiph.org/releases/${_realname}/${_realname}-${pkgver}.tar.gz")
+sha256sums=('01c2579fba8b283c9068cb704a70a6e654aa74ced064c091cafffbe6fb1d4cbf')
+
+build() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  ./configure --prefix=/usr --libdir=/usr/lib32
+  make -C libcelt
+}
+
+package() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install-pkgconfigDATA
+  make -C libcelt DESTDIR="${pkgdir}" install
+
+  # remove unneeded stuff
+  rm -rf "${pkgdir}/usr/include"
+}
+
+# vim:set ts=2 sw=2 et:

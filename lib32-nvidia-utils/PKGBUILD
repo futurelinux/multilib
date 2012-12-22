@@ -5,21 +5,21 @@
 
 _pkgbasename=nvidia-utils
 pkgname=lib32-$_pkgbasename
-pkgver=295.17
-pkgrel=1
+pkgver=310.19
+pkgrel=2
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
 url="http://www.nvidia.com/"
-depends=('lib32-libxvmc' 'lib32-zlib' 'lib32-gcc-libs' $_pkgbasename)
+depends=('lib32-libxvmc' 'lib32-zlib' 'lib32-gcc-libs' $_pkgbasename=$pkgver)
 conflicts=('lib32-libgl')
-provides=('lib32-libgl=7.11')
+provides=('lib32-libgl')
 license=('custom')
 options=('!strip')
 
 _filearch='x86'
 _pkg="NVIDIA-Linux-${_filearch}-${pkgver}"
-source=(ftp://download.nvidia.com/XFree86/Linux-${_filearch}/${pkgver}/${_pkg}.run)
-md5sums=('453d7585254cb2abb486135828278e43')
+source=("http://us.download.nvidia.com/XFree86/Linux-${_filearch}/${pkgver}/${_pkg}.run")
+md5sums=('2adbdd38540b3a8955714760e05f575d')
 
 build() {
     cd $srcdir
@@ -33,9 +33,6 @@ package() {
     install -D -m755 libGL.so.$pkgver $pkgdir/usr/lib32/libGL.so.$pkgver
     # OpenGL core library
     install -D -m755 libnvidia-glcore.so.$pkgver $pkgdir/usr/lib32/libnvidia-glcore.so.$pkgver
-    # XvMC
-    install -D -m644 libXvMCNVIDIA.a $pkgdir/usr/lib32/libXvMCNVIDIA.a
-    install -D -m755 libXvMCNVIDIA.so.$pkgver $pkgdir/usr/lib32/libXvMCNVIDIA.so.$pkgver
     # VDPAU
     install -D -m755 libvdpau_nvidia.so.$pkgver $pkgdir/usr/lib32/vdpau/libvdpau_nvidia.so.$pkgver
     # CUDA

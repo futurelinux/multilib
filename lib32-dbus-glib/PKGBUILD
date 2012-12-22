@@ -1,3 +1,4 @@
+
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
@@ -6,17 +7,17 @@
 _pkgbasename=dbus-glib
 
 pkgname=lib32-${_pkgbasename}
-pkgver=0.94
+pkgver=0.100
 pkgrel=1
 pkgdesc="GLib bindings for DBUS (32-bit)"
 arch=(x86_64)
 license=('GPL')
 url="http://www.freedesktop.org/wiki/Software/DBusBindings"
 depends=('lib32-dbus-core' 'lib32-glib2' ${_pkgbasename})
-makedepends=('gcc-multilib' 'pkgconfig')
+makedepends=('gcc-multilib' 'lib32-libffi' 'pkgconfig')
 options=(!libtool !emptydirs)
 source=(http://dbus.freedesktop.org/releases/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-md5sums=('e1f1506a6f4941e67bffd614b1ad5af6')
+md5sums=('d33959a9c0c6a158f5ac6d640316e89e')
 
 build() {
   export CC="gcc -m32"
@@ -30,7 +31,6 @@ build() {
               --enable-static=no \
               --enable-bash-completion=no
   make
-  make DESTDIR="${pkgdir}" install
 }
 
 package() {

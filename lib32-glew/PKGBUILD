@@ -1,20 +1,19 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
-#
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=glew
 pkgname=lib32-$_pkgbasename
-pkgver=1.5.8
+pkgver=1.9.0
 pkgrel=1
 pkgdesc="A cross-platform C/C++ extension loading library (32 bit)"
 arch=('x86_64')
 url="http://glew.sourceforge.net"
 license=('BSD' 'MIT' 'GPL')
-depends=('lib32-libxmu' 'lib32-libxi' 'lib32-mesa' "$_pkgbasename>=$pkgver")
+depends=('lib32-libxmu' 'lib32-libxi' 'lib32-mesa' "$_pkgbasename>=$pkgver" )
 makedepends=('gcc-multilib')
 source=(http://downloads.sourceforge.net/${_pkgbasename}/${_pkgbasename}-${pkgver}.tgz)
-sha1sums=('450946935faa20ac4950cb42ff025be2c1f7c22e')
+sha1sums=('9291f5c5afefd482c7f3e91ffb3cd4716c6c9ffe')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"

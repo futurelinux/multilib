@@ -1,11 +1,10 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=wine
 pkgver=1.5.19
-pkgrel=1
+pkgrel=3
 
 _pkgbasever=${pkgver/rc/-rc}
 
@@ -16,7 +15,7 @@ pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
 screenshot=('http://wstaw.org/m/2012/04/28/wine.png')
-arch=(i686 x86_64)
+arch=(x86_64)
 license=(LGPL)
 install=wine.install
 
@@ -36,6 +35,7 @@ depends=(
   libxi           lib32-libxi
   gettext         lib32-gettext
   desktop-file-utils
+  gstreamer0.10-base lib32-gstreamer0.10-base
 )
 
 makedepends=(autoconf ncurses bison perl fontforge flex prelink

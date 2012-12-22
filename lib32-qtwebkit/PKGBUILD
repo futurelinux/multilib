@@ -1,0 +1,46 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Daniele Cocca <jmc@chakra-project.org>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+_pkgbasename=qtwebkit
+pkgname="lib32-${_pkgbasename}"
+pkgver=2.2.2
+pkgrel=2
+pkgdesc="Standalone QtWebKit version. (ELF32)"
+arch=('i686' 'x86_64')
+url="http://trac.webkit.org/wiki/QtWebKit"
+license=('GPL3' 'LGPL')
+depends=('lib32-qt' 'lib32-gstreamer0.10' 'lib32-gstreamer0.10-base'
+         "${_pkgbasename}=${pkgver}")
+makedepends=('gperf' 'phonon' 'perl' 'python'
+             'lib32-sqlite3' 'lib32-fontconfig' 'lib32-mesa' 'lib32-libglapi')
+#source=("http://get.qt.nokia.com/qtwebkit/QtWebKit-${pkgver}.tar.gz")
+source=("http://chakra-linux.org/sources/${_pkgbasename}/qtwebkit-${pkgver}-source.tar.gz"
+        "http://chakra-linux.org/sources/${_pkgbasename}/qwebview-4.8.0.tar.bz2"
+        'glib.patch')
+md5sums=('86702e3a908e2968e87baa6600cbf31f'
+         '13a4ac75d98452c2bf7ef710353e91d8'
+         'dece50d952593e301007432962ba3000')
+
+build() {
+  cd "${srcdir}/qtwebkit-${pkgver}-source"
+
+  patch -p1 -i "${srcdir}"/glib.patch
+
+  # move headers
+  mv include Source/
+
+  cd Source
+  qmake
+  cd ../
+
+  make -C Source
+
+}
+
+package() {
+  cd "${srcdir}/qtwebkit-${pkgver}-source"
+  make INSTALL_ROOT="${pkgdir}" -C Source install
+  rm -rf "${pkgdir}"/usr/{include,share,lib}
+}

@@ -1,16 +1,20 @@
-# Maintainer: Radu Andries <admiral0@chakra-project.org>
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
 _pkgbasename=keyutils
 pkgname=lib32-$_pkgbasename
-pkgver=1.4
-pkgrel=2
+pkgver=1.5.5
+pkgrel=1
 pkgdesc="Linux Key Management Utilities (32-bit)"
 arch=(x86_64)
 url="http://www.kernel.org"
 license=('GPL2' 'LGPL2.1')
-depends=(lib32-glibc $_pkgbasename)
+depends=(lib32-glibc $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 source=(http://people.redhat.com/~dhowells/$_pkgbasename/$_pkgbasename-$pkgver.tar.bz2)
-md5sums=('e168c1bdaf5aa93c2cbf8a5e7f8ef27b')
+md5sums=('d759680b2f23c99af95938f5026f25fb')
 
 build() {
   cd "$srcdir/$_pkgbasename-$pkgver"
@@ -28,10 +32,4 @@ package() {
   make DESTDIR="$pkgdir" install
 
   rm -rf "${pkgdir}"/{usr/{include,share,bin,sbin},etc,{s,}bin}
-  
-  # Fix symlink
-  cd "${pkgdir}/usr/lib32/"
-  rm libkeyutils.so
-  ln -s libkeyutils.so.1 libkeyutils.so
 }
-
