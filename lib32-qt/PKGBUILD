@@ -5,7 +5,7 @@
 _pkgbasename=qt
 pkgname="lib32-${_pkgbasename}"
 pkgver=4.8.4
-pkgrel=1
+pkgrel=2
 pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
 url='http://qt-project.org/'
@@ -13,7 +13,7 @@ license=('GPL3' 'LGPL')
 depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gstreamer0.10,gstreamer0.10-base}
          lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi,xml2}
          "${_pkgbasename}=${pkgver}")
-makedepends=('cups' 'gcc-multilib' lib32-{mesa,libcups,libxfixes})
+makedepends=('cups' 'gcc-multilib' lib32-{mesa,libcups,libxfixes} 'lib32-icu')
 options=('!libtool')
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
 source=("http://releases.qt-project.org/qt4/source/${_pkgfqn}.tar.gz")
@@ -22,14 +22,10 @@ md5sums=('89c5ecba180cae74c66260ac732dc5cb')
 build() {
   cd "${srcdir}/${_pkgfqn}"
 
-  export CC='gcc -m32'
-  export CXX='g++ -m32'
+  export QT4DIR=$srcdir/$_pkgfqn
+  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  export QT4DIR="${srcdir}/${_pkgfqn}"
-  export LD_LIBRARY_PATH="${QT4DIR}/lib:${LD_LIBRARY_PATH}"
-
-  # some of those are likely unnecessary, but I'm too lazy to find and remove them
   sed -i "/^QMAKE_LINK\s/s|g++|g++ -m32|g" mkspecs/common/g++-base.conf
   sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/g++-base.conf
   sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/gcc-base.conf
@@ -54,7 +50,7 @@ build() {
               -no-phonon \
               -no-phonon-backend \
               -webkit \
-              -no-javascript-jit \
+    	      -graphicssystem raster \
               -openssl-linked \
               -nomake demos \
               -nomake examples \
@@ -66,12 +62,6 @@ build() {
               -reduce-relocations \
               -no-openvg \
               -xcursor 
-
-  # disable "warnings are errors" for some source directories
-  sed -e 's,-Werror,,' \
-      -i src/3rdparty/webkit/Source/WebCore/Makefile* \
-      -i src/3rdparty/webkit/Source/JavaScriptCore/Makefile* \
-      -i src/3rdparty/webkit/Source/WebKit/qt/Makefile* \
 
   make
 }
