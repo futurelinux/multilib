@@ -6,7 +6,7 @@
 _pkgbasename=libjpeg-turbo
 pkgname=lib32-$_pkgbasename
 pkgver=1.2.1
-pkgrel=1
+pkgrel=2
 pkgdesc="libjpeg derivative with accelerated baseline JPEG compression and decompression (32-bit)"
 arch=('x86_64')
 url="http://libjpeg-turbo.virtualgl.org/"
@@ -28,12 +28,26 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   sed -i "s|NAFLAGS='-felf64 -DELF -D__x86_64__'|NAFLAGS='-felf32 -DELF -D__x86_64__'|" configure
-  
+ 
+  # libjpeg6
+  ./configure --prefix=/usr \
+              --with-jpeg6 \
+              --mandir=/usr/share/man \
+              --libdir=/usr/lib32 \
+              --without-simd
+  make
+
+  mkdir -p $srcdir/libjpeg6
+  cp -d .libs/libjpeg.so.6* $srcdir/libjpeg6
+  rm -R .libs
+
+  # libjpeg8
   ./configure --prefix=/usr \
               --with-jpeg8 \
               --mandir=/usr/share/man \
               --libdir=/usr/lib32 \
               --without-simd
+
   make
 }
 
@@ -41,6 +55,7 @@ package() {
   cd "$srcdir/$_pkgbasename-$pkgver"
 
   make DESTDIR="$pkgdir/" install
+  cp -vd $srcdir/libjpeg6/libjpeg.so.6* $pkgdir/usr/lib32
   rm -rf "${pkgdir}"/usr/{include,share,bin,sbin}
   mkdir -p "$pkgdir/usr/share/licenses"
   ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
