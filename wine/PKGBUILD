@@ -3,13 +3,13 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.5.20
+pkgver=1.5.21
 pkgrel=1
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2)
-md5sums=('ea1c3ec9935d1da1b0f50552d540c242')
+md5sums=('0ebfc492bf22f22bff27af04c92fd9d2')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
@@ -20,22 +20,22 @@ license=(LGPL)
 install=wine.install
 
 depends=(
-  fontconfig      lib32-fontconfig
-  mesa            lib32-mesa
-  libglapi        lib32-libglapi
-  libxcursor      lib32-libxcursor
-  libxrandr       lib32-libxrandr
-  libxdamage      lib32-libxdamage
-  libxxf86dga     lib32-libxxf86dga
-  alsa-lib        lib32-alsa-lib
-  lcms            lib32-lcms
-  mpg123          lib32-mpg123
-  openal          lib32-openal
-  libxml2         lib32-libxml2
-  libxi           lib32-libxi
-  gettext         lib32-gettext
-  desktop-file-utils
+  fontconfig	     lib32-fontconfig
+  mesa               lib32-mesa
+  libglapi           lib32-libglapi
+  libxcursor         lib32-libxcursor
+  libxrandr          lib32-libxrandr
+  libxdamage         lib32-libxdamage
+  libxxf86dga        lib32-libxxf86dga
+  alsa-lib           lib32-alsa-lib
+  lcms               lib32-lcms
+  mpg123             lib32-mpg123
+  openal             lib32-openal
+  libxml2            lib32-libxml2
+  libxi              lib32-libxi
+  gettext            lib32-gettext
   gstreamer0.10-base lib32-gstreamer0.10-base
+  desktop-file-utils
 )
 
 makedepends=(autoconf ncurses bison perl fontforge flex prelink
