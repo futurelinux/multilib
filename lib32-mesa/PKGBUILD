@@ -108,6 +108,7 @@ package_lib32-mesa() {
   rm -f "${pkgdir}/usr/lib32/libdricore9.0.1.so"*
   rm -f "${pkgdir}/usr/lib32/xorg/modules/dri/swrast_dri.so"*
   rm -rf "${pkgdir}/usr/include"
+  rm -rf "${pkgdir}/usr/etc"
 
   install -m755 -d "${pkgdir}/usr/share/licenses/mesa"
   ln -s mesa "$pkgdir/usr/share/licenses/mesa/lib32-mesa"
