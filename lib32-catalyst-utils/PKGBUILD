@@ -5,9 +5,9 @@
 
 _pkgsourcename=catalyst-utils
 pkgname=lib32-$_pkgsourcename
-pkgver=12.12
-pkgrel=2
-_amdver=9.01
+pkgver=13.1
+pkgrel=1
+_amdver=9.012
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
 url="http://www.ati.amd.com"
 arch=(x86_64)

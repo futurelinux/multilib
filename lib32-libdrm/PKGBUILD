@@ -5,7 +5,7 @@
 
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.37
+pkgver=2.4.41
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
@@ -14,11 +14,12 @@ depends=('lib32-libpciaccess' 'lib32-glibc' 'lib32-cairo' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 options=('!libtool')
 url="http://dri.freedesktop.org/"
-source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2
-        no-pthread-stubs.patch)
-
-sha1sums=('fa8463e390eee9b589dc369abc4cbe3e4ef16d16'
-          'd7b0e03185a4edd322925440286c9e71e6fcef30')
+source=("http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2"
+        'no-pthread-stubs.patch'
+        'missing_makefile.diff')
+sha1sums=('edc0585d97765bad11d8f63c8343a23075f5eb3d'
+          '1602cd40f42238935a3c8d8aebd1fc0afb974379'
+          'af3c480682e6f1a167b1e52f6ff4c2595b4201b1')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
@@ -27,7 +28,10 @@ build() {
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  patch -Np1 -i "${srcdir}/no-pthread-stubs.patch"
+  patch -p1 -i "${srcdir}/no-pthread-stubs.patch"
+
+  # Makefile is missing
+  patch -p1 -i ${srcdir}/missing_makefile.diff
 
   autoreconf --force --install
   ./configure --prefix=/usr --libdir=/usr/lib32 \
