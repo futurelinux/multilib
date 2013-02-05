@@ -1,7 +1,7 @@
 # Lib32 Packages for Chakra
 
 pkgname=lib32-icu
-pkgver=4.6
+pkgver=50.1.2
 pkgrel=1
 pkgdesc="International Components for Unicode library (32 bit)"
 arch=('x86_64')
@@ -9,8 +9,10 @@ url="http://www.icu-project.org/"
 license=('custom:icu')
 depends=('lib32-gcc-libs' 'icu')
 makedepends=('gcc-multilib')
-source=(http://download.icu-project.org/files/icu4c/${pkgver}/icu4c-${pkgver//./_}-src.tgz)
-md5sums=('43e56b71c407be5154de681eaa646a4a')
+source=(http://download.icu-project.org/files/icu4c/${pkgver}/icu4c-${pkgver//./_}-src.tgz
+	icu.8198.revert.icu5431.patch)
+md5sums=('beb98aa972219c9fcd9c8a71314943c9'
+         'ebd5470fc969c75e52baf4af94a9ee82')
 
 build() {
   # This version of ICU needs to set those flags 
@@ -23,6 +25,9 @@ build() {
   export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
 
   cd $srcdir/icu/source
+
+  # fix Malayalam encoding https://bugzilla.redhat.com/show_bug.cgi?id=654200
+  patch -Rp3 -i ${srcdir}/icu.8198.revert.icu5431.patch
 
   ./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --libdir=/usr/lib32
 
