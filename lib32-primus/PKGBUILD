@@ -1,0 +1,46 @@
+# Platform Packages for Chakra
+# Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
+# Contributions from AUR: https://aur.archlinux.org/packages/li/lib32-primus-git/PKGBUILD
+
+pkgname=lib32-primus
+_pkgname=primus
+pkgver=20130225
+pkgrel=1
+pkgdesc="Faster OpenGL offloading for Bumblebee (32-bit library, git sources)"
+arch=('x86_64')
+url="https://github.com/amonakov/primus"
+license=('custom:ISC')
+depends=('primus' 'lib32-mesa' 'lib32-nvidia-utils-bumblebee')
+makedepends=('git' 'gcc-multilib')
+source=("${pkgname}-${pkgver}.tar.xz")
+md5sums=('cd6d31e2ea027b6e5a4fcdaab875b727')
+
+# create tarball: source PKGBUILD && mksource
+
+mksource() {
+    if [ "${1}" = "" ] ; then
+        git clone git://github.com/amonakov/primus.git ${pkgname}
+    else
+        git clone -b "${1}" git://github.com/amonakov/primus.git ${pkgname}
+    fi
+    pushd ${pkgname}
+    popd
+    rm ${pkgname}/PKGBUILD
+    tar -cvJf ${pkgname}-${pkgver}.tar.xz ${pkgname}
+    md5sum ${pkgname}-${pkgver}.tar.xz
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  
+  CXX=g++\ -m32 LIBDIR=lib32 make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+
+  install -D "lib32/libGL.so.1" "$pkgdir/usr/lib32/primus/libGL.so.1"
+
+  install -D -m644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
