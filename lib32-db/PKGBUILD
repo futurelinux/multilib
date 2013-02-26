@@ -5,7 +5,7 @@
 
 _pkgbasename=db
 pkgname=lib32-$_pkgbasename
-pkgver=4.8.26
+pkgver=5.3.21
 pkgrel=1
 pkgdesc="The Berkeley DB embedded database system (32-bit)"
 arch=('x86_64')
@@ -13,9 +13,9 @@ url="http://www.oracle.com/technology/software/products/berkeley-db/index.html"
 license=('custom')
 depends=('lib32-gcc-libs' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
-options=('!libtool' 'force')
-source=(http://download-uk.oracle.com/berkeley-db/db-${pkgver}.tar.gz)
-md5sums=('3476bac9ec0f3c40729c8a404151d5e3')
+options=('!libtool')
+source=("http://download.oracle.com/berkeley-db/db-${pkgver}.tar.gz")
+md5sums=('3fda0b004acdaa6fa350bfc41a3b95ca')
 
 build() {
   export CC="gcc -m32"
@@ -24,7 +24,7 @@ build() {
 
   cd ${srcdir}/$_pkgbasename-${pkgver}/build_unix
   ../dist/configure --prefix=/usr --libdir=/usr/lib32 --enable-compat185 \
-    --enable-shared --enable-static --enable-cxx
+    --enable-shared --enable-static --enable-cxx --enable-dbm
   make LIBSO_LIBS=-lpthread
 }
 
