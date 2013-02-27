@@ -1,12 +1,11 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libglade
 pkgname=lib32-libglade
 pkgver=2.6.4
-pkgrel=3
+pkgrel=4
 pkgdesc="Allows you to load glade interface files in a program at runtime (32-bit)"
 arch=('x86_64')
 license=('LGPL')
