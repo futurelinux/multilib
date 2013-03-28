@@ -5,7 +5,7 @@
 
 _pkgbasename=openssl
 pkgname=lib32-$_pkgbasename
-_ver=1.0.1c	
+_ver=1.0.1e
 # use a pacman compatible version scheme
 pkgver=${_ver/[a-z]/.${_ver//[0-9.]/}}
 pkgrel=1
@@ -19,7 +19,7 @@ options=('!makeflags')
 source=("https://www.openssl.org/source/${_pkgbasename}-${_ver}.tar.gz"
         'no-rpath.patch'
         'ca-dir.patch')
-md5sums=('ae412727c8c15b67880aef7bd2999b2e'
+md5sums=('66bf6f10f060d561929de96f9dfe5b8c'
          'dc78d3d06baffc16217519242ce92478'
          '3bf51be3a1bbd262be46dc619f92aa90')
 
@@ -36,7 +36,7 @@ build() {
   patch -p0 -i $srcdir/ca-dir.patch
   # mark stack as non-executable: http://bugs.archlinux.org/task/12434
   ./Configure linux-elf --prefix=/usr --openssldir=/etc/ssl --libdir=lib32 \
-    shared zlib enable-md2 -Wa,--noexecstack
+    shared zlib -Wa,--noexecstack
 
   make
 
