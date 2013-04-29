@@ -3,14 +3,14 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.5.28
+pkgver=1.5.29
 pkgrel=1
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf)
-md5sums=('a5b94becaf41a3e7f6d3d85a57a2f8d4'
+md5sums=('4a7dc9dad3c3c7710c202458374ed21c'
          '1ff4e467f59409272088d92173a0f801')
 
 pkgdesc="A compatibility layer for running Windows programs"
@@ -41,7 +41,7 @@ depends=(
 )
 
 makedepends=(autoconf ncurses bison perl fontforge flex prelink
-  gcc  gcc-multilib
+  'gcc>=4.5.0-2'  'gcc-multilib>=4.5.0-2'
   giflib          lib32-giflib
   libxpm          lib32-libxpm
   libpng          lib32-libpng
@@ -62,6 +62,7 @@ makedepends=(autoconf ncurses bison perl fontforge flex prelink
   alsa-lib        lib32-alsa-lib
   oss
   samba
+  opencl-headers
 )
 
 optdepends=(
@@ -103,9 +104,12 @@ build() {
     --sysconfdir=/etc \
     --libdir=/usr/lib \
     --with-x \
+    --without-gstreamer \
     --enable-win64
+    # Gstreamer was disabled for FS#33655
 
-  make
+  # These additional flags solve FS#34819
+  make CFLAGS+="-fno-builtin-memcpy" CXXFLAGS+="-fno-builtin-memcpy"
 
   _wine32opts=(
     --libdir=/usr/lib32
@@ -120,10 +124,11 @@ build() {
     --prefix=/usr \
     --sysconfdir=/etc \
     --with-x \
+    --without-gstreamer \
     "${_wine32opts[@]}"
 
-  # These additional CFLAGS solve FS#27560 and FS#23277
-  make CFLAGS+="-mstackrealign -mincoming-stack-boundary=2" CXXFLAGS+="-mstackrealign -mincoming-stack-boundary=2"
+  # These additional CFLAGS solve FS#23277
+  make CFLAGS+="-mincoming-stack-boundary=2" CXXFLAGS+="-mincoming-stack-boundary=2"
 }
 
 package() {
