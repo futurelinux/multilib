@@ -1,12 +1,9 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgsourcename=catalyst-utils
 pkgname=lib32-catalyst-legacy-utils
 pkgver=13.1
-pkgrel=1
+pkgrel=2
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
 url="http://www.ati.amd.com"
 arch=(x86_64)
