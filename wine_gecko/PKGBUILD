@@ -4,7 +4,7 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=wine_gecko
-pkgver=1.9
+pkgver=2.21
 pkgrel=1
 pkgdesc="Wine's built-in replacement for Microsoft's Internet Explorer"
 arch=('x86_64')
@@ -13,8 +13,8 @@ license=('MPL')
 depends=('wine')
 source=("http://downloads.sourceforge.net/wine/${pkgname}-${pkgver}-x86.msi"
         "http://downloads.sourceforge.net/wine/${pkgname}-${pkgver}-x86_64.msi")
-md5sums=('54a6418e2469fad5c4374a35ea54cf1a'
-         '9f870bef3aa17b3de06c8d36be5508f2')
+md5sums=('432eb3a2d05c3f07df67864f53c87c60'
+         '580bbabde1ec99ba9caa439c2dbca3f6')
 
 package() {
   cd "$srcdir"
