@@ -1,11 +1,8 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
 
 _pkgbasename=pixman
 pkgname=lib32-$_pkgbasename
-pkgver=0.21.8
+pkgver=0.30.0
 pkgrel=1
 pkgdesc="Pixman library (32-bit)"
 arch=('x86_64')
@@ -15,7 +12,7 @@ depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 options=('!libtool')
 source=(http://xorg.freedesktop.org/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('1a46b77586fbfd517cccf8ced3a835a1')
+md5sums=('11b7e062e20ae40e49c2871dd9f82b0b')
 
 build() {
   export CC="gcc -m32"
