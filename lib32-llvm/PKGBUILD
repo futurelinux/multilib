@@ -3,15 +3,18 @@
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-pkgname=('lib32-llvm')
-pkgver=3.2
+_basepkgname=llvm
+pkgname='lib32-llvm'
+pkgver=3.3
 pkgrel=1
 arch=('x86_64')
+pkgdesc="Low Level Virtual Machine (32 bits version)"
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
+depends=('perl' 'lib32-libffi' 'llvm' "${_basepkgname}=${pkgver}")
 makedepends=('lib32-libffi' 'python2' 'gcc-multilib' 'groff')
 source=("http://llvm.org/releases/${pkgver}/llvm-${pkgver}.src.tar.gz")
-md5sums=('71610289bbc819e3e15fdd562809a2d7')
+md5sums=('40564e1dc390f9844f1711c08b08e391')
 
 build() {
   export CC="gcc -m32"
@@ -62,9 +65,6 @@ build() {
 }
 
 package() {
-pkgdesc="Low Level Virtual Machine (32 bits version)"
-depends=('perl' 'lib32-libffi' 'llvm')
-
   cd "${srcdir}/llvm-${pkgver}.src"
 
   # We move the clang directory out of the tree so it won't get installed and
