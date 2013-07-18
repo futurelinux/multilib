@@ -1,16 +1,16 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer: Giuseppe Calà <gcala[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.5.31
+pkgver=1.6
 pkgrel=1
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf)
-md5sums=('21a8326bbce7f0f051a19a64101e75bf'
+md5sums=('47cf1e121d395e9c8ca1a4ab88f1e658'
          '1ff4e467f59409272088d92173a0f801')
 
 pkgdesc="A compatibility layer for running Windows programs"
@@ -108,8 +108,7 @@ build() {
     --enable-win64
     # Gstreamer was disabled for FS#33655
 
-  # These additional flags solve FS#34819
-  make CFLAGS+="-fno-builtin-memcpy" CXXFLAGS+="-fno-builtin-memcpy"
+  make
 
   _wine32opts=(
     --libdir=/usr/lib32
@@ -127,8 +126,8 @@ build() {
     --without-gstreamer \
     "${_wine32opts[@]}"
 
-  # These additional CFLAGS solve FS#23277
-  make CFLAGS+="-mincoming-stack-boundary=2" CXXFLAGS+="-mincoming-stack-boundary=2"
+  # These additional flags solve FS#23277
+  make CFLAGS+="-mstackrealign -mincoming-stack-boundary=2" CXXFLAGS+="-mstackrealign -mincoming-stack-boundary=2"
 }
 
 package() {
