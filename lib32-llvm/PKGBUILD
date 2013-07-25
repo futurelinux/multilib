@@ -6,7 +6,7 @@
 _basepkgname=llvm
 pkgname='lib32-llvm'
 pkgver=3.3
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 pkgdesc="Low Level Virtual Machine (32 bits version)"
 url="http://llvm.org/"
@@ -93,7 +93,12 @@ package() {
 
   install -D -m644 LICENSE.TXT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 
-  rm -rf "${pkgdir}/usr"/{bin,lib,include,share/{doc,man}}
+  mv "$pkgdir"/usr/include/llvm/Config/*config.h "$pkgdir/"
+  rm -rf "${pkgdir}/usr"/{bin,include,share/{doc,man}}
+  
+  install -d "$pkgdir/usr/include/llvm/Config"
+  mv "$pkgdir/config.h" "$pkgdir/usr/include/llvm/Config/config-32.h"
+  mv "$pkgdir/llvm-config.h" "$pkgdir/usr/include/llvm/Config/llvm-config-32.h"
 
   mkdir "${pkgdir}/usr/bin"
   mv "${pkgdir}/usr/lib32/llvm-config" "${pkgdir}/usr/bin/llvm-config32"
