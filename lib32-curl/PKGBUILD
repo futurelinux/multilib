@@ -5,7 +5,7 @@
 
 _pkgbasename=curl
 pkgname=lib32-$_pkgbasename
-pkgver=7.28.1
+pkgver=7.31.0
 pkgrel=1
 pkgdesc="An URL retrieval utility and library (32-bit)"
 arch=('x86_64')
@@ -15,7 +15,7 @@ depends=('lib32-zlib' 'lib32-openssl' 'lib32-libssh2' 'bash' 'ca-certificates' $
 makedepends=(gcc-multilib)
 options=('!libtool')
 source=("http://curl.haxx.se/download/${_pkgbasename}-${pkgver}.tar.bz2")
-md5sums=('26eb081c999b0e203770869427e9a93d')
+md5sums=('b7bea20579ac2f696338ae03f2c19ba5')
 
 build() {
   export CC="gcc -m32"
