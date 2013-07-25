@@ -49,16 +49,17 @@ build() {
                --disable-rpath \
                --without-tcl \
                --enable-dns-for-realm \
-               --with-ldap
+               --with-ldap \
+               --without-system-verto
 
    make
 }
 
-check() {
-   # We can't do this in the build directory.
-   cd "${srcdir}/${_pkgbasename}-${pkgver}"
-   make -C src check
-}
+#check() {
+   # We can't do this in the build directory.  
+   #cd "${srcdir}/${_pkgbasename}-${pkgver}"
+   #make -C src check
+#}
 
 package() {
    cd "${srcdir}/${_pkgbasename}-${pkgver}/src"
