@@ -1,22 +1,22 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
 
 _pkgbasename=gnutls
 pkgname=lib32-$_pkgbasename
-pkgver=2.8.6
+pkgver=3.2.2
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer (32-bit)"
 arch=('x86_64')
 license=('GPL3' 'LGPL')
 url="http://www.gnu.org/software/gnutls/"
 options=('libtool')
-# uses built-in libtasn1 for the moment
-depends=(lib32-{gcc-libs,readline,libgcrypt,zlib})
-makedepends=('gcc-multilib')
-source=(ftp://ftp.gnu.org/gnu/gnutls/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('eb0a6d7d3cb9ac684d971c14f9f6d3ba')
+depends=(lib32-{gcc-libs,readline,libgcrypt,zlib,nettle,libtasn1})
+makedepends=('gcc-multilib' 'lib32-libidn')
+source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/${_pkgbasename}-${pkgver}.tar.xz{,.sig}
+        tls_fix.diff)
+md5sums=('9dd691ad1ccdb7386029809afef6b5ea'
+         SKIP
+         '1bbf5bfb4e1420fd61c75e14347340fc')
 
 build() {
   export CC="gcc -m32"
@@ -24,8 +24,16 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd ${srcdir}/${_pkgbasename}-${pkgver}
+  
+    # fix broken TLS connections
+  patch -Np1 -i ../tls_fix.diff
+  
   ./configure --prefix=/usr --libdir=/usr/lib32 \
-    --with-zlib --disable-guile
+              --with-zlib \
+              --disable-guile \
+              --disable-static \
+              --disable-valgrind-tests --disable-hardware-acceleration
+
   make
 }
 
