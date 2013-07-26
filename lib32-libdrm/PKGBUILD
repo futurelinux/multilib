@@ -5,7 +5,7 @@
 
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.42
+pkgver=2.4.46
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
@@ -16,7 +16,7 @@ options=('!libtool')
 url="http://dri.freedesktop.org/"
 source=("http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2"
         'no-pthread-stubs.patch')
-sha1sums=('7004899b6a80b2ee50f35f883cc14804c3e24188'
+sha1sums=('b3a0fac0c8ef9110dce32feb8004f53f0081dea4'
           '1602cd40f42238935a3c8d8aebd1fc0afb974379')
 
 build() {
@@ -34,7 +34,9 @@ build() {
       --enable-intel \
       --enable-radeon \
       --enable-vmwgfx-experimental-api \
-      --enable-nouveau-experimental-api
+      --enable-nouveau-experimental-api \
+      --enable-omap-experimental-api \
+      --enable-exynos-experimental-api 
   make
 }
 
