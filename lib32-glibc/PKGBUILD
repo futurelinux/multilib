@@ -1,4 +1,4 @@
-# maintainer: Manuel Tortosa <manutortoasÃ@chakra-project.org>
+# maintainer: Manuel Tortosa <manutortoasa@chakra-project.org>
 
 # toolchain build order: 
 # lib32-glibc > binutils-multilib > gcc-multilib > binutils-multilib > lib32-glibc
