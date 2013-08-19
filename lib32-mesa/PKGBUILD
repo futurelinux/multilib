@@ -6,11 +6,11 @@
 pkgbase=lib32-mesa
 pkgname=('lib32-mesa' 'lib32-libgl' 'lib32-libglapi')
 pkgver=9.1.5
-pkgrel=1
-arch=(x86_64)
-makedepends=('glproto>=1.4.12' 'pkgconfig' 'lib32-libdrm>=2.4.37' 'lib32-libxxf86vm>=1.1.0' 'lib32-libxdamage>=1.1.3' 
-             'lib32-expat>=2.0.1' 'lib32-libx11>=1.3.5' 'lib32-libxt>=1.0.8' 'lib32-gcc-libs>=4.7' 'lib32-llvm>=3.2' 
-             'dri2proto>=2.6' 'python2' 'libxml2' 'gcc-multilib' 'imake')
+pkgrel=2
+arch=('x86_64')
+makedepends=('glproto>=1.4.14' 'lib32-libdrm>=2.4.38' 'lib32-libxxf86vm>=1.1.1' 'lib32-libxdamage>=1.1.3' 
+             'lib32-expat>=2.0.1' 'lib32-libx11>=1.4.3' 'lib32-libxt>=1.1.1' 'lib32-gcc-libs>=4.7' 'lib32-llvm>=3.2' 'lib32-systemd'
+             'dri2proto>=2.6' 'python2' 'libxml2' 'gcc-multilib' 'imake' 'pkg-config')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 options=('!libtool')
@@ -28,26 +28,28 @@ build() {
   cd "${srcdir}/Mesa-${pkgver}" 
 
   autoreconf -vfi
-   
-  ./autogen.sh --prefix=/usr \
+
+  ./configure --enable-32-bit \
     --libdir=/usr/lib32 \
+    --prefix=/usr \
+    --sysconfdir=/etc \
     --with-dri-driverdir=/usr/lib32/xorg/modules/dri \
     --with-gallium-drivers=r300,r600,nouveau,svga,swrast \
     --with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
-    --with-llvm-shared-libs \
     --enable-gallium-llvm \
-    --disable-gallium-egl \
-    --enable-shared-glapi\
+    --enable-gallium-egl \
+    --with-egl-platforms=x11,drm \
+    --enable-shared-glapi \
+    --enable-gbm \
     --enable-glx-tls \
     --enable-dri \
     --enable-glx \
     --enable-osmesa \
     --enable-gles1 \
     --enable-gles2 \
-    --disable-egl \
+    --enable-egl \
     --enable-texture-float \
     --enable-xa \
-    --enable-32-bit \
     --disable-64-bit
 
   make
@@ -82,14 +84,14 @@ package_lib32-libglapi() {
 
   cd ${srcdir}/?esa-*   
   install -m755 -d "${pkgdir}/usr/lib32"
-  mv lib32/libglapi.so* "${pkgdir}/usr/lib32/"
+  cp -dp --no-preserve=ownership lib32/libglapi.so* "${pkgdir}/usr/lib32/"
 
   install -m755 -d "${pkgdir}/usr/share/licenses/libglapi"
   ln -s libglapi "${pkgdir}/usr/share/licenses/libglapi/lib32-libglapi"
 }
 
 package_lib32-mesa() {
-  depends=('lib32-libglapi' 'lib32-libgl' 'lib32-libx11>=1.4.5' 'lib32-libxt>=1.1.1' "mesa=${pkgver}" "glu")
+  depends=('lib32-libglapi' 'lib32-libgl' 'lib32-libx11>=1.4.5' 'lib32-libxt>=1.1.1' 'lib32-systemd' "mesa=${pkgver}" "glu")
   pkgdesc="Mesa 3-D graphics libraries and include files (ELF32)"
   provides=('lib32-libgles' 'lib32-libegl' 'lib32-ati-dri' 'lib32-intel-dri' 'lib32-svga-dri' 'lib32-nouveau-dri')
   conflicts=('lib32-libgles' 'lib32-libegl' 'lib32-ati-dri' 'lib32-intel-dri' 'lib32-svga-dri' 'lib32-nouveau-dri' 'lib32-udev')
