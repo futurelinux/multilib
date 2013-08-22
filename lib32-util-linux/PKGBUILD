@@ -5,7 +5,7 @@
 
 _pkgbasename=util-linux
 pkgname=lib32-$_pkgbasename
-pkgver=2.22.1
+pkgver=2.23.2
 pkgrel=1
 pkgdesc="Miscellaneous system utilities for Linux (32-bit)"
 url="http://userweb.kernel.org/~kzak/util-linux-ng/"
@@ -14,8 +14,8 @@ depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 license=('GPL2')
 options=('!libtool' '!emptydirs')
-source=(ftp://ftp.kernel.org/pub/linux/utils/${_pkgbasename}/v2.22/util-linux-${pkgver}.tar.bz2)
-md5sums=('cad23c41a014af766d467b86628bd0fd')
+source=(ftp://ftp.kernel.org/pub/linux/utils/${_pkgbasename}/v2.23/util-linux-${pkgver}.tar.bz2)
+md5sums=('39a02ad0b3b37824c394f40930b7aa38')
 
 shopt -s extglob
 
