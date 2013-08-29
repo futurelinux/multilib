@@ -1,18 +1,15 @@
-#
-# Apps Packages for Chakra, part of chakra-project.org
-#
-# Maintainer: Adrián Chaves Fernández (Gallaecio) <adriyetichaves gmail.com>
+#Maintainer: Adrián Chaves Fernández (Gallaecio) <adriyetichaves gmail.com>
 
 pkgname=winetricks
-pkgver=20120912
+pkgver=20130707
 pkgrel=1
 pkgdesc='Script to install various redistributable runtime libraries in Wine.'
 url='http://wiki.winehq.org/winetricks'
 license=('LGPL')
-arch=('any')
+arch=('x86_64')
 depends=('wine' 'cabextract' 'unzip' 'xorg-utils')
 source=($pkgname-$pkgver::http://www.kegel.com/wine/$pkgname)
-md5sums=('f9b05806f393f55e809556103f219fbe')
+md5sums=('153383a6d1a0eb1ad9f070696ee9fd0b')
 
 package() {
   install -Dm755 $srcdir/$pkgname-$pkgver $pkgdir/usr/bin/$pkgname
