@@ -5,14 +5,14 @@
 # contributor (ccr): blablub <spamalicious.steve@gmail.com>
 
 pkgname=steam
-pkgver=1.0.0.36
-pkgrel=2
+pkgver=1.0.0.41
+pkgrel=1
 pkgdesc="Installer for the Steam software distribution service"
 arch=('x86_64')
 url="http://steampowered.com/"
 license=('custom')
 depends=('bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
-      'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation'
+      'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'python'
       'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib'
       'lib32-libgcrypt' 'lib32-nss' 'lib32-openal'
       'lib32-gcc-libs' 'lib32-libx11')
@@ -30,7 +30,7 @@ makedepends=('librsvg')
 install=steam.install  
 source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgname}_$pkgver.tar.gz"
         'lib32-flashplugin-path.patch')
-md5sums=('85b0e502ee7842225935348da85e4c85'
+md5sums=('c332e265439d492b308682b254847fa3'
          '1d83a1df55d677f35ce415e0750f4448')
 
 build() {
