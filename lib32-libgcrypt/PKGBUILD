@@ -5,7 +5,7 @@
 
 _pkgbasename=libgcrypt
 pkgname=lib32-$_pkgbasename
-pkgver=1.5.2
+pkgver=1.5.3
 pkgrel=1
 pkgdesc="a general purpose crypto library based on the code used (32-bit)"
 arch=(x86_64)
@@ -13,11 +13,11 @@ url="http://www.gnupg.org"
 license=('LGPL')
 depends=('lib32-libgpg-error>=1.7' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib libtool-multilib)
-options=(!libtool)
-source=(ftp://ftp.gnupg.org/gcrypt/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2
+options=('!libtool' '!emptydirs')
+source=("ftp://ftp.gnupg.org/gcrypt/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2"
   #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgcrypt/${_pkgbasename}-${pkgver}.tar.bz2
 )
-sha1sums=('c9998383532ba3e8bcaf690f2f0d65e814b48d2f')
+sha1sums=('2c6553cc17f2a1616d512d6870fe95edf6b0e26e')
 
 build() {
   export CC="gcc -m32"
@@ -32,6 +32,11 @@ build() {
   # keep static library for , needed for cryptsetup
   ./configure --prefix=/usr --disable-padlock-support --libdir=/usr/lib32 --enable-shared
   make
+}
+
+check() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+  make check
 }
 
 package() {
