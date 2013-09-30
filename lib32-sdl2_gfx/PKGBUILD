@@ -1,0 +1,36 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# maintainer: Giuseppe Calà <jiveaxe@gmail.com>
+
+_pkgbasename=sdl2_gfx
+pkgname=lib32-$_pkgbasename
+pkgver=5
+pkgrel=1
+pkgdesc="SDL Graphic Primitives (Version 2, 32-bit)"
+arch=('i686' 'x86_64')
+url="http://www.libsdl.org"
+license=('zlib')
+depends=('lib32-sdl2' $_pkgbasename=$pkgver)
+makedepends=('svn' 'gcc-multilib')
+options=(!libtool)
+source=("sdl2-gfx::svn://svn.code.sf.net/p/sdl2gfx/code/trunk#revision=$pkgver")
+sha256sums=('SKIP')
+
+build() {
+  cd "${srcdir}/sdl2-gfx/"
+  
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  
+  ./autogen.sh
+  ./configure --disable-static --prefix=/usr --libdir=/usr/lib32
+  make
+}
+
+package() {
+  cd "${srcdir}/sdl2-gfx/"
+  make DESTDIR="${pkgdir}/" install
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+}
+
