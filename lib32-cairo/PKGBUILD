@@ -5,7 +5,8 @@
 _pkgbasename=cairo
 pkgname=lib32-$_pkgbasename
 pkgver=1.12.14
-pkgrel=2
+pkgrel=3
+_ubuntu_diff_version=${pkgver}-0ubuntu1
 pkgdesc="Cairo vector graphics library (32-bit)"
 arch=('x86_64')
 url="http://cairographics.org/"
@@ -13,10 +14,10 @@ license=('LGPL' 'MPL')
 depends=('lib32-libpng' 'lib32-libxrender' 'lib32-fontconfig' 'lib32-libxext'
          'lib32-pixman' 'lib32-glib2' ${_pkgbasename}=${pkgver})
 makedepends=('gcc-multilib' 'libtool-multilib')
-source=(http://cairographics.org/releases/${_pkgbasename}-${pkgver}.tar.xz
-        cairo-1.10.0-buggy_gradients.patch)
+source=("http://cairographics.org/releases/${_pkgbasename}-${pkgver}.tar.xz"
+        "http://archive.ubuntu.com/ubuntu/pool/main/c/cairo/cairo_${_ubuntu_diff_version}.debian.tar.gz")
 sha1sums=('9106ab09b2e7b9f90521b18dd4a7e9577eba6c15'
-          'e867f1020391686b972d5bedcce3c6d1193d7953')
+          'c4c89d212f1e3a131ea4e228562c91a0a632118f')
 
 build() {
   export CC="gcc -m32"
@@ -24,15 +25,20 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  patch -p1 -i "${srcdir}/cairo-1.10.0-buggy_gradients.patch"
+  
+  # apply ubuntu patches
+  for _f in $(cat "$srcdir/debian/patches/series" | grep -v '#') ; do    
+    patch -Np1 -i "$srcdir/debian/patches/$_f"
+  done
 
   autoreconf -vfi
-  ./configure --prefix=/usr --libdir=/usr/lib32 \
-      --sysconfdir=/etc \
-      --localstatedir=/var \
-      --disable-static \
-      --enable-tee \
-      --disable-xlib-xcb
+  ./configure --prefix=/usr \
+              --libdir=/usr/lib32 \
+              --sysconfdir=/etc \
+              --localstatedir=/var \
+              --disable-static \
+              --enable-tee \
+              --disable-xlib-xcb
   make
 }
 
