@@ -5,7 +5,7 @@
 _pkgbasename=cairo
 pkgname=lib32-$_pkgbasename
 pkgver=1.12.14
-pkgrel=3
+pkgrel=4
 _ubuntu_diff_version=${pkgver}-0ubuntu1
 pkgdesc="Cairo vector graphics library (32-bit)"
 arch=('x86_64')
@@ -14,6 +14,9 @@ license=('LGPL' 'MPL')
 depends=('lib32-libpng' 'lib32-libxrender' 'lib32-fontconfig' 'lib32-libxext'
          'lib32-pixman' 'lib32-glib2' ${_pkgbasename}=${pkgver})
 makedepends=('gcc-multilib' 'libtool-multilib')
+provides=("${pkgname}-ubuntu")
+conflicts=("${pkgname}-ubuntu")
+replaces=("${pkgname}-ubuntu")
 source=("http://cairographics.org/releases/${_pkgbasename}-${pkgver}.tar.xz"
         "http://archive.ubuntu.com/ubuntu/pool/main/c/cairo/cairo_${_ubuntu_diff_version}.debian.tar.gz")
 sha1sums=('9106ab09b2e7b9f90521b18dd4a7e9577eba6c15'

@@ -6,7 +6,7 @@
 _pkgbasename=freetype2
 pkgname=lib32-$_pkgbasename
 pkgver=2.4.11
-pkgrel=2
+pkgrel=3
 _ubuntu_diff_version=${pkgver}-0ubuntu1
 pkgdesc="TrueType font rendering library (32-bit)"
 arch=(x86_64)
@@ -15,6 +15,9 @@ url="http://freetype.sourceforge.net"
 depends=('lib32-zlib' 'lib32-bzip2' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 options=('!libtool')
+provides=("${pkgname}-ubuntu")
+conflicts=("${pkgname}-ubuntu")
+replaces=("${pkgname}-ubuntu")
 source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
         "http://archive.ubuntu.com/ubuntu/pool/main/f/freetype/freetype_${_ubuntu_diff_version}.diff.gz")
 md5sums=('b93435488942486c8d0ca22e8f768034'
