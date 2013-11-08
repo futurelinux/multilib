@@ -6,7 +6,7 @@ pkgbase=libtool-multilib
 _pkgbase=libtool
 pkgname=(libtool-multilib lib32-libltdl)
 pkgver=2.4.2
-pkgrel=5
+pkgrel=6
 pkgdesc="A generic library support script for multilib"
 arch=('x86_64')
 url="http://www.gnu.org/software/libtool"
@@ -39,7 +39,7 @@ build() {
 }
 
 package_libtool-multilib() {
-  depends=('sh' "libltdl=$pkgver" 'tar' "gcc-multilib=4.8.0" "lib32-libltdl=$pkgver")
+  depends=('sh' "libltdl=$pkgver" 'tar' "gcc-multilib=4.8.1" "lib32-libltdl=$pkgver")
   groups=('multilib-devel')
   install=libtool.install
   provides=("libtool=$pkgver-$pkgrel")
