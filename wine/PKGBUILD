@@ -3,13 +3,13 @@
 # maintainer: Giuseppe Cala' <gcala[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.7.4
+pkgver=1.7.6
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf)
 
-md5sums=('a1e78cdce188a4f52244780b6628507b'
+md5sums=('5c3f579f161d12a0d65c3fa1335b604f'
          '1ff4e467f59409272088d92173a0f801')
 
 pkgdesc="A compatibility layer for running Windows programs"
