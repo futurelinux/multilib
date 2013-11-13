@@ -1,14 +1,9 @@
-#
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
 # Maintainer: kote <koteccr at gmail dot com>
-# Arch linux maintainer:
-# Maintainer : josephgbr <rafael.f.f1 at gmail.com>
 
 _pkgbase=gstreamer0.10
 pkgname=lib32-${_pkgbase}
 pkgver=0.10.36
-pkgrel=1
+pkgrel=2
 pkgdesc="GStreamer Multimedia Framework (32 bit)"
 arch=('x86_64')
 license=('LGPL')
