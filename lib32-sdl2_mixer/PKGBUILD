@@ -1,13 +1,11 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
 # maintainer: Giuseppe Calà <jiveaxe@gmail.com>
 
 _pkgbasename=sdl2_mixer
 pkgname=lib32-$_pkgbasename
 pkgver=2.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A simple multi-channel audio mixer (Version 2, 32-bit)"
-arch=('i686' 'x86_64')
+arch=('x86_64')
 url="http://www.libsdl.org"
 license=('MIT')
 depends=('lib32-sdl2' 'lib32-libvorbis' 'lib32-libmodplug' 'lib32-smpeg2' 'lib32-flac' $_pkgbasename=$pkgver)
