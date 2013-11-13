@@ -1,11 +1,9 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=mpg123
 pkgname="lib32-${_pkgbasename}"
-pkgver=1.15.1
+pkgver=1.16.0
 pkgrel=1
 pkgdesc="A console based real time MPEG Audio Player for Layer 1, 2 and 3. (ELF32)"
 arch=('x86_64')
@@ -16,7 +14,7 @@ makedepends=('lib32-sdl' gcc-multilib libtool-multilib)
 optdepends=('lib32-sdl: for additional audio support')
 options=('libtool')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2")
-sha256sums=('c6ea4f4db28a66a7ad9f22f890ce10aa796f73ae03f864f3272070c46c088355')
+sha256sums=('f00f72e385b522b8f05c9b1ed371abad438362620e6eb8164e2a99b79bb3f6d3')
 
 build() {
   export CC="gcc -m32"
