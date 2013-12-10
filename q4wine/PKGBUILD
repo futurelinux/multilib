@@ -1,7 +1,7 @@
 # maintainer (x86_64): Giuseppe calà <jiveaxe@gmail.com>
 
 pkgname=q4wine
-pkgver=1.0_r3
+pkgver=1.1_r1
 pkgrel=1
 pkgdesc="A Qt4 GUI for Wine"
 arch=("x86_64")
@@ -12,13 +12,10 @@ makedepends=("cmake")
 optdepends=("winetricks")
 options=('!emptydirs')
 source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver/_/-}.tar.bz2")
-#        q4wine-gcc47.patch)
-md5sums=('29bb4b51334a78191611f49c050950d1')
-#         'd2d4ee8abbd21edca9b0fe2a8f7c9297')
+md5sums=('59ce6b2036a99217d572536a4f9c2555')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver/_/-}
-#  patch -Np1 -i ${srcdir}/q4wine-gcc47.patch
 
   cmake -DCMAKE_INSTALL_PREFIX=/usr \
         -DWITH_WINETRIKS=ON \
