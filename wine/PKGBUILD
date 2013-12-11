@@ -3,13 +3,13 @@
 # maintainer: Giuseppe Cala' <gcala[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.7.7
+pkgver=1.7.8
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf)
 
-md5sums=('e3b9383439d60202b10b5e93e5b00a3b'
+md5sums=('e66a9d73e224c099b617a1f5d718d604'
          '1ff4e467f59409272088d92173a0f801')
 
 pkgdesc="A compatibility layer for running Windows programs"
@@ -74,8 +74,9 @@ optdepends=(
   libcups       lib32-libcups
   gnutls        lib32-gnutls
   v4l-utils     lib32-v4l-utils
-  oss cups
+  cups
   samba
+  dosbox
 )
 
 
@@ -94,16 +95,14 @@ build() {
   rm -rf $pkgname-{32,64}-build
   mkdir $pkgname-32-build
 
-  # These additional CFLAGS solve FS#27662
-  export CFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
-  export CXXFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
+  # These additional CPPFLAGS solve FS#27662 and FS#34195
+  export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
 
   msg2 "Building Wine-64..."
   mkdir $pkgname-64-build
   cd "$srcdir/$pkgname-64-build"
   ../$pkgname/configure \
     --prefix=/usr \
-    --sysconfdir=/etc \
     --libdir=/usr/lib \
     --with-x \
     --without-gstreamer \
@@ -123,7 +122,6 @@ build() {
   cd "$srcdir/$pkgname-32-build"
   ../$pkgname/configure \
     --prefix=/usr \
-    --sysconfdir=/etc \
     --with-x \
     --without-gstreamer \
     "${_wine32opts[@]}"
