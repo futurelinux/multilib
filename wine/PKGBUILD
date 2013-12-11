@@ -4,13 +4,15 @@
 
 pkgname=wine
 pkgver=1.7.8
-pkgrel=1
+pkgrel=2
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
-        30-win32-aliases.conf)
+        30-win32-aliases.conf
+        wine-pulse-1.7.8.patch)
 
 md5sums=('e66a9d73e224c099b617a1f5d718d604'
-         '1ff4e467f59409272088d92173a0f801')
+         '1ff4e467f59409272088d92173a0f801'
+         '03f6189e2c265436877e14b9df13ad4b')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
@@ -36,6 +38,7 @@ depends=(
   libxi                 lib32-libxi
   gettext               lib32-gettext
   gstreamer0.10-base    lib32-gstreamer0.10-base
+  libpulse              lib32-libpulse
   desktop-file-utils
 )
 
@@ -61,7 +64,6 @@ makedepends=(autoconf ncurses bison perl fontforge flex prelink
   gnutls         lib32-gnutls
   v4l-utils      lib32-v4l-utils
   alsa-lib       lib32-alsa-lib
-  oss
   samba
   opencl-headers
 )
@@ -90,6 +92,10 @@ build() {
   # ncurses fix
   sed -i 's|libncurses|libncursesw|g' "$srcdir/$pkgname/configure"
   sed -i 's|lncurses|lncursesw|g' "$srcdir/$pkgname/configure"
+  
+  cd $pkgname
+  patch -Np1 -i ../wine-pulse-1.7.8.patch
+  cd "$srcdir"
 
   # Get rid of old build dirs
   rm -rf $pkgname-{32,64}-build
@@ -106,6 +112,7 @@ build() {
     --libdir=/usr/lib \
     --with-x \
     --without-gstreamer \
+    --with-pulse \
     --enable-win64
     # Gstreamer was disabled for FS#33655
 
@@ -124,14 +131,13 @@ build() {
     --prefix=/usr \
     --with-x \
     --without-gstreamer \
+    --with-pulse \
     "${_wine32opts[@]}"
 
 
   # These additional flags solve FS#23277
   make CFLAGS+="-mstackrealign -mincoming-stack-boundary=2" CXXFLAGS+="-mstackrealign -mincoming-stack-boundary=2"
 }
-
-
 
 package() {
   msg2 "Packaging Wine-32..."
