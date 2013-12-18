@@ -5,7 +5,7 @@
 
 _pkgbasename=libxdamage
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.3
+pkgver=1.1.4
 pkgrel=1
 pkgdesc="X11 damaged region extension library (32-bit)"
 arch=(x86_64)
@@ -15,7 +15,7 @@ depends=('lib32-libxfixes>=4.0.4' $_pkgbasename=$pkgver)
 makedepends=('pkg-config' 'damageproto>=1.2.0' gcc-multilib)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXdamage-${pkgver}.tar.bz2)
-md5sums=('44774e1a065158b52f1a0da5100cebec')
+md5sums=('0cf292de2a9fa2e9a939aefde68fd34f')
 
 build() {
   export CC="gcc -m32"
@@ -30,7 +30,7 @@ build() {
 package() {
   cd "${srcdir}/libXdamage-${pkgver}"
 
-  make DESTDIR="${pkgdir}" install || return 1
+  make DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}"/usr/{include,share,bin}
   mkdir -p "$pkgdir/usr/share/licenses"
   ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
