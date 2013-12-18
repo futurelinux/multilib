@@ -5,8 +5,8 @@
 
 _pkgbasename=libsm
 pkgname=lib32-$_pkgbasename
-pkgver=1.2.0
-pkgrel=4
+pkgver=1.2.2
+pkgrel=1
 pkgdesc="X11 Session Management library (32-bit)"
 arch=(x86_64)
 license=('custom')
@@ -15,7 +15,7 @@ depends=('lib32-libice' 'lib32-util-linux' $_pkgbasename=$pkgver)
 makedepends=('xorg-util-macros' 'xtrans' 'gcc-multilib')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libSM-${pkgver}.tar.bz2)
-md5sums=('e78c447bf1790552b644eca81b542742')
+md5sums=('499a7773c65aba513609fe651853c5f3')
 
 build() {
   cd "${srcdir}/libSM-${pkgver}"
