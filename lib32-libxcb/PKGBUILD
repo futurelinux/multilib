@@ -1,12 +1,12 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
+# Part of X.org group
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libxcb
 pkgname=lib32-libxcb
-pkgver=1.9
-pkgrel=2
+pkgver=1.9.3
+pkgrel=1
 pkgdesc="X11 client-side library (32-bit)"
 arch=(x86_64)
 url="http://xcb.freedesktop.org/"
@@ -19,8 +19,8 @@ options=('!libtool')
 license=('custom')
 source=(${url}/dist/${_pkgbasename}-${pkgver}.tar.bz2
         libxcb-1.1-no-pthread-stubs.patch)
-sha1sums=('ad2fb95eeec41ba3d39502a4f7460c3b64fdf061'
-          '93a5bb66ac8bd55e310c708addf5c711eb5e91f6')
+sha1sums=('28076500e2ca05e5887c7ed231ba305a85e8bd0b'
+          '93330bdcf29a9386b4222e2f0c3cea3add93f5c0')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
