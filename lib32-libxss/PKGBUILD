@@ -1,11 +1,11 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
+# Part of X.org group√
 #
 # maintainer (x86_64): Giuseppe Cal√† <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libxss
 pkgname=lib32-$_pkgbasename
-pkgver=1.2.0
+pkgver=1.2.2
 pkgrel=1
 pkgdesc="X11 Screen Saver extension library (32-bit)"
 arch=(x86_64)
@@ -15,7 +15,7 @@ depends=('lib32-libxext' 'scrnsaverproto' $_pkgbasename=$pkgver)
 makedepends=('xorg-util-macros' gcc-multilib)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXScrnSaver-${pkgver}.tar.bz2)
-sha1sums=('ea2935eb67efa77fd90372337f2d782a8ef74cea')
+sha1sums=('7b8298eec371c33a71232e3653370a98f03c6c88')
 
 build() {
   export CC="gcc -m32"
