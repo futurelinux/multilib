@@ -1,21 +1,20 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
+# Part of the Xorg group
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# contributor (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libpciaccess
 pkgname=lib32-${_pkgbasename}
-pkgver=0.13.1
+pkgver=0.13.2
 pkgrel=1
 pkgdesc="X11 PCI access library (32-bit)"
-arch=(i686 x86_64)
+arch=('x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('lib32-glibc' ${_pkgbasename})
 makedepends=('gcc-multilib' 'pkgconfig' 'xorg-util-macros')
 options=('!libtool')
 source=(${url}/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2)
-sha1sums=('ae4dcf27a1b52c6a1fd90b21165fbaecae34e8ac')
+sha1sums=('63df515a4c5d5a339a7c1f9e4baa6543efa3c7da')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
