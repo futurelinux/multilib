@@ -1,12 +1,10 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# contributor (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
 pkgver=2.4.46
-pkgrel=2
+pkgrel=3
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
 license=('custom')
