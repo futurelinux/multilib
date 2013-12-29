@@ -3,16 +3,16 @@
 # maintainer: Giuseppe Cala' <gcala[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.7.8
-pkgrel=2
+pkgver=1.7.9
+pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf
-        wine-pulse-1.7.8.patch)
+        wine-pulse-1.7.9.patch)
 
-md5sums=('e66a9d73e224c099b617a1f5d718d604'
+md5sums=('084d30aa42bc40f6472c3730bcf9c5ea'
          '1ff4e467f59409272088d92173a0f801'
-         '03f6189e2c265436877e14b9df13ad4b')
+         'd2e7f5b72e98205e86ca7fa3d1daba61')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
@@ -94,7 +94,7 @@ build() {
   sed -i 's|lncurses|lncursesw|g' "$srcdir/$pkgname/configure"
   
   cd $pkgname
-  patch -Np1 -i ../wine-pulse-1.7.8.patch
+  patch -Np1 -i ../wine-pulse-1.7.9.patch
   cd "$srcdir"
 
   # Get rid of old build dirs
