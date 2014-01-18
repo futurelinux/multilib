@@ -3,17 +3,17 @@
 # maintainer: Giuseppe Cala' <gcala[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.7.10
+pkgver=1.7.11
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf
         wine-pulse-1.7.10.patch
-        http://dev.gentoo.org/~tetromino/distfiles/wine/winepulse-patches-$pkgver.tar.bz2)
+        http://dev.gentoo.org/~tetromino/distfiles/wine/winepulse-patches-1.7.10.tar.bz2)
 
-md5sums=('dc58a93457071b187e75c90ce74c069f'
+md5sums=('e0e55105e5c7ba5277023bd54ac60d44'
          '1ff4e467f59409272088d92173a0f801'
-         'e68beaa30225b0a1a7e75dadf324dec2'
+         '47d6d1f23f0d0d9c3f86dead425cbf62'
          'f3bede3db855f8f655921b9239bb91fc')
 
 pkgdesc="A compatibility layer for running Windows programs"
@@ -102,7 +102,7 @@ build() {
 #   cd "$srcdir"
 
   cd $pkgname
-  for _patch in $(ls $srcdir/winepulse-patches-$pkgver/*.patch) ; do    
+  for _patch in $(ls $srcdir/winepulse-patches-1.7.10/*.patch) ; do    
     patch -Np1 -i $_patch
   done
   cd $srcdir
