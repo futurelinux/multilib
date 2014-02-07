@@ -4,8 +4,7 @@
 # Maintainer: Francesco Marinucci <franzmari[at]chakra-project[dot]it>
 
 
-pkgname=lib32-$_pkgname
-_pkgname=libtxc-dxtn
+pkgname=lib32-libtxc-dxtn
 _pkgbasename=libtxc_dxtn
 pkgver=1.0.1
 pkgrel=2
