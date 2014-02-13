@@ -1,18 +1,18 @@
-# Lib32 packages for Chakra
+# Lib32 Packages for Chakra, part of chakra-project.org
+#s
 
 _pkgbasename=harfbuzz
 pkgname=lib32-$_pkgbasename
-pkgver=0.9.21
+pkgver=0.9.26
 pkgrel=1
 pkgdesc="OpenType text shaping engine. (32-bit)"
-arch=('i686' 'x86_64')
+arch=('x86_64')
 url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
 license=('MIT')
 depends=('lib32-icu' 'lib32-glib2' 'lib32-freetype2' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib' 'lib32-cairo')
-options=(!libtool)
-source=(http://www.freedesktop.org/software/harfbuzz/release/${_pkgbasename}-${pkgver}.tar.bz2)
-sha256sums=('a0d36f883d98f2375f9b2a03c8a6c361b161a76d4b58ea9d08be59e39e73dae8')
+source=("http://www.freedesktop.org/software/harfbuzz/release/${_pkgbasename}-${pkgver}.tar.bz2")
+md5sums=('a2b6cbd437f22dd5dc93d377696c9204')
 
 build() {
   export CC="gcc -m32"
