@@ -1,16 +1,15 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
 # maintainer: Giuseppe Cala' <gcala[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.7.12
+pkgver=1.7.13
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
+_pulsepatches=1.7.12
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf
-        http://dev.gentoo.org/~tetromino/distfiles/wine/winepulse-patches-$pkgver.tar.bz2)
+        http://dev.gentoo.org/~tetromino/distfiles/wine/winepulse-patches-$_pulsepatches.tar.bz2)
 
-md5sums=('ce32c886af1c8a4e824e8dc1a01c5703'
+md5sums=('f238be82934d48fee55b46789a26d9aa'
          '1ff4e467f59409272088d92173a0f801'
          '79649b4c374a09054f934010b47c7132')
 
@@ -81,12 +80,14 @@ optdepends=(
   dosbox
 )
 
-
-
-build() {
-  cd "$srcdir"
+prepare() {
+  cd $srcdir
   
+  # Get rid of old code dir
   rm -rf $pkgname
+  
+  # Get rid of old build dirs
+  rm -rf $pkgname-{32,64}-build
 
   # Allow ccache to work
   mv $pkgname-$_pkgbasever $pkgname
@@ -96,16 +97,16 @@ build() {
   sed -i 's|lncurses|lncursesw|g' "$srcdir/$pkgname/configure"
 
   cd $pkgname
-  for _patch in $(ls $srcdir/winepulse-patches-$pkgver/*.patch) ; do    
+  for _patch in $(ls $srcdir/winepulse-patches-$pkgver/*.patch) ; do  # use this if patches come from gentoo
     patch -Np1 -i $_patch
   done
-  cd $srcdir
-
-  # Get rid of old build dirs
-  rm -rf $pkgname-{32,64}-build
 
   # These additional CPPFLAGS solve FS#27662 and FS#34195
   export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
+}
+
+build() {
+  cd $srcdir
 
   msg2 "Building Wine-64..."
   mkdir $pkgname-64-build
