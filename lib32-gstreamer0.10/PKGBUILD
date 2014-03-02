@@ -2,15 +2,15 @@
 #
 # Maintainer: kote <koteccr at gmail dot com>
 
-_pkgbase=gstreamer0.10
-pkgname=lib32-${_pkgbase}
+_pkgbasename=gstreamer0.10
+pkgname=lib32-${_pkgbasename}
 pkgver=0.10.36
-pkgrel=3
+pkgrel=4
 pkgdesc="GStreamer Multimedia Framework (32 bit)"
 arch=('x86_64')
 license=('LGPL')
 url="http://gstreamer.freedesktop.org/"
-depends=('lib32-libxml2' 'lib32-glib2' 'gstreamer0.10')
+depends=('lib32-libxml2' 'lib32-glib2' $_pkgbasename=$pkgver)
 makedepends=('intltool' 'gcc-multilib')
 source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
 md5sums=('15389c73e091b1dda915279c388b9cb2')

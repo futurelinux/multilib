@@ -3,16 +3,15 @@
 #
 # Maintainer: Francesco Marinucci <franzmari[at]chakra-project[dot]it>
 
-
-pkgname=lib32-libtxc-dxtn
-_pkgbasename=libtxc_dxtn
+_pkgbasename=libtxc-dxtn
+pkgname=lib32-$_pkgbasename
 pkgver=1.0.1
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 pkgdesc="Texture compression library for Mesa (32-bit)"
 url="http://dri.freedesktop.org/wiki/S3TC"
 license=(custom:BSD)
-depends=(lib32-mesa)
+depends=('lib32-mesa' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 options=(!libtool)
 source=(http://cgit.freedesktop.org/~mareko/$_pkgbasename/snapshot/$_pkgbasename-$pkgver.tar.bz2)

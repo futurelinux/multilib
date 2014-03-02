@@ -3,7 +3,7 @@
 #               Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=xcb-util
-pkgname=lib32-xcb-util
+pkgname=lib32-${_pkgbasename}
 pkgver=0.3.9
 pkgrel=2
 pkgdesc="Utility libraries for XC Binding (32-bit)"

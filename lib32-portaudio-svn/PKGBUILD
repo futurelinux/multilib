@@ -3,14 +3,15 @@
 # Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
 # Contributor from AUR: josephgbr <rafael.f.f1@gmail.com>
 
-pkgname=lib32-portaudio-svn
+_pkgbasename=portaudio-svn
+pkgname=lib32-${_pkgbasename}
 pkgver=1870
-pkgrel=1
+pkgrel=2
 pkgdesc="A free, cross platform, open-source, audio I/O library. (32 bit)"
 arch=('x86_64')
 url="http://www.portaudio.com"
 license="custom"
-depends=('lib32-alsa-lib' 'lib32-jack' 'portaudio-svn')
+depends=('lib32-alsa-lib' 'lib32-jack' $_pkgbasename=$pkgver)
 makedepends=('subversion' 'gcc-multilib')
 conflicts=('lib32-portaudio')
 provides=('lib32-portaudio')

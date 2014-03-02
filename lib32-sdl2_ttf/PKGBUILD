@@ -7,7 +7,7 @@ pkgname=lib32-$_pkgbasename
 pkgver=2.0.12
 pkgrel=1
 pkgdesc="A library that allows you to use TrueType fonts in your SDL applications (Version 2, 32-bit)"
-arch=('i686' 'x86_64')
+arch=('x86_64')
 url="http://www.libsdl.org"
 license=('MIT')
 depends=('lib32-sdl2' 'lib32-freetype2' $_pkgbasename=$pkgver)

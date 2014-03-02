@@ -1,13 +1,14 @@
 # Lib32 Packages for Chakra
 
-pkgname=lib32-icu
+_pkgbasename=icu
+pkgname=lib32-$_pkgbasename
 pkgver=51.2
-pkgrel=1
+pkgrel=2
 pkgdesc="International Components for Unicode library (32 bit)"
 arch=('x86_64')
 url="http://www.icu-project.org/"
 license=('custom:icu')
-depends=('lib32-gcc-libs' 'icu')
+depends=('lib32-gcc-libs' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 source=(http://download.icu-project.org/files/icu4c/${pkgver}/icu4c-${pkgver//./_}-src.tgz
 	icu.8198.revert.icu5431.patch)
