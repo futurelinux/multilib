@@ -3,20 +3,20 @@
 # Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
 # Contributor from AUR: 3V0LU710N <db_eee-at-hotmail-dot-com>
 
-_pkgbase=libusbx
-pkgname=lib32-${_pkgbase}
+_pkgbasename=libusbx
+pkgname=lib32-$_pkgbasename
 pkgver=1.0.14
-pkgrel=1
+pkgrel=2
 pkgdesc="Library to enable user space application programs to communicate with USB devices. (32-bit). libusb fork."
 arch=('x86_64')
 url="http://libusbx.sourceforge.net/"
 license=('LGPL')
-depends=('lib32-glibc' "${_pkgbase}")
+depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 provides=('lib32-libusb')
 conflicts=('lib32-libusb')
 replaces=('lib32-libusb')
-source=(http://downloads.sourceforge.net/${_pkgbase}/${_pkgbase}-${pkgver}.tar.bz2)
+source=(http://downloads.sourceforge.net/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2)
 options=(!libtool)
 md5sums=('0a6a75edb4b4eae7dc82c1dd71ddc470')
 

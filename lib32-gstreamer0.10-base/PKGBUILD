@@ -1,13 +1,13 @@
 # Maintainer: kote <koteccr at gmail dot com>
 
-_pkgbase=gstreamer0.10-base
-pkgname=lib32-${_pkgbase}
+_pkgbasename=gstreamer0.10-base
+pkgname=lib32-${_pkgbasename}
 pkgver=0.10.36
-pkgrel=2
+pkgrel=3
 pkgdesc="GStreamer Multimedia Framework Base plugin libraries (32 bit)"
 arch=('x86_64')
 license=('LGPL')
-depends=("lib32-gstreamer0.10" 'lib32-orc' 'lib32-libxv' ${_pkgbase})
+depends=("lib32-gstreamer0.10" 'lib32-orc' 'lib32-libxv' ${_pkgbasename}=${pkgver})
 makedepends=('gcc-multilib' 'lib32-alsa-lib' 'cdparanoia' 'lib32-libvisual'
              'lib32-libvorbis' 'lib32-libtheora' 'lib32-pango')
 options=('!libtool' '!emptydirs')

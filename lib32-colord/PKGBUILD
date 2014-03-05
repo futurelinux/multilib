@@ -1,0 +1,56 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# Maintainer:  AlmAck <almack@chakra-project.org>
+# Contributor: jtts
+
+_pkgbasename=colord
+pkgname=lib32-$_pkgbasename
+pkgver=1.0.6
+pkgrel=1
+pkgdesc="System daemon for managing color devices (32-bit)"
+arch=(x86_64)
+url="http://www.freedesktop.org/software/colord"
+license=(GPL2)
+depends=('lib32-lcms2' 'lib32-libgusb' 'lib32-polkit' 'lib32-sqlite3' 'lib32-systemd' 'lib32-dbus-core' 'lib32-glib2' $_pkgbasename=$pkgver) #shared-color-profiles 
+makedepends=('gcc-multilib' 'intltool' 'gobject-introspection' 'vala') # docbook2x sane bash-completion
+#optdepends=('sane: UseSANE support [/etc/colord.conf]')
+#install=colord.install
+#backup=(etc/colord.conf)
+source=($url/releases/$_pkgbasename-$pkgver.tar.xz
+        udev-systemd.patch)
+#source=($url/releases/$_pkgbasename-$pkgver.tar.xz{,.asc}
+sha1sums=('b3ad9d1cd90ff0ea4d955b253dc0491d851c2778'
+          '3b467b9674f767c804943d191beaf6bd1ba3a606')
+#          'SKIP'
+    
+
+prepare() {
+  cd $_pkgbasename-$pkgver
+  patch -Np1 -i ../udev-systemd.patch
+}
+
+build() {
+  export CC='gcc -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  cd $_pkgbasename-$pkgver
+  
+  # put udev files in /usr/lib
+  sed -i "/slashlibdir=/s#/lib#/usr/lib#" configure
+  
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+    --libexecdir=/usr/lib32/$_pkgbasename --libdir=/usr/lib32 --disable-static \
+    --with-systemdsystemunitdir=/usr/lib/systemd/system \
+    --enable-vala --disable-volume-search \
+    --disable-nls --disable-bash-completion
+    #--enable-sane 
+    # Not recognized by configure
+    #--disable-manpages
+  make
+}
+
+package() {
+  cd $_pkgbasename-$pkgver
+  make DESTDIR="$pkgdir" install
+  rm -rf "${pkgdir}"/{etc,lib,var,usr/{bin,include,lib,share}}
+}

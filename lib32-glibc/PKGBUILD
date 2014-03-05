@@ -6,11 +6,12 @@
 _pkgbasename=glibc
 pkgname=lib32-$_pkgbasename
 pkgver=2.18
-pkgrel=9
+pkgrel=10
 pkgdesc="GNU C Library for multilib"
 arch=('x86_64')
 url="http://www.gnu.org/software/libc"
 license=('GPL' 'LGPL')
+depends=($_pkgbasename=$pkgver)
 makedepends=('gcc-multilib>=4.7')
 options=('!strip' '!emptydirs')
 source=(http://ftp.gnu.org/gnu/libc/${_pkgbasename}-${pkgver}.tar.xz{,.sig}

@@ -4,12 +4,12 @@
 _pkgbasename=nettle
 pkgname=lib32-$_pkgbasename
 pkgver=2.7.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A low-level cryptographic library (32-bit)"
 arch=('x86_64')
 url="http://www.lysator.liu.se/~nisse/nettle/"
 license=('GPL2')
-depends=('lib32-gmp' $_pkgbasename)
+depends=('lib32-gmp' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 source=(ftp://ftp.gnu.org/gnu/nettle/$_pkgbasename-$pkgver.tar.gz)
 md5sums=('003d5147911317931dd453520eb234a5')

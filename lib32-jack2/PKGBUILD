@@ -17,14 +17,15 @@
 # and provide just the 32 bit jack client library using some dynamic
 # patching that seems stable enough to last on future build system changes.
 
-pkgname=lib32-jack2
+_pkgbasename=jack2
+pkgname=lib32-$_pkgbasename
 pkgver=1.9.9.5
 pkgrel=2
 pkgdesc="The next-generation JACK with SMP support (32 bit)"
 arch=('x86_64')
 url="http://jackaudio.org/"
 license=('GPL')
-depends=('lib32-gcc-libs' 'jack2')
+depends=('lib32-gcc-libs' $_pkgbasename=$pkgver)
 makedepends=('python2' 'gcc-multilib')
 provides=('lib32-jack' 'jack2-multilib' 'jack2-dbus-multilib')
 conflicts=('lib32-jack' 'jack2-multilib' 'jack2-dbus-multilib')
