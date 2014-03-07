@@ -2,7 +2,7 @@
 
 pkgname=wine
 pkgver=1.7.13
-pkgrel=1
+pkgrel=2
 _pkgbasever=${pkgver/rc/-rc}
 _pulsepatches=1.7.12
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
@@ -97,10 +97,10 @@ prepare() {
   sed -i 's|lncurses|lncursesw|g' "$srcdir/$pkgname/configure"
 
   cd $pkgname
-  for _patch in $(ls $srcdir/winepulse-patches-$pkgver/*.patch) ; do  # use this if patches come from gentoo
+  for _patch in $(ls $srcdir/winepulse-patches-$_pulsepatches/*.patch) ; do
     patch -Np1 -i $_patch
   done
-
+  
   # These additional CPPFLAGS solve FS#27662 and FS#34195
   export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
 }
