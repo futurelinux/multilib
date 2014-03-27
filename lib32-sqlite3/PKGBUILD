@@ -1,12 +1,11 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=sqlite3
 pkgname=lib32-sqlite3
-_amalgamationver=3080002
-pkgver=3.8.0.2
+_amalgamationver=3080401
+pkgver=3.8.4.1
 pkgrel=1
 pkgdesc="A C library that implements an SQL database engine (32-bit)"
 arch=('x86_64')
@@ -14,9 +13,9 @@ license=('custom')
 url="http://www.sqlite.org/"
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('tcl' 'gcc-multilib' 'lib32-readline')
-source=(http://www.sqlite.org/2013/sqlite-src-${_amalgamationver}.zip)
+source=(http://www.sqlite.org/2014/sqlite-src-${_amalgamationver}.zip)
 options=(!libtool)
-md5sums=('99c9161e32981fba8bed160a86485d03')
+md5sums=('7fe9146d236bc068fb0d7c54d0b863e7')
 
 build() {
   cd ${srcdir}/sqlite-src-${_amalgamationver}
