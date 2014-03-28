@@ -1,22 +1,19 @@
-#
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# Maintainer: Daniele Cocca <jmc@chakra-project.org>
-#
+# Maintainer: Neophytos Kolokotronis <tetris4 AT gmail DOT com>
+# Contributions from: Daniele Cocca
 
 pkgname=peazip
-pkgver=4.7.1
+pkgver=5.2.2
 pkgrel=1
 pkgdesc="Free, Open Source file and archive manager. Supports 7Z, ACE, ARC, CAB, ISO, PAQ, PEA, RAR, TAR, ZIP and many more archive formats."
 arch=('x86_64')
 url="http://peazip.org/"
 license=('GPL')
-depends=('zip' 'unzip' 'unrar' 'xz' 'p7zip' 'unarj' 'lib32-qt')
+depends=('zip' 'unzip' 'unrar' 'xz' 'p7zip' 'unarj' 'lib32-qt' 'lib32-fontconfig')
 optdepends=('rar: support for RAR archive compression')
 conflicts=('lib32-fpc-qtbindings') # just in case it will be added - the PKGBUILD would need a change
 source=("http://sourceforge.net/projects/peazip/files/${pkgver}/${pkgname}-${pkgver}.LINUX.Qt.tgz")
 noextract=("${pkgname}-${pkgver}.LINUX.Qt.tgz")
-md5sums=('e2c1a1b52292190bd6c5cb4b465bb4dc')
+md5sums=('799a2db9a11107d186b55df5c749b1c0')
 
 package() {
   # Extract the software as distributed upstream
@@ -51,5 +48,3 @@ package() {
   ln -sf /usr/share/PeaZip/res/pealauncher "${pkgdir}/usr/bin/pealauncher"
   ln -sf /usr/share/PeaZip/peazip "${pkgdir}/usr/bin/peazip"
 }
-
-# vim:set ts=2 sw=2 et:
