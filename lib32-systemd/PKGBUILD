@@ -1,7 +1,7 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
 pkgver=212
-pkgrel=1
+pkgrel=2
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/wiki/Software/systemd"
@@ -25,6 +25,7 @@ build() {
     --localstatedir=/var \
     --sysconfdir=/etc \
     --enable-compat-libs \
+    --enable-split-usr \
     --disable-audit \
     --disable-ima \
     --disable-pam \
