@@ -2,27 +2,26 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer (x86_64): AlmAck <AlmAck[at]chakraos[dot]org>
 
 _pkgbasename=fontconfig
 pkgname=lib32-$_pkgbasename
-pkgver=2.10.93
-pkgrel=4
-_ubuntu_diff_version=${pkgver}-0ubuntu1
+pkgver=2.11.0
+pkgrel=1
+_ubuntu_diff_version=${pkgver}-0ubuntu4
 pkgdesc="A library for configuring and customizing font access (32-bit)"
-arch=(x86_64)
+arch=('x86_64')
 url="http://www.fontconfig.org/release/"
 license=('custom')
-depends=('lib32-expat>=2.0.1' 'lib32-freetype2>=2.3.11' $_pkgbasename=$pkgver 'lib32-bzip2')
+depends=('lib32-expat' 'lib32-freetype2' 'lib32-bzip2' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
-options=('!libtool')
 provides=("${pkgname}-ubuntu")
 conflicts=("${pkgname}-ubuntu")
 replaces=("${pkgname}-ubuntu")
-source=("http://www.fontconfig.org/release/${_pkgbasename}-${pkgver}.tar.gz"
+source=("http://www.fontconfig.org/release/$_pkgbasename-$pkgver.tar.bz2"
         "http://archive.ubuntu.com/ubuntu/pool/main/f/fontconfig/fontconfig_${_ubuntu_diff_version}.debian.tar.gz")
-sha256sums=('381541e4d1a150dac46af1d9ad64bdc3a131d6b2707d192209b2ed26e3e64147'
-            'bd02a8858786e30a70b145494168c0c99a0ad4c8606d3bbaed99f9f3d3ea690f')
+md5sums=('000bd4baf7aefa828e03414d0c8c7dc5'
+         '50682ac34c77af146b97c2bcc01c3ffb')
 
 build() {
   export CC="gcc -m32"
