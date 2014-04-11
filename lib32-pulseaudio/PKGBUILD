@@ -3,32 +3,30 @@
 _pkgbasename=pulseaudio
 pkgname=lib32-libpulse
 pkgdesc="A featureful, general-purpose sound server. (32-bit client libraries)"
-pkgver=4.0
-pkgrel=4
+pkgver=5.0
+pkgrel=1
 arch=('x86_64')
 url="http://pulseaudio.org/"
 license=('GPL' 'LGPL')
-depends=(lib32-{dbus-core,xcb-util,json-c}
+depends=(lib32-{dbus-core,xcb-util,json-c,systemd}
          lib32-lib{asyncns,cap,xtst,sm,sndfile,samplerate}
          'webrtc-audio-processing' 'systemd'
          "$_pkgbasename=${pkgver}")
 makedepends=('pkgconfig' 'gcc-multilib' 'lib32-libtool' 'intltool'
 		         'lib32-glib2' 'lib32-speex')
 optdepends=('lib32-alsa-plugins: ALSA support')
-provides=("lib32-pulseaudio")
+provides=('lib32-pulseaudio')
 conflicts=('lib32-pulseaudio')
 replaces=('lib32-pulseaudio')
 options=(!emptydirs !libtool)
 source=("http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${pkgver}.tar.xz")
-sha256sums=('35ceb36bb1822fe54f0b5e4863b4f486769fdfb8ff2111f01fd8778928f9cdae')
+sha256sums=('99c13a8b1249ddbd724f195579df79484e9af6418cecf6a15f003a7f36caf939')
 
 _libs="libpulse.la libpulse-simple.la libpulse-mainloop-glib.la"
-#_pkglibs="libpulsecommon-${pkgver}.la libpulsedsp.la"
-_pkglibs="libpulsecommon-4.0.la libpulsedsp.la"
-
+_pkglibs="libpulsecommon-${pkgver}.la libpulsedsp.la"
 
 build() {
-  cd "$srcdir/pulseaudio-$pkgver"
+  cd pulseaudio-$pkgver
 
   export CC="gcc -m32"
   export CXX="g++ -m32"
@@ -51,9 +49,10 @@ build() {
 }
 
 package() {
-  cd "${srcdir}/pulseaudio-${pkgver}"
-  make -C src DESTDIR="${pkgdir}" \
-    lib_LTLIBRARIES="${_libs}" pkglib_LTLIBRARIES="${_pkglibs}" \
-    install-libLTLIBRARIES install-pkglibLTLIBRARIES
-  make DESTDIR="${pkgdir}" install-pkgconfigDATA
+  cd pulseaudio-$pkgver
+  make -j1 -C src DESTDIR="$pkgdir" \
+    lib_LTLIBRARIES="$_libs" install-libLTLIBRARIES
+  make -j1 -C src DESTDIR="$pkgdir" \
+    pkglib_LTLIBRARIES="$_pkglibs" install-pkglibLTLIBRARIES
+  make -j1 DESTDIR="$pkgdir" install-pkgconfigDATA
 }
