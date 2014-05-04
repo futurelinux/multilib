@@ -1,7 +1,7 @@
 # maintainer: Giuseppe Cala' <gcala[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.7.17
+pkgver=1.7.18
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
 _pulsepatches=1.7.12
@@ -9,7 +9,7 @@ source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbas
         30-win32-aliases.conf
         http://dev.gentoo.org/~tetromino/distfiles/wine/winepulse-patches-$_pulsepatches.tar.bz2)
 
-md5sums=('f672039ddf29838be2ac38832da40d6d'
+md5sums=('b13c19ef69a99f2aa6c0b3fd08ae8d90'
          '1ff4e467f59409272088d92173a0f801'
          '79649b4c374a09054f934010b47c7132')
 
