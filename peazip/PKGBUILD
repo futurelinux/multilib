@@ -2,7 +2,7 @@
 # Contributions from: Daniele Cocca
 
 pkgname=peazip
-pkgver=5.2.2
+pkgver=5.3.1
 pkgrel=1
 pkgdesc="Free, Open Source file and archive manager. Supports 7Z, ACE, ARC, CAB, ISO, PAQ, PEA, RAR, TAR, ZIP and many more archive formats."
 arch=('x86_64')
@@ -13,7 +13,7 @@ optdepends=('rar: support for RAR archive compression')
 conflicts=('lib32-fpc-qtbindings') # just in case it will be added - the PKGBUILD would need a change
 source=("http://sourceforge.net/projects/peazip/files/${pkgver}/${pkgname}-${pkgver}.LINUX.Qt.tgz")
 noextract=("${pkgname}-${pkgver}.LINUX.Qt.tgz")
-md5sums=('799a2db9a11107d186b55df5c749b1c0')
+md5sums=('74fae026d090e989c0184e769e646546')
 
 package() {
   # Extract the software as distributed upstream
