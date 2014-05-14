@@ -2,7 +2,7 @@
 
 pkgname=wine
 pkgver=1.7.18
-pkgrel=1
+pkgrel=2
 _pkgbasever=${pkgver/rc/-rc}
 _pulsepatches=1.7.12
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
@@ -55,7 +55,7 @@ makedepends=(autoconf ncurses bison perl fontforge flex prelink
   libxml2        lib32-libxml2
   libxslt        lib32-libxslt
   libldap        lib32-libldap
-  lcms           lib32-lcms
+  lcms2          lib32-lcms2
   mpg123         lib32-mpg123
   openal         lib32-openal
   jack           lib32-jack
