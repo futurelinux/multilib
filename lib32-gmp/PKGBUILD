@@ -3,7 +3,7 @@
 
 _pkgbasename=gmp
 pkgname=lib32-$_pkgbasename
-pkgver=5.1.2
+pkgver=6.0.0
 pkgrel=1
 pkgdesc="A free library for arbitrary precision arithmetic (32-bit)"
 arch=('x86_64')
@@ -12,9 +12,8 @@ depends=('lib32-gcc-libs' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 license=('LGPL3')
 options=(!libtool)
-source=(ftp://ftp.gmplib.org/pub/gmp-${pkgver}/gmp-${pkgver}.tar.xz{,.sig})
-md5sums=('06fe2ca164221c59ce74867155cfc1ac'
-         'SKIP')
+source=(https://gmplib.org/download/gmp/gmp-${pkgver}.tar.xz) #{,.sig}
+md5sums=('4dc314ac6d3059cc8d712aad4a6d162e')
 
 build() {
   export CC="gcc -m32"
