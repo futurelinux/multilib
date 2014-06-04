@@ -1,24 +1,22 @@
-# Lib32 packages for Chakra
-#
 # Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
 # Contributor from AUR: 3V0LU710N <db_eee-at-hotmail-dot-com>
 
 _pkgbasename=libusbx
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.14
-pkgrel=2
+pkgver=1.0.18
+pkgrel=1
 pkgdesc="Library to enable user space application programs to communicate with USB devices. (32-bit). libusb fork."
 arch=('x86_64')
 url="http://libusbx.sourceforge.net/"
 license=('LGPL')
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
-makedepends=('gcc-multilib')
+makedepends=('gcc-multilib' 'lib32-systemd')
 provides=('lib32-libusb')
 conflicts=('lib32-libusb')
 replaces=('lib32-libusb')
 source=(http://downloads.sourceforge.net/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2)
 options=(!libtool)
-md5sums=('0a6a75edb4b4eae7dc82c1dd71ddc470')
+md5sums=('f2ccd0589dde901dfd5607459f77bf44')
 
 build() {
   export CC="gcc -m32"
