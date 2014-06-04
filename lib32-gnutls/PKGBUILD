@@ -1,9 +1,8 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-# maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
+# Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
 
 _pkgbasename=gnutls
 pkgname=lib32-$_pkgbasename
-pkgver=3.2.12.1
+pkgver=3.2.15
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer (32-bit)"
 arch=('x86_64')
@@ -12,8 +11,8 @@ url="http://www.gnu.org/software/gnutls/"
 depends=(lib32-{gcc-libs,readline,libgcrypt,zlib,nettle,libtasn1} $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib' 'lib32-libidn')
 source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/${_pkgbasename}-${pkgver}.tar.xz{,.sig})
-md5sums=('a795db68253d1336f1e3c2ee48c1fee4'
-         SKIP)
+md5sums=('ec3b06f80e312137386c5d322183ca5a'
+         'SKIP')
 
 build() {
   export CC="gcc -m32"
@@ -21,7 +20,7 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   #cd ${srcdir}/${_pkgbasename}-${pkgver}
-  cd "${srcdir}/${_pkgbasename}-3.2.12"
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
   
   ./configure --prefix=/usr --libdir=/usr/lib32 \
               --with-zlib \
@@ -34,7 +33,7 @@ build() {
 
 package() {
   #cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  cd "${srcdir}/${_pkgbasename}-3.2.12"
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
   make DESTDIR="${pkgdir}" install
 
   rm -rf "${pkgdir}"/usr/{bin,include,share}
