@@ -1,11 +1,8 @@
-#
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
 # Ported from CCR: kote <koteccr at gmail dot com>
 
 _pkgbasename=gtk3
 pkgname=lib32-$_pkgbasename
-pkgver=3.6.4
+pkgver=3.10.7
 pkgrel=1
 pkgdesc="GObject-based multi-platform GUI toolkit (v3) (32-bit)"
 arch=('x86_64')
@@ -16,12 +13,12 @@ depends=('lib32-atk' 'lib32-gdk-pixbuf2' 'lib32-libxcomposite'
 	 'lib32-libxi' 'lib32-libxinerama' 'lib32-libxrandr'
 	 'lib32-pango' 'lib32-cairo' 'lib32-keyutils' 
 	 'lib32-krb5' 'lib32-e2fsprogs' 'lib32-at-spi2-atk'
-	 'lib32-colord' ${_pkgbasename}=${pkgver})
-makedepends=('gcc-multilib' )
+	 'lib32-colord' ${_pkgbasename}=${pkgver} 'lib32-libxkbcommon' 'lib32-wayland')
+makedepends=('gcc-multilib')
 options=('!libtool' '!docs')
 install=gtk3.install
 source=("http://ftp.gnome.org/pub/gnome/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz")
-sha256sums=('dbda37986f934f986c0bb20f2b0c59f2717a2e5c098370ad69677ff89295f1a1')
+sha256sums=('b7e9de15385031cff43897e7e59f6692eaabf500f36eef80e6b9d6486ad49427')
 
 build() {  
   export CC="gcc -m32"
