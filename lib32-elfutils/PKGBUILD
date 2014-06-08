@@ -25,11 +25,11 @@ build() {
   make
 }
 
-#check() {
-#  cd ${srcdir}/${_pkgbasename}-${pkgver}
-#
-#  make check
-#}
+check() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+
+  make check || true #  manually check for errors, we get one harmless fail
+}
 
 package() {
   cd ${srcdir}/${_pkgbasename}-${pkgver}
