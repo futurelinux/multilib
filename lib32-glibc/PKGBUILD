@@ -6,7 +6,7 @@
 _pkgbasename=glibc
 pkgname=lib32-$_pkgbasename
 pkgver=2.19
-pkgrel=1
+pkgrel=3
 pkgdesc="GNU C Library (32-bit)"
 arch=('x86_64')
 url="http://www.gnu.org/software/libc"
@@ -104,8 +104,10 @@ package() {
 
 
   # Dynamic linker
-  mkdir ${pkgdir}/usr/lib
-  ln -s ../lib32/ld-linux.so.2 ${pkgdir}/usr/lib/
+  # install -d -m755 ${pkgdir}/usr/lib
+  install -d -m755 ${pkgdir}/lib
+  # ln -s ../lib32/ld-linux.so.2 ${pkgdir}/usr/lib/ # no reason yet to install in /usr/lib too, only needed once we also move lib
+  ln -s ../usr/lib32/ld-linux.so.2 ${pkgdir}/lib/ 
 
   # Add lib32 paths to the default library search path
   install -Dm644 "$srcdir/lib32-glibc.conf" "$pkgdir/etc/ld.so.conf.d/lib32-glibc.conf"

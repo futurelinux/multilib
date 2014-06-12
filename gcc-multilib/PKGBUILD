@@ -8,7 +8,7 @@
 pkgname=('gcc-multilib' 'gcc-libs-multilib' 'lib32-gcc-libs' 'gcc-fortran-multilib' 'gcc-objc-multilib' 'gcc-ada-multilib' 'gcc-go-multilib')
 pkgver=4.9.0
 _pkgver=4.9
-pkgrel=1
+pkgrel=3
 _snapshot=4.9-20140521
 pkgdesc="The GNU Compiler Collection for multilib"
 arch=('x86_64')
