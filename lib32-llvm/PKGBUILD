@@ -6,29 +6,33 @@
 # adjusted for Chakra
 
 pkgname=('lib32-llvm' 'lib32-llvm-libs')
-pkgver=3.3
-_gcc_ver=4.8.0
-pkgrel=3
+pkgver=3.4.1
+_base_ver=3.4
+_gcc_ver=4.9.0
+pkgrel=1
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
 makedepends=('lib32-libffi' 'lib32-zlib' 'python2' "gcc-multilib=${_gcc_ver}")
 
-source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.gz
-        http://llvm.org/releases/$pkgver/compiler-rt-$pkgver.src.tar.gz)
-sha256sums=('68766b1e70d05a25e2f502e997a3cb3937187a3296595cf6e0977d5cd6727578'
-            '0e2f3180d6316e6c43f064fdd406c5c6515e682c5f31c57c28335b68c7525423')
+source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.gz{,.sig}
+        http://llvm.org/releases/$_base_ver/compiler-rt-$_base_ver.src.tar.gz{,.sig})
+sha256sums=('7d28bb6eca243a2bb6d65a05743ab915b57958a7770277364e93534b63eef93a'
+            SKIP
+            'f37c89b1383ce462d47537a0245ac798600887a9be9f63073e16b79ed536ab5c'
+            SKIP)
 
-build() {
+prepare() {
+  # Change directory names to release names so we don't need to change the
+  # whole PKGBUILD
+  mv llvm-$pkgver{.src,}
 
-  # preparation
-
-  cd "$srcdir/llvm-$pkgver.src"
+  cd "$srcdir/llvm-$pkgver"
 
   rm -rf tools/clang
   
   rm -rf projects/compiler-rt
-  mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
+  mv "$srcdir/compiler-rt-$_base_ver" projects/compiler-rt
 
   # Fix installation directories, ./configure doesn't seem to set them right
   sed -i -e 's:\$(PROJ_prefix)/lib:$(PROJ_prefix)/lib32:' \
@@ -39,11 +43,13 @@ build() {
   sed -i 's:LLVM_LIBDIR="${prefix}/lib":LLVM_LIBDIR="${prefix}/lib32":' \
     autoconf/configure.ac \
     configure
-
+  
   # Fix insecure rpath (http://bugs.archlinux.org/task/14017)
   sed -i 's:$(RPATH) -Wl,$(\(ToolDir\|LibDir\|ExmplDir\))::g' Makefile.rules
+}
 
-  cd "$srcdir/llvm-$pkgver.src"
+build() {
+  cd "$srcdir/llvm-$pkgver"
 
   export CC="gcc -m32"
   export CXX="g++ -m32"
@@ -81,14 +87,15 @@ build() {
 
 package_lib32-llvm() {
   pkgdesc="Low Level Virtual Machine (32-bit)"
-  depends=('lib32-llvm-libs' 'llvm')
+  depends=('lib32-llvm-libs' "llvm=${pkgver}")
 
-  cd "$srcdir/llvm-$pkgver.src"
+  cd "$srcdir/llvm-$pkgver"
 
   make DESTDIR="$pkgdir" install
 
   # The runtime library goes into lib32-llvm-libs
-  mv "$pkgdir/usr/lib32/libLLVM-3.3.so" "$srcdir"
+  mv "$pkgdir/usr/lib32/libLLVM-$pkgver.so" "$srcdir"
+  rm "$pkgdir/usr/lib32/libLLVM-$_base_ver.so"
 
   # Fix permissions of static libs
   chmod -x "$pkgdir"/usr/lib32/*.a
@@ -117,14 +124,15 @@ package_lib32-llvm() {
 }
 
 package_lib32-llvm-libs() {
-  pkgdesc="Low Level Virtual Machine (runtime library)(32-bit) "
+  pkgdesc="Low Level Virtual Machine (runtime library)(32-bit)"
   depends=('lib32-libffi' 'lib32-zlib' 'lib32-gcc-libs')
 
   cd "$srcdir"
 
-  install -D libLLVM-3.3.so "$pkgdir/usr/lib32/libLLVM-3.3.so"
+  install -D libLLVM-$pkgver.so "$pkgdir/usr/lib32/libLLVM-$pkgver.so"
+  ln -s libLLVM-$pkgver.so "$pkgdir/usr/lib32/libLLVM-$_base_ver.so"
 
-  install -Dm644 llvm-$pkgver.src/LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 llvm-$pkgver/LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
 # vim:set ts=2 sw=2 et:
