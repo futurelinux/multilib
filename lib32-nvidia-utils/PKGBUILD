@@ -1,8 +1,8 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
+# Lib32 Packages for Chakra, part of chakraos.org
 
 _pkgbasename=nvidia-utils
 pkgname=lib32-$_pkgbasename
-pkgver=331.38
+pkgver=331.79
 pkgrel=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
@@ -16,7 +16,7 @@ options=('!strip')
 _filearch='x86'
 _pkg="NVIDIA-Linux-${_filearch}-${pkgver}"
 source=("http://us.download.nvidia.com/XFree86/Linux-${_filearch}/${pkgver}/${_pkg}.run")
-md5sums=('16aa229f7f118c8cafad6fb3f4ac082e')
+md5sums=('220c01c912b4039ef87dbf5634497c6a')
 
 build() {
     cd $srcdir
