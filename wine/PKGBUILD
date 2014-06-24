@@ -1,17 +1,17 @@
 # maintainer: Giuseppe Cala' <gcala[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.7.19
+pkgver=1.7.20
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
-_pulsepatches=1.7.12
+_pulsepatches=1.7.20
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf
         http://dev.gentoo.org/~tetromino/distfiles/wine/winepulse-patches-$_pulsepatches.tar.bz2)
 
-md5sums=('31bec293e8c87ce3696f1e78730f5d4d'
+md5sums=('439a9b275be4953fde194ca949568da1'
          '1ff4e467f59409272088d92173a0f801'
-         '79649b4c374a09054f934010b47c7132')
+         '84ce2689c79ca7ef8bfc40096dbee3f2')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
