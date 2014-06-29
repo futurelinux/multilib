@@ -1,20 +1,21 @@
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# contributor: (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# Maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# Contributor: (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=mesa
 pkgbase=lib32-mesa
 pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-mesa' 'lib32-mesa-libgl')
-pkgver=10.0.5
+pkgver=10.2.2
 pkgrel=3
 arch=('x86_64')
 makedepends=(
     'python2' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'dri3proto' 'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc-multilib' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd' 'lib32-libvdpau' 'lib32-wayland')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
-options=('!libtool')
-source=(${source[@]} 
-"ftp://ftp.freedesktop.org/pub/mesa/older-versions/10.x/${pkgver}/MesaLib-${pkgver}.tar.gz" )
-md5sums=('db606aadd0fe321f3664099677d159bc')
+source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2
+        LICENSE)
+options=('libtool')
+sha256sums=('38c4a40364000f89cddaa1694f6f3cfb444981d1110238ce603093585477399c'
+            '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2')
 
 build() {
   export CFLAGS="-m32"
@@ -107,7 +108,7 @@ package_lib32-nouveau-dri() {
 
 package_lib32-mesa() {
   pkgdesc="an open-source implementation of the OpenGL specification (32-bit)"
-  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-systemd' 'lib32-elfutils' 'lib32-llvm-libs' 'lib32-libvdpau' 'lib32-wayland' $_pkgbasename=$pkgver)
+  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-systemd' 'lib32-elfutils' 'lib32-llvm-libs' 'lib32-libvdpau' 'lib32-wayland') # $_pkgbasename=$pkgver)
   optdepends=('opengl-man-pages: for the OpenGL API man pages')
   provides=('lib32-libglapi' 'lib32-libgles' 'lib32-libegl')
   conflicts=('lib32-libglapi' 'lib32-libgles' 'lib32-libegl')
