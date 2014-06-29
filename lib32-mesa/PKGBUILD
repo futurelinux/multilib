@@ -11,11 +11,9 @@ makedepends=(
     'python2' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'dri3proto' 'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc-multilib' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd' 'lib32-libvdpau' 'lib32-wayland')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
-source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2
-        LICENSE)
+source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2)
 options=('libtool')
-sha256sums=('38c4a40364000f89cddaa1694f6f3cfb444981d1110238ce603093585477399c'
-            '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2')
+sha256sums=('38c4a40364000f89cddaa1694f6f3cfb444981d1110238ce603093585477399c')
 
 build() {
   export CFLAGS="-m32"
