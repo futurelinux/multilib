@@ -2,7 +2,7 @@
 
 _pkgbasename=pixman
 pkgname=lib32-$_pkgbasename
-pkgver=0.30.0
+pkgver=0.32.4
 pkgrel=1
 pkgdesc="Pixman library (32-bit)"
 arch=('x86_64')
@@ -12,7 +12,7 @@ depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 options=('!libtool')
 source=(http://xorg.freedesktop.org/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('11b7e062e20ae40e49c2871dd9f82b0b')
+md5sums=('cdb566504fe9daf6728c7b03cc7ea228')
 
 build() {
   export CC="gcc -m32"
