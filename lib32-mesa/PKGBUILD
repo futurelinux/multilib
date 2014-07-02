@@ -7,12 +7,12 @@ pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-mesa' 'lib
 pkgver=10.2.2
 pkgrel=1
 arch=('x86_64')
-makedepends=(
-    'python2' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'presentproto' 'dri3proto' 'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc-multilib' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd' 'lib32-libvdpau' 'lib32-wayland')
+makedepends=('python2' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'presentproto' 'dri3proto' 
+             'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc-multilib' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd' 'lib32-libvdpau' 'lib32-wayland' 'lib32-libxshmfence')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2)
-options=('libtool')
+options=('!libtool')
 sha256sums=('38c4a40364000f89cddaa1694f6f3cfb444981d1110238ce603093585477399c')
 
 build() {
