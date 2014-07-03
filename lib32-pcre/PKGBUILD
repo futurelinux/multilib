@@ -3,7 +3,7 @@
 
 _pkgbasename=pcre
 pkgname=lib32-$_pkgbasename
-pkgver=8.34
+pkgver=8.35
 pkgrel=1
 pkgdesc="A library that implements Perl 5-style regular expressions (32-bit)"
 arch=('x86_64')
@@ -11,8 +11,14 @@ url="http://pcre.sourceforge.net"
 license=('custom')
 depends=('lib32-gcc-libs' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
-source=(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${_pkgbasename}-${pkgver}.tar.bz2)
+source=("ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${_pkgbasename}-${pkgver}.tar.bz2"
+        "pcre-8.35-Do-not-rely-on-wrapping-signed-integer-while-parsein.patch")
 md5sums=('5439e321351bddd5533551bbce128d07')
+
+prepare() {
+  cd "${srcdir}"/${_pkgbasename}-${pkgver}
+  patch -Np1 -i "../pcre-8.35-Do-not-rely-on-wrapping-signed-integer-while-parsein.patch" || return 1
+}
 
 build() {
   cd "${srcdir}"/${_pkgbasename}-${pkgver}
@@ -33,3 +39,5 @@ package() {
   mkdir -p "$pkgdir/usr/share/licenses"
   ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }
+md5sums=('6aacb23986adccd9b3bc626c00979958'
+         'a2bc385e8c65edc84e98c9ea5471f169')
