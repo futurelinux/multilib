@@ -5,9 +5,10 @@
 
 _pkgbasename=libxft
 pkgname=lib32-$_pkgbasename
-pkgver=2.3.1
+pkgver=2.3.2
+_ubuntu_ver=2.3.1
 pkgrel=1
-_ubuntu_diff_version=${pkgver}-2
+_ubuntu_diff_version=${_ubuntu_ver}-2
 pkgdesc="FreeType-based font drawing library for X (32-bit)"
 arch=('x86_64')
 license=('custom')
@@ -19,9 +20,11 @@ provides=("${pkgname}-ubuntu")
 conflicts=("${pkgname}-ubuntu")
 replaces=("${pkgname}-ubuntu")
 source=(${url}/releases/individual/lib/libXft-${pkgver}.tar.bz2
-        "http://archive.ubuntu.com/ubuntu/pool/main/x/xft/xft_${_ubuntu_diff_version}.diff.gz")
-sha1sums=('c7ec1361e3d4f095910f8c58988ab42e32f314d9'
-          'f86ef3fde13301682e0473474cd55fc8caa41ec7')
+        #"http://archive.ubuntu.com/ubuntu/pool/main/x/xft/xft_${_ubuntu_diff_version}.diff.gz"
+        # from original, removed xftglyphs.c patch
+        xft_2.3.2-1.diff)
+sha1sums=('e025d790a7b6c4d283a78d8df06615cb10278e2d'
+          '75bda08fd01faae18a85140fbc577beb0a89e823')
 
 build() {
   export CC="gcc -m32"
@@ -30,8 +33,11 @@ build() {
 
   cd ${srcdir}/libXft-${pkgver}
   
+  # apply our custom patche
+  patch -Np1 -i ../xft_2.3.2-1.diff
+
   # apply ubuntu patches
-  patch -Np1 -i ../xft_${_ubuntu_diff_version}.diff
+  #patch -Np1 -i ../xft_${_ubuntu_diff_version}.diff
   for _f in $(cat "$srcdir/libXft-${pkgver}/debian/patches/series" | grep -v '#') ; do    
     patch -Np1 -i "$srcdir/libXft-${pkgver}/debian/patches/$_f"
   done
