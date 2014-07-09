@@ -1,8 +1,8 @@
 # Maintainer: AlmAck
 
 _pkgbasename=libvdpau
-pkgname=lib32-libvdpau
-pkgver=0.7
+pkgname=lib32-$_pkgbasename
+pkgver=0.8
 pkgrel=1
 pkgdesc='Nvidia VDPAU library'
 arch=('x86_64')
@@ -11,7 +11,7 @@ license=('custom')
 depends=('lib32-gcc-libs' 'lib32-libxext' $_pkgbasename=$pkgver)
 makedepends=('dri2proto')
 source=("http://people.freedesktop.org/~aplattner/vdpau/${_pkgbasename}-${pkgver}.tar.gz")
-md5sums=('cb81b0c3b7d32b2b2a51894ef05b95ce')
+md5sums=('acf68adc8b8ff4f72be6e8679abc284e')
 
 build() {
   cd ${srcdir}/${_pkgbasename}-${pkgver}
