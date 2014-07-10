@@ -3,7 +3,7 @@
 
 _pkgbasename=nvidia-304xx-utils
 pkgname=lib32-$_pkgbasename
-pkgver=304.121
+pkgver=304.123
 pkgrel=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
@@ -17,7 +17,7 @@ options=('!strip')
 _parch='x86'
 _pkg="NVIDIA-Linux-${_parch}-${pkgver}"
 source=("ftp://download.nvidia.com/XFree86/Linux-${_parch}/${pkgver}/${_pkg}.run")
-md5sums=('b8c950f0a30a6e1f503630fbd0ca8ab9')
+md5sums=('52307054483f5c40391608ce69114d48')
 
 build() {
     cd "${srcdir}"
