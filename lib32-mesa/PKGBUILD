@@ -2,17 +2,16 @@
 # Contributor: (x86_64): AlmAck  almack@chakraos.org
 
 _pkgbasename=mesa
-pkgbase=lib32-mesa
+pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-mesa' 'lib32-mesa-libgl')
 pkgver=10.2.3
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 makedepends=('python2' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'presentproto' 'dri3proto' 
-             'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc-multilib' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd' 'lib32-libvdpau' 'lib32-wayland' 'lib32-libxshmfence')
+             'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc-multilib' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd' 'lib32-libvdpau' 'lib32-wayland' 'lib32-libxshmfence' 'libtool')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2)
-options=('!libtool')
 sha256sums=('e482a96170c98b17d6aba0d6e4dda4b9a2e61c39587bb64ac38cadfa4aba4aeb')
 
 build() {
@@ -33,8 +32,8 @@ build() {
     --with-dri-driverdir=/usr/lib32/xorg/modules/dri \
     --with-gallium-drivers=r300,r600,radeonsi,nouveau,svga,swrast \
     --with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
-    --with-egl-platforms=x11,drm \
-    --with-llvm-shared-libs \
+    --with-egl-platforms=x11,drm,wayland \
+    --enable-llvm-shared-libs \
     --enable-gallium-llvm \
     --enable-gallium-egl \
     --enable-shared-glapi \
@@ -48,6 +47,8 @@ build() {
     --enable-egl \
     --enable-texture-float \
     --enable-xa \
+    --enable-vdpau \
+    --enable-dri3 \
     --disable-64-bit
 
   make
