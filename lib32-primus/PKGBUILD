@@ -2,8 +2,8 @@
 # Contributions from Arch: https://projects.archlinux.org/svntogit/community.git/tree/trunk?h=packages/lib32-primus
 
 _pkgbasename=primus
-pkgname=lib32-primus
-pkgver=20131127
+pkgname=lib32-$_pkgbasename
+pkgver=20131226
 pkgrel=1
 pkgdesc="Faster OpenGL offloading for Bumblebee (32-bit library, git sources)"
 arch=('x86_64')
