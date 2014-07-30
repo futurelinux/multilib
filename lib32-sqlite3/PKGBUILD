@@ -4,8 +4,8 @@
 
 _pkgbasename=sqlite3
 pkgname=lib32-sqlite3
-_amalgamationver=3080401
-pkgver=3.8.4.1
+_amalgamationver=3080500
+pkgver=3.8.5
 pkgrel=1
 pkgdesc="A C library that implements an SQL database engine (32-bit)"
 arch=('x86_64')
@@ -15,7 +15,7 @@ depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('tcl' 'gcc-multilib' 'lib32-readline')
 source=(http://www.sqlite.org/2014/sqlite-src-${_amalgamationver}.zip)
 options=(!libtool)
-md5sums=('7fe9146d236bc068fb0d7c54d0b863e7')
+sha1sums=('a6ba45cf83273fa8f0cf77a6ce3c4d7616e6e52c')
 
 build() {
   cd ${srcdir}/sqlite-src-${_amalgamationver}
