@@ -4,12 +4,12 @@
 _pkgbasename=primus
 pkgname=lib32-$_pkgbasename
 pkgver=20131226
-pkgrel=1
+pkgrel=2
 pkgdesc="Faster OpenGL offloading for Bumblebee (32-bit library, git sources)"
 arch=('x86_64')
 url="https://github.com/amonakov/primus"
 license=('custom:ISC')
-depends=($_pkgbasename=$pkgver 'lib32-mesa' 'lib32-nvidia-utils-bumblebee')
+depends=($_pkgbasename=$pkgver 'bumblebee' 'lib32-mesa-libgl')
 makedepends=('git' 'gcc-multilib')
 source=("git://github.com/amonakov/primus.git#commit=074817614c")
 md5sums=('SKIP')
