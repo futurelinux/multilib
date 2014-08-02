@@ -5,7 +5,7 @@
 # contributor (ccr): blablub <spamalicious.steve@gmail.com>
 
 pkgname=steam
-pkgver=1.0.0.45
+pkgver=1.0.0.48
 pkgrel=1
 pkgdesc="Installer for the Steam software distribution service"
 arch=('x86_64')
@@ -15,26 +15,33 @@ depends=('bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
       'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'python'
       'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib'
       'lib32-libgcrypt' 'lib32-nss' 'lib32-openal'
-      'lib32-gcc-libs' 'lib32-libx11')
+      'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxshmfence')
       
 optdepends=(
-      'lib32-mesa: for open source ATI/Intel/Nouveau users'
+      'lib32-ati-dri: for open source ATI driver users'
       'lib32-catalyst-utils: for AMD Catalyst users'
-      'lib32-catalyst-legacy-utils: for AMD Catalyst Legacy users'
-      'lib32-nvidia-utils-bumblebee: for NVIDIA + Bumblebee users'
+      'lib32-intel-dri: for open source Intel driver users'
+      'lib32-nouveau-dri: for Nouveau users'
+      'lib32-primus: for NVIDIA + Bumblebee users'
       'lib32-nvidia-utils: for NVIDIA proprietary blob users'
-      'lib32-nvidia-304xx-utils: for NVIDIA 304xx series proprietary users')
+      'lib32-nvidia-304xx-utils: for NVIDIA 304xx series proprietary users'
+      'flashplugin: for flash video'
+      'lib32-alsa-plugins: for pulseaudio on some games')
 
 makedepends=('librsvg')
 
 install=steam.install  
 source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgname}_$pkgver.tar.gz"
-        'lib32-flashplugin-path.patch')
-md5sums=('586e707d30a034cc049f9156062fc37a'
-         '1d83a1df55d677f35ce415e0750f4448')
+        'lib32-flashplugin-path.patch'
+        'alsa_sdl_audiodriver.patch')
+md5sums=('d0d9b46bb44d3a3b6b1b44304afe7995'
+         '1d83a1df55d677f35ce415e0750f4448'
+         'ac0e03d70f1101331598b2b32ed9bac3')
 
-build() {
+
+prepare() {
     patch -d "$pkgname" -Np1 -i "$srcdir/lib32-flashplugin-path.patch"
+    patch -d "$pkgname" -Np1 -i "$srcdir/alsa_sdl_audiodriver.patch"
 }
 
 package() {
