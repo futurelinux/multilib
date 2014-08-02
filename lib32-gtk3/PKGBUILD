@@ -2,7 +2,7 @@
 
 _pkgbasename=gtk3
 pkgname=lib32-$_pkgbasename
-pkgver=3.10.7
+pkgver=3.10.9
 pkgrel=1
 pkgdesc="GObject-based multi-platform GUI toolkit (v3) (32-bit)"
 arch=('x86_64')
@@ -13,12 +13,12 @@ depends=('lib32-atk' 'lib32-gdk-pixbuf2' 'lib32-libxcomposite'
 	 'lib32-libxi' 'lib32-libxinerama' 'lib32-libxrandr'
 	 'lib32-pango' 'lib32-cairo' 'lib32-keyutils' 
 	 'lib32-krb5' 'lib32-e2fsprogs' 'lib32-at-spi2-atk'
-	 'lib32-colord' ${_pkgbasename}=${pkgver} 'lib32-libxkbcommon' 'lib32-wayland')
+	 'lib32-colord' ${_pkgbasename}=${pkgver} 'lib32-libxkbcommon' 'lib32-wayland' 'lib32-glib2')
 makedepends=('gcc-multilib')
-options=('!libtool' '!docs')
+options=('!docs')
 install=gtk3.install
 source=("http://ftp.gnome.org/pub/gnome/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz")
-sha256sums=('b7e9de15385031cff43897e7e59f6692eaabf500f36eef80e6b9d6486ad49427')
+sha256sums=('bd05caf5b2eea1d63e721daa990f0c9d86ecbdc8de91480c53b3b7d16a6e43ba')
 
 build() {  
   export CC="gcc -m32"
@@ -32,6 +32,8 @@ build() {
       --disable-schemas-compile \
       --enable-introspection=no \
       --libdir=/usr/lib32
+  #--enable-wayland-backend see,s broken with 3.10.9 enable later
+    
   #https://bugzilla.gnome.org/show_bug.cgi?id=655517
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool  
   make
@@ -42,5 +44,5 @@ package() {
   make DESTDIR="${pkgdir}" install
   mv "${pkgdir}"/usr/bin/gtk-query-immodules-3.0{,-32}
   rm "${pkgdir}"/usr/bin/gtk3-{demo-application,widget-factory}
-  rm -rf "${pkgdir}"/usr/{include,share,bin/gtk3-demo} "${pkgdir}/etc"
+  rm -rf "${pkgdir}"/usr/{include,share,bin/{gtk3-demo,gtk-launch}} "${pkgdir}/etc"
 }
