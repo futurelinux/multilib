@@ -4,11 +4,11 @@
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
 pkgver=2.4.54
-pkgrel=2
+pkgrel=3
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
 license=('custom')
-depends=('lib32-libpciaccess' 'lib32-glibc') # $_pkgbasename=$pkgver)
+depends=('lib32-libpciaccess' 'lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 checkdepends=('lib32-cairo')
 url="http://dri.freedesktop.org/"

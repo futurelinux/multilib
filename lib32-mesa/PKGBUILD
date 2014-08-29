@@ -4,15 +4,17 @@
 _pkgbasename=mesa
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-svga-dri' 'lib32-mesa' 'lib32-mesa-libgl')
-pkgver=10.2.4
+pkgver=10.2.6
 pkgrel=1
 arch=('x86_64')
-makedepends=('python2' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'presentproto' 'dri3proto' 
-             'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc-multilib' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd' 'lib32-libvdpau' 'lib32-wayland' 'lib32-libxshmfence' 'libtool')
+makedepends=('python2' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'dri3proto' 'presentproto'
+             'lib32-libxshmfence' 'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc-multilib' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd'
+             'lib32-libvdpau' 'lib32-wayland' 'libtool')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
-source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2)
-sha256sums=('06a2341244eb85c283f59f70161e06ded106f835ed9b6be1ef0243bd9344811a')
+source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2{,.sig})
+sha256sums=('193314d2adba98e43697d726739ac46b4299aae324fa1821aa226890c28ac806'
+            SKIP)
 
 build() {
   export CC="gcc -m32"
@@ -34,17 +36,17 @@ build() {
     --with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
     --with-egl-platforms=x11,drm,wayland \
     --enable-llvm-shared-libs \
-    --enable-gallium-llvm \
+    --enable-egl \
     --enable-gallium-egl \
-    --enable-shared-glapi \
     --enable-gbm \
+    --enable-gallium-llvm \
+    --enable-shared-glapi \
     --enable-glx-tls \
     --enable-dri \
     --enable-glx \
     --enable-osmesa \
     --enable-gles1 \
     --enable-gles2 \
-    --enable-egl \
     --enable-texture-float \
     --enable-xa \
     --enable-vdpau \
@@ -122,7 +124,7 @@ package_lib32-svga-dri() {
 
 package_lib32-mesa() {
   pkgdesc="an open-source implementation of the OpenGL specification (32-bit)"
-  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-systemd' 'lib32-elfutils' 'lib32-llvm-libs' 'lib32-libvdpau' 'lib32-wayland') # $_pkgbasename=$pkgver)
+  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-libxshmfence' 'lib32-systemd' 'lib32-elfutils' 'lib32-llvm-libs' 'lib32-wayland' $_pkgbasename=$pkgver)
   optdepends=('opengl-man-pages: for the OpenGL API man pages')
   provides=('lib32-libglapi' 'lib32-libgles' 'lib32-libegl')
   conflicts=('lib32-libglapi' 'lib32-libgles' 'lib32-libegl')
