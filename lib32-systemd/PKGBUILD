@@ -1,16 +1,17 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
-pkgver=214
+pkgver=216
 pkgrel=1
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/wiki/Software/systemd"
 license=('GPL2' 'LGPL2.1' 'MIT')
+depends=('lib32-glib2' 'lib32-libgcrypt' 'lib32-xz' 'lib32-curl' "$_pkgbasename=$pkgver")
 makedepends=('lib32-gcc-libs' 'gcc-multilib' 'lib32-dbus-core' 'lib32-libcap' 'lib32-acl' 
-             'lib32-libgcrypt' 'lib32-glib2' 'lib32-xz' 'intltool' 'gperf' 'lib32-kmod')
+             'intltool' 'gperf')
 options=('!libtool')
 source=("http://www.freedesktop.org/software/$_pkgbasename/$_pkgbasename-$pkgver.tar.xz")
-md5sums=('eac4f9fc5bd18a0efc3fc20858baacf3')
+md5sums=('04fda588a04f549da0f397dce3ae6a39')
 
 build() {
   export CC="gcc -m32"
@@ -18,6 +19,9 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/systemd-${pkgver}"
+
+  # LTO currently breaks the build because of libtool failures
+  CFLAGS+=' -fno-lto'
 
   ./configure \
     --libexecdir=/usr/lib32 \
@@ -27,22 +31,24 @@ build() {
     --enable-compat-libs \
     --enable-split-usr \
     --disable-audit \
+    --disable-tests \
     --disable-ima \
-    --disable-pam \
-    --disable-kmod \
-    --disable-blkid \
     --disable-kdbus \
     --disable-seccomp \
+    --disable-pam \
+    --disable-kmod \
+    --disable-networkd \
+    --disable-blkid \
     --without-python \
     --disable-libcryptsetup \
     --with-sysvinit-path= \
-    --with-sysvrcnd-path=
+    --with-sysvrcnd-path= \
+    --with-firmware-path="/usr/lib/firmware/updates:/usr/lib/firmware"
 
   make
 }
 
 package() {
-  depends=('lib32-glib2' 'lib32-libgcrypt' 'lib32-xz' "$_pkgbasename=$pkgver")
   cd "${srcdir}/systemd-${pkgver}"
     
   make DESTDIR="$pkgdir" install
@@ -50,4 +56,7 @@ package() {
   rm -rf "${pkgdir}"/{etc,var}
   rm -rf "${pkgdir}"/usr/{bin,include,lib,share}
   rm -rf "${pkgdir}"/usr/lib32/libnss*
+
+  install -m755 -d "${pkgdir}/usr/share/licenses"
+  ln -s systemd "$pkgdir/usr/share/licenses/lib32-systemd"
 }
