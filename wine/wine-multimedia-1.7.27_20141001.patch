@@ -1,426 +1,5 @@
-From b406908d798762a07d7cd0d02810ea46f30417ce Mon Sep 17 00:00:00 2001
-From: John Schoenick <jschoenick@mozilla.com>
-Date: Sat, 12 Jul 2014 13:32:45 -0700
-Subject: [PATCH] wine-multimedia for wine 1.7.22
-
-Squashed commit of the following:
-
-commit 324c919d453ddcad3e505f3a7682936afc00315c
-Author: Mark Harmstone <mark@harmstone.com>
-Date:   Sat May 24 10:20:47 2014 +0200
-
-    winepulse: handle stream create failing correctly
-
-commit 36b071ed8d9586ec783d5103738f633a5ce1658d
-Author: Maarten Lankhorst <wine@mblankhorst.nl>
-Date:   Sat May 24 10:20:47 2014 +0200
-
-    dsound: fixup IDirectSoundCaptureBuffer_QueryInterface
-
-    Don't expose v8, and actually respond to iunknown.
-
-commit b95c53699cda97b1e37dfd10a73197c89fd5c366
-Author: Maarten Lankhorst <wine@mblankhorst.nl>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    Revert "winmm: Increase mmdevapi buffer sizes."
-
-    This reverts commit fdfff7cf6013a030f2b240b13b02831e502d49e7.
-
-    You've got to be kidding me, 1 second latency in winmm because
-    of a driver not used on linux? If the 'upstream' audio devs
-    spent less time on workarounds and more on fixing drivers,
-    this kind of crap wouldn't be needed.
-
-    I cannot believe that winecoreaudio requires .5 second latency,
-    their api allows for very low latency, so it's probably
-    winecoreaudio screwing things up instead.
-
-commit 9c2ed8b6547526555a2abd685728efc470a6a918
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    TESTING -- override pthreads to fix gstreamer v2
-
-    I believe the code is ready and will work properly now in all cases.
-    but please test before cherry picking this patch, and report
-    success or failure to me please.
-
-    Changes since v1:
-      - Call pthread_yield to make sure that we link against libpthread.
-        This fixes the build on saucy.
-
-commit 23e5b3d03ee065cd86fb3a2f9cbec7381bdf1396
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    winepulse: add support for IMarshal
-
-    Fixes bug 32161 for winepulse. Based On Jeff Klein's patches for the
-    other drivers.
-
-commit 3546c02b884f5009daab652b93ec53ded1bc9725
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    winepulse: use a pi-mutex for serialization.
-
-    The winepulse thread is realtime, to prevent blocking it indefinitely
-    use priority inheritance. Only initialize and release are potentially
-    unsafe, the rest should be ok with -rt.
-
-commit 72b20348ec2ce540468a5051b8b089d75ef819ef
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    dsound: kill unconditional memory allocation in mixing thread
-
-    Unfortunately this doesn't get rid of the memory allocation entirely,
-    but it will decrease the chance of underruns due to locking immensely.
-
-    Signed-off-by: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-
-commit b90fc84ebb6f18267628e7a1b8eec5a896587f21
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    dsound: remove state machine from render buffer
-
-    .. wat
-
-commit 2ea58a009384645445c8cf7865ae8c43478b124c
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    dsound: fixup DSOUND_WaveQueue checks
-
-    If you're going to be silly, you should go all the way. :P
-
-commit 78621985136b5624677b0a85e4535a010362396b
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    dsound: fix format handling on invalid format to never fail
-
-    For the users still on oss4 this is probably useful. This is more of
-    a theoretical concern than practical, since nobody uses primary mode.
-    And even if someone did, they would have to find a format that was
-    unsupported, like IEEE float would probably be the easiest to trigger.
-
-    This patch now forces everything to a single call to DSOUND_ReopenDevice,
-    which will either fail and keep previous state, or succeed.
-
-commit 7651cdf5babcf4343ee08abf03bff7b44ff05a8c
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    dsound: mix float natively
-
-commit 88d429e4383a723f590877998b64ba5cf5fb97d5
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:46 2014 +0200
-
-    dsound: rework ugly mixer logic
-
-commit 1ad2303cc86af1c9bdc290821177fcb07ae9a5a8
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:45 2014 +0200
-
-    winepulse v23: fixup a invalid free in mmdevapi
-
-    array members of ids should be dynamically allocated, judging from valgrind output.
-
-commit 8c3ad5783376246d222e33395e8e28da933395b9
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:45 2014 +0200
-
-    winepulse: fix unneeded free in write..
-
-commit 7d41010fbd4445856293dfa83ab2c391326b0e42
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:45 2014 +0200
-
-    winepulse v21: return early if padding didn't update
-
-commit 18a8f3794d1828d2ebae4de9d0b911e0c5c7dbe5
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:45 2014 +0200
-
-    winepulse: fixup IsFormatSupported calls
-
-commit c831afd2f2674f4abba830e87ffeb911df1388f5
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:45 2014 +0200
-
-    winepulse v20: fix the checks in IsFormatSupported
-
-    Thanks to DGhost001 for reporting and isolating the issue.
-
-commit a3b383a5ed0221812e16a9ff83852d57c51b9ff9
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:45 2014 +0200
-
-    winepulse: disable the setevent part of the latency hack
-
-    If you get playback glitches in skyrim or other games as a result of
-    this patch, PLEASE REPORT TO ME!
-
-commit b93ed79dab2976417c306b44576c3f8ed8daa8fa
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:45 2014 +0200
-
-    winepulse: remove bogus SetEvent from pulse_started_callback
-
-commit ee2d5abb46b6fd0967ffdb99798bd24c0b9ba65f
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:45 2014 +0200
-
-    winepulse: drop realtime priority before thread destruction
-
-    prevents having to handle a kernel RT Watchdog Timeout.
-
-commit 9361e6798401ab3650fd74d8ec410475b5dae36b
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:45 2014 +0200
-
-    winepulse: Fix low latency support
-
-    Some games request a 20 ms buffer and will only fill 20 ms.
-    Since 10 ms periods are too long in this case for winepulse,
-    fill change period size to 5 ms and force a trigger if
-    there's still data left to fill.
-
-commit b426d9e516cf13b0bc1af1236f37923c4b741b71
-Author: Juergen Tretthahn <orson@orson.at>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    winepulse: API Compatibility with 1.5.2 onward, v2
-
-    V2: Add winepulse.drv.spec to commit too
-    V1: Original version
-
-    Commit e87cb774d131963d2642d075977571585ec5da8d changed the driver api
-    leave this commit out to build for builds prior to this
-
-    Not needed for: 1.5.1, 1.5 and 1.4 builds
-
-commit 24ad9ec72bdde9f552edf720dfb8ddb296b78308
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    winepulse v18: Latency and compilation improvements
-
-    Changes since v17:
-    - Remove clock_pulse interpolation
-      * Couldn't work, sadly
-    - Allow 2 * MinimumPeriod for shared buffers
-    - Fix all compiler warnings when compiling with 64-bits
-    - Dynamically select low latency mode if less than 2 default periods are request
-      * This requires the rtkit patch to be useful
-
-commit e2f8019b05427532961356cdaf40cdbb0cb392f7
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    winepulse v17: Fix winmm tests
-
-    Handle dwChannelMask = SPEAKER_ALL better so WAVE_FORMAT_EXTENSIBLE tests pass too
-
-commit 15983e6eaf216927c7bed825ab846ae377a33156
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    winepulse v16: Add official warning wine doesn't want to support winepulse
-
-    And give an alternative place to ask for support.
-    I wish it didn't have to come to this.
-
-commit d2b1b8b1979b799fd87b08bda9b0e77821681f2e
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    winepulse v15: Add support for missing formats, and silence an error for missing format tags
-
-commit 2ad5775f86fe0282901cf65ee36fe1b806312591
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    winepulse v12
-
-    Changes since v11:
-    - Fix incorrect assertions which may fail on moving a capture device
-    - Whitespace apply fixes
-
-    Changes since v10:
-    - Make some members static
-    - Fix small memory leak in GetService
-
-commit cf6cf4117deb96c6c3d0ae9f0a655866021b32da
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    fix fdels trailing whitespaces
-
-    Happy? :P
-
-commit ff821e5994ae1ecba9593f766e7deea2b0ee5fc9
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    winepulse: Add session support
-
-    ---
-    Copied verbatim from winealsa
-
-commit ebd14a44da5d2e918e6992e7119a9dd7969a13de
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    winepulse: Add audiostreamvolume
-
-    ---
-    Pulse allows streams to set volume, but for various reasons it's
-    better off being disabled by default.
-
-    It can be enabled with HKCU\Software\Wine\Pulse\StreamVol=0x1
-
-commit 7bd1f84624013c656e0275247a83ea3cb386feca
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:44 2014 +0200
-
-    winepulse: Add IAudioClock and IAudioClock2
-
-commit fea2f362a74cf8b309facef0558f10eea1ab234f
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:43 2014 +0200
-
-    winepulse: Add IAudioRenderClient and IAudioCaptureClient
-
-commit 47e1cf987c4f010f06adb75b2b554bf7e4a71211
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:43 2014 +0200
-
-    winepulse: Add audioclient
-
-    ---
-    Without AudioRenderClient and AudioCaptureClient it won't work,
-    but it's easier to review
-
-commit b11592830890f0f5dcfd2f4747d6bd9356d5618a
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:43 2014 +0200
-
-    winepulse: Add format and period probing
-
-commit 8b1ac77e1a5eff08a0d38975ba5e57f1ccb363c6
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:43 2014 +0200
-
-    winepulse: Add initial stub for pulseaudio support
-
-    ---
-    Just the basic of initialization and pulseaudio mainloop support is
-    added here.
-
-commit 9ea97bb103cc71446810810f8d5593a8d7e4c99c
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:43 2014 +0200
-
-    winmm: Load winealsa if winepulse is found
-
-    Fixes midi on winepulse
-
-commit 21d468a3d66605ace55d07e215cf9df0327d350d
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:43 2014 +0200
-
-    mmdevapi: be stricter about tests
-
-    Dont care about broken drivers..
-
-commit 27fdbad8391fee7a4c8fbd45b8d5e93b008dd359
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:43 2014 +0200
-
-    rtkit: add SIGXCPU handling to wineserver
-
-    This is dependent on getting the correct server_pid in the previous commit.
-    Processes now forward SIGXCPU to wineserver, who will attempt to downgrade
-    all threads that were set to realtime priority by avrt first, and if another
-    SIGXCPU is received or none were found it will downgrade all realtime threads.
-
-    Special-thanks-to: tizbac
-
-commit 0480aaaa8e7da26e8ea5ab68290ac0ed4515fbbd
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:43 2014 +0200
-
-    server: Bump priority on server to process messages faster
-
-commit 5a838e231c27328d1b0777667e7adb20eb1fe5a1
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:43 2014 +0200
-
-    avrt: Add realtime to stub
-
-commit 03f9a8631d0519c0ac205fde7430910ea7f78df7
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:42 2014 +0200
-
-    server: Use rtkit to set realtime priority, try 4
-
-commit 8e269bc3b9adba17f3e0187b33b30abd1a1eb89b
-Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
-Date:   Sat May 24 10:20:42 2014 +0200
-
-    valgrind prevent crash hack
-
-commit 0d57845a8a5ef48616b98296e336332ad12ab3c9
-Author: Maarten Lankhorst <m.b.lankhorst@gmail.com>
-Date:   Sat May 24 10:20:42 2014 +0200
-
-    winemenubuilder: silence an err
----
- configure                                  |   99 +-
- configure.ac                               |   32 +-
- dlls/avrt/main.c                           |    1 +
- dlls/dsound/capture.c                      |    9 +-
- dlls/dsound/dsound.c                       |   52 +-
- dlls/dsound/dsound_convert.c               |   18 -
- dlls/dsound/dsound_main.c                  |    8 +-
- dlls/dsound/dsound_private.h               |   13 +-
- dlls/dsound/mixer.c                        |  305 +--
- dlls/dsound/primary.c                      |  455 ++--
- dlls/mmdevapi/main.c                       |    2 +-
- dlls/mmdevapi/tests/capture.c              |    8 +-
- dlls/mmdevapi/tests/render.c               |  243 ++-
- dlls/ntdll/ntdll_misc.h                    |    3 +
- dlls/ntdll/server.c                        |   94 +-
- dlls/ntdll/thread.c                        |  261 ++-
- dlls/winegstreamer/glibthread.c            |   13 +
- dlls/winepulse.drv/Makefile.in             |    7 +
- dlls/winepulse.drv/mmdevdrv.c              | 3227 ++++++++++++++++++++++++++++
- dlls/winepulse.drv/winepulse.drv.spec      |    5 +
- dlls/winmm/lolvldrv.c                      |    5 +-
- dlls/winmm/waveform.c                      |    4 +-
- libs/wine/loader.c                         |   46 +-
- libs/wine/wine.map                         |    6 +
- loader/Makefile.in                         |    2 +-
- loader/main.c                              |   41 +
- programs/winemenubuilder/winemenubuilder.c |    2 +-
- server/Makefile.in                         |    2 +
- server/main.c                              |    4 +
- server/rtkit.c                             |  292 +++
- server/thread.c                            |   36 +-
- server/thread.h                            |    2 +
- 32 files changed, 4649 insertions(+), 648 deletions(-)
- create mode 100644 dlls/winepulse.drv/Makefile.in
- create mode 100644 dlls/winepulse.drv/mmdevdrv.c
- create mode 100644 dlls/winepulse.drv/winepulse.drv.spec
- create mode 100644 server/rtkit.c
-
 diff --git a/configure b/configure
-index d7efbfd..011b8a3 100755
+index 73b114f..5d82d5f 100755
 --- a/configure
 +++ b/configure
 @@ -653,6 +653,8 @@ OSS4_CFLAGS
@@ -432,15 +11,15 @@ index d7efbfd..011b8a3 100755
  GETTEXTPO_LIBS
  Z_LIBS
  FREETYPE_LIBS
-@@ -824,6 +826,7 @@ with_osmesa
- with_oss
+@@ -826,6 +828,7 @@ with_oss
+ with_pcap
  with_png
  with_pthread
 +with_pulse
  with_sane
  with_tiff
  with_v4l
-@@ -1263,6 +1266,7 @@ enable_winemapi
+@@ -1267,6 +1270,7 @@ enable_winemapi
  enable_winemp3_acm
  enable_wineoss_drv
  enable_wineps_drv
@@ -448,15 +27,15 @@ index d7efbfd..011b8a3 100755
  enable_wineqtdecoder
  enable_winex11_drv
  enable_wing32
-@@ -2092,6 +2096,7 @@ Optional Packages:
-   --without-oss           do not use the OSS sound support
+@@ -2098,6 +2102,7 @@ Optional Packages:
+   --without-pcap          do not use the Packet Capture library
    --without-png           do not use PNG
    --without-pthread       do not use the pthread library
 +  --without-pulse         do not use PulseAudio sound support
    --without-sane          do not use SANE (scanner support)
    --without-tiff          do not use TIFF
    --without-v4l           do not use v4l1 (v4l support)
-@@ -3333,6 +3338,12 @@ if test "${with_pthread+set}" = set; then :
+@@ -3345,6 +3350,12 @@ if test "${with_pthread+set}" = set; then :
  fi
  
  
@@ -469,7 +48,7 @@ index d7efbfd..011b8a3 100755
  # Check whether --with-sane was given.
  if test "${with_sane+set}" = set; then :
    withval=$with_sane;
-@@ -12105,6 +12116,87 @@ esac
+@@ -12189,6 +12200,87 @@ esac
  fi
  fi
  
@@ -557,7 +136,7 @@ index d7efbfd..011b8a3 100755
  if test "x$with_gstreamer" != "xno"
  then
      if ${GSTREAMER_CFLAGS:+false} :; then :
-@@ -13416,12 +13508,14 @@ fi
+@@ -13500,12 +13592,13 @@ fi
  
  test -n "$ALSA_LIBS" || enable_winealsa_drv=${enable_winealsa_drv:-no}
  test -n "$COREAUDIO_LIBS" || enable_winecoreaudio_drv=${enable_winecoreaudio_drv:-no}
@@ -567,14 +146,13 @@ index d7efbfd..011b8a3 100755
  
 -if test "x$ALSA_LIBS$COREAUDIO_LIBS" = "x" -a \
 +if test "x$ALSA_LIBS$COREAUDIO_LIBS$PULSELIBS" = "x" -a \
-+if test "x$ALSALIBS$COREAUDIO$PULSELIBS" = "x" -a \
          "x$ac_cv_member_oss_sysinfo_numaudioengines" != xyes -a \
 -        "x$with_alsa$with_coreaudio$with_oss" != xnonono
 +        "x$with_alsa$with_coreaudio$with_oss$with_pulse" != xnononono
  then
      as_fn_append wine_warnings "|No sound system was found. Windows applications will be silent."
  fi
-@@ -17265,6 +17359,7 @@ wine_fn_config_dll winemp3.acm enable_winemp3_acm
+@@ -17352,6 +17445,7 @@ wine_fn_config_dll winemp3.acm enable_winemp3_acm
  wine_fn_config_dll wineoss.drv enable_wineoss_drv
  wine_fn_config_dll wineps.drv enable_wineps_drv clean,po
  wine_fn_config_dll wineps16.drv16 enable_win16
@@ -583,10 +161,10 @@ index d7efbfd..011b8a3 100755
  wine_fn_config_dll winex11.drv enable_winex11_drv
  wine_fn_config_dll wing.dll16 enable_win16
 diff --git a/configure.ac b/configure.ac
-index c913f9f..6539100 100644
+index 17ff399..539498a 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -70,6 +70,7 @@ AC_ARG_WITH(oss,       AS_HELP_STRING([--without-oss],[do not use the OSS sound
+@@ -72,6 +72,7 @@ AC_ARG_WITH(pcap,      AS_HELP_STRING([--without-pcap],[do not use the Packet Ca
  AC_ARG_WITH(png,       AS_HELP_STRING([--without-png],[do not use PNG]))
  AC_ARG_WITH(pthread,   AS_HELP_STRING([--without-pthread],[do not use the pthread library]),
              [if test "x$withval" = "xno"; then ac_cv_header_pthread_h=no; fi])
@@ -594,7 +172,7 @@ index c913f9f..6539100 100644
  AC_ARG_WITH(sane,      AS_HELP_STRING([--without-sane],[do not use SANE (scanner support)]))
  AC_ARG_WITH(tiff,      AS_HELP_STRING([--without-tiff],[do not use TIFF]))
  AC_ARG_WITH(v4l,       AS_HELP_STRING([--without-v4l],[do not use v4l1 (v4l support)]))
-@@ -1518,6 +1519,30 @@ then
+@@ -1537,6 +1538,30 @@ then
            [GetText ${notice_platform}development files not found (or too old), po files can't be rebuilt.])
  fi
  
@@ -625,7 +203,7 @@ index c913f9f..6539100 100644
  dnl **** Check for gstreamer ****
  if test "x$with_gstreamer" != "xno"
  then
-@@ -1736,13 +1761,15 @@ fi
+@@ -1755,13 +1780,14 @@ fi
  dnl **** Disable unsupported winmm drivers ****
  test -n "$ALSA_LIBS" || enable_winealsa_drv=${enable_winealsa_drv:-no}
  test -n "$COREAUDIO_LIBS" || enable_winecoreaudio_drv=${enable_winecoreaudio_drv:-no}
@@ -636,14 +214,13 @@ index c913f9f..6539100 100644
  dnl **** Check for any sound system ****
 -if test "x$ALSA_LIBS$COREAUDIO_LIBS" = "x" -a \
 +if test "x$ALSA_LIBS$COREAUDIO_LIBS$PULSELIBS" = "x" -a \
-+if test "x$ALSALIBS$COREAUDIO$PULSELIBS" = "x" -a \
          "x$ac_cv_member_oss_sysinfo_numaudioengines" != xyes -a \
 -        "x$with_alsa$with_coreaudio$with_oss" != xnonono
 +        "x$with_alsa$with_coreaudio$with_oss$with_pulse" != xnononono
  then
      WINE_WARNING([No sound system was found. Windows applications will be silent.])
  fi
-@@ -3239,6 +3266,7 @@ WINE_CONFIG_DLL(winemp3.acm)
+@@ -3261,6 +3287,7 @@ WINE_CONFIG_DLL(winemp3.acm)
  WINE_CONFIG_DLL(wineoss.drv)
  WINE_CONFIG_DLL(wineps.drv,,[clean,po])
  WINE_CONFIG_DLL(wineps16.drv16,enable_win16)
@@ -852,7 +429,7 @@ index d3d686a..d410d5e 100644
 -    (normfunc)normieee32
  };
 diff --git a/dlls/dsound/dsound_main.c b/dlls/dsound/dsound_main.c
-index 7a16366..4f533b4 100644
+index 0e3a313..35a101d 100644
 --- a/dlls/dsound/dsound_main.c
 +++ b/dlls/dsound/dsound_main.c
 @@ -91,8 +91,7 @@ GUID                    DSOUND_capture_guids[MAXWAVEDRIVERS];
@@ -2408,10 +1985,10 @@ index 4370084..1af819b 100644
  
  static inline struct ntdll_thread_data *ntdll_get_thread_data(void)
 diff --git a/dlls/ntdll/server.c b/dlls/ntdll/server.c
-index f3c6b38..8c48fd2 100644
+index aabda4f..f2b8216 100644
 --- a/dlls/ntdll/server.c
 +++ b/dlls/ntdll/server.c
-@@ -79,6 +79,9 @@
+@@ -81,6 +81,9 @@
  #include "ntdll_misc.h"
  
  WINE_DEFAULT_DEBUG_CHANNEL(server);
@@ -2421,7 +1998,7 @@ index f3c6b38..8c48fd2 100644
  
  /* Some versions of glibc don't define this */
  #ifndef SCM_RIGHTS
-@@ -1328,6 +1331,88 @@ static int get_unix_tid(void)
+@@ -1330,6 +1333,88 @@ static int get_unix_tid(void)
  }
  
  
@@ -2510,7 +2087,7 @@ index f3c6b38..8c48fd2 100644
  /***********************************************************************
   *           server_init_process
   *
-@@ -1337,6 +1422,14 @@ void server_init_process(void)
+@@ -1339,6 +1424,14 @@ void server_init_process(void)
  {
      obj_handle_t version;
      const char *env_socket = getenv( "WINESERVERSOCKET" );
@@ -2525,7 +2102,7 @@ index f3c6b38..8c48fd2 100644
  
      server_pid = -1;
      if (env_socket)
-@@ -1420,7 +1513,6 @@ NTSTATUS server_init_process_done(void)
+@@ -1422,7 +1515,6 @@ NTSTATUS server_init_process_done(void)
      return status;
  }
  
@@ -2534,7 +2111,7 @@ index f3c6b38..8c48fd2 100644
   *           server_init_thread
   *
 diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
-index c8461b0..f133db3 100644
+index c8461b0..8d5470e 100644
 --- a/dlls/ntdll/thread.c
 +++ b/dlls/ntdll/thread.c
 @@ -33,6 +33,7 @@
@@ -2658,7 +2235,7 @@ index c8461b0..f133db3 100644
  
      if (status)  /* send the exit code to the server (0 is already the default) */
      {
-@@ -380,24 +453,158 @@ void exit_thread( int status )
+@@ -380,24 +453,177 @@ void exit_thread( int status )
  
      pthread_sigmask( SIG_BLOCK, &server_block_set, NULL );
  
@@ -2702,7 +2279,6 @@ index c8461b0..f133db3 100644
 +
 +static void call_native_cleanup(void *arg)
 +{
-+    RtlFreeThreadActivationContextStack();
 +    exit_thread_common(0);
 +}
 +
@@ -2711,10 +2287,14 @@ index c8461b0..f133db3 100644
 +		      void *(*start_routine) (void *), void *parm)
 +{
 +    NTSTATUS ret;
++    pthread_t tid;
 +    size_t stack = 8 * 1024 * 1024;
 +    struct unix_arg arg;
 +    arg.start = start_routine;
 +    arg.arg = parm;
++
++    if (!thread)
++        thread = &tid;
 +
 +    TRACE("Overriding thread creation!\n");
 +    if (attr) {
@@ -2732,6 +2312,7 @@ index c8461b0..f133db3 100644
 +        FIXME("ret: %08x\n", ret);
 +    switch (ret) {
 +    case STATUS_SUCCESS:
++        TRACE("created thread %lx for %p/%p\n", *thread, start_routine, parm);
 +        return 0;
 +    case STATUS_NO_MEMORY:
 +        return ENOMEM;
@@ -2749,6 +2330,7 @@ index c8461b0..f133db3 100644
 +    TEB *teb = NULL;
 +
 +    if (pthread_equal(thread, pthread_self())) {
++        TRACE("Detached self: %lx\n", pthread_self());
 +        ntdll_get_thread_data()->detached = 1;
 +        return 0;
 +    }
@@ -2761,6 +2343,7 @@ index c8461b0..f133db3 100644
 +            list_remove(&thread_data->entry);
 +            if (!pthread_tryjoin_np(thread, NULL)) {
 +                detach_thread_unlock(NULL);
++                TRACE("Thread %lx was dead, cleaning up\n", thread);
 +                signal_free_thread(teb);
 +                return 0;
 +            }
@@ -2769,6 +2352,10 @@ index c8461b0..f133db3 100644
 +        }
 +    }
 +    detach_thread_unlock(NULL);
++    if (!teb)
++        TRACE("Could not find thread %lx to detach\n", thread);
++    else
++        TRACE("Changed thread %lx to detached\n", thread);
 +    return teb ? 0 : ESRCH;
 +}
 +
@@ -2787,19 +2374,26 @@ index c8461b0..f133db3 100644
 +        if (pthread_equal(thread, thread_data->pthread_id)) {
 +
 +            ret = pthread_tryjoin_np(thread, retval);
-+            if (!ret)
++            if (!ret) {
++                TRACE("Thread %lx was dead fastpath, cleaning up\n", thread);
 +                goto free;
++            }
 +            detach_thread_unlock(NULL);
 +
 +            ret = __glob_pthread_join(thread, retval);
-+            if (ret)
++            if (ret) {
++                TRACE("Thread %lx join failed with %i, ignoring\n", thread, ret);
 +                return ret;
++            }
 +
 +            take_thread_lock();
 +            /* Check if someone else freed the thread yet */
 +            LIST_FOR_EACH_ENTRY(t2, &active_list, typeof(*thread_data), entry)
-+                if (t2 == thread_data)
++                if (t2 == thread_data) {
++                    TRACE("Cleaning up after successful join\n");
 +                    goto free;
++                }
++            TRACE("No clean up after successful join, multiple pthread_join's?\n");
 +            break;
 +
 +free:
@@ -2811,6 +2405,8 @@ index c8461b0..f133db3 100644
 +    }
 +
 +    detach_thread_unlock(NULL);
++    if (ret)
++        TRACE("failed with %i\n", ret);
 +    return ret;
 +}
 +
@@ -2818,7 +2414,7 @@ index c8461b0..f133db3 100644
  
  /***********************************************************************
   *           start_thread
-@@ -426,9 +633,26 @@ static void start_thread( struct startup_info *info )
+@@ -426,9 +652,19 @@ static void start_thread( struct startup_info *info )
      if (TRACE_ON(relay))
          DPRINTF( "%04x:Starting thread proc %p (arg=%p)\n", GetCurrentThreadId(), func, arg );
  
@@ -2828,26 +2424,69 @@ index c8461b0..f133db3 100644
 +    if (info->native_thread) {
 +        void *(*start)(void*) = (void*)func;
  
-+        thread_data->detached = 0;
-+
-+        take_thread_lock();
-+        list_add_tail(&active_list, &thread_data->entry);
-+        detach_thread_unlock(NULL);
-+
 +        FIXME("Started native thread %08x\n", GetCurrentThreadId());
 +        pthread_cleanup_push(call_native_cleanup, NULL);
 +        pthread_exit(start(arg));
 +        pthread_cleanup_pop(1);
 +        return;
 +    }
-+    thread_data->detached = 1;
 +#endif
 +        call_thread_entry_point( (LPTHREAD_START_ROUTINE)func, arg );
 +}
  
  /***********************************************************************
   *              RtlCreateUserThread   (NTDLL.@)
-@@ -524,8 +748,18 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, const SECURITY_DESCRIPTOR *
+@@ -440,14 +676,13 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, const SECURITY_DESCRIPTOR *
+                                      HANDLE *handle_ptr, CLIENT_ID *id )
+ {
+     sigset_t sigset;
+-    pthread_t pthread_id;
+     pthread_attr_t attr;
+     struct ntdll_thread_data *thread_data;
+     struct startup_info *info = NULL;
+     HANDLE handle = 0, actctx = 0;
+     TEB *teb = NULL;
+     DWORD tid = 0;
+-    int request_pipe[2];
++    int request_pipe[2], ret;
+     NTSTATUS status;
+ 
+     if (process != NtCurrentProcess())
+@@ -472,10 +707,14 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, const SECURITY_DESCRIPTOR *
+             if (handle_ptr) *handle_ptr = wine_server_ptr_handle( result.create_thread.handle );
+             else NtClose( wine_server_ptr_handle( result.create_thread.handle ));
+         }
++        TRACE("CreateThread for other process returns %08x\n", result.create_thread.status);
+         return result.create_thread.status;
+     }
+ 
+-    if (server_pipe( request_pipe ) == -1) return STATUS_TOO_MANY_OPENED_FILES;
++    if (server_pipe( request_pipe ) == -1) {
++        TRACE("CreateThread cannot create request pipe: %m\n");
++        return STATUS_TOO_MANY_OPENED_FILES;
++    }
+     wine_server_send_fd( request_pipe[0] );
+ 
+     SERVER_START_REQ( new_thread )
+@@ -496,12 +735,16 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, const SECURITY_DESCRIPTOR *
+     if (status)
+     {
+         close( request_pipe[1] );
++        TRACE("CreateThread server request failed with %08x\n", status);
+         return status;
+     }
+ 
+     pthread_sigmask( SIG_BLOCK, &server_block_set, &sigset );
+ 
+-    if ((status = signal_alloc_thread( &teb ))) goto error;
++    if ((status = signal_alloc_thread( &teb ))) {
++        TRACE("CreateThread signal thread allocation failed with %08x\n", status);
++        goto error;
++    }
+ 
+     teb->Peb = NtCurrentTeb()->Peb;
+     teb->ClientId.UniqueProcess = ULongToHandle(GetCurrentProcessId());
+@@ -524,32 +767,64 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, const SECURITY_DESCRIPTOR *
  
      info = (struct startup_info *)(teb + 1);
      info->teb         = teb;
@@ -2867,23 +2506,50 @@ index c8461b0..f133db3 100644
 +    }
  
      thread_data = (struct ntdll_thread_data *)teb->SpareBytes1;
++#ifdef __linux__
++    thread_data->detached = !info->native_thread;
++#endif
      thread_data->request_fd  = request_pipe[1];
-@@ -540,7 +774,7 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, const SECURITY_DESCRIPTOR *
+     thread_data->reply_fd    = -1;
+     thread_data->wait_fd[0]  = -1;
+     thread_data->wait_fd[1]  = -1;
++    thread_data->entry.next = NULL;
+ 
+-    if ((status = virtual_alloc_thread_stack( teb, stack_reserve, stack_commit ))) goto error;
++    if ((status = virtual_alloc_thread_stack( teb, stack_reserve ?: (8 << 20), stack_commit ?: (1 << 20) ))) {
++        TRACE("Allocating virtual stack for %p (%li/%li) failed with %08x\n", start, stack_reserve, stack_commit, status);
++        goto error;
++    }
+ 
+     pthread_attr_init( &attr );
+     pthread_attr_setstack( &attr, teb->DeallocationStack,
                             (char *)teb->Tib.StackBase - (char *)teb->DeallocationStack );
      pthread_attr_setscope( &attr, PTHREAD_SCOPE_SYSTEM ); /* force creating a kernel thread */
      interlocked_xchg_add( &nb_threads, 1 );
 -    if (pthread_create( &pthread_id, &attr, (void * (*)(void *))start_thread, info ))
-+    if (__glob_pthread_create( &pthread_id, &attr, (void * (*)(void *))start_thread, info ))
++
++    take_thread_lock();
++    ret = __glob_pthread_create( &thread_data->pthread_id, &attr, (void * (*)(void *))start_thread, info );
++    if (ret)
      {
++        TRACE("pthread create failed with %i/%m\n", ret);
          interlocked_xchg_add( &nb_threads, -1 );
          pthread_attr_destroy( &attr );
-@@ -550,6 +784,11 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, const SECURITY_DESCRIPTOR *
+         status = STATUS_NO_MEMORY;
+         goto error;
+     }
++    if (!thread_data->detached)
++        list_add_tail(&active_list, &thread_data->entry);
++    detach_thread_unlock(NULL);
++
      pthread_attr_destroy( &attr );
      pthread_sigmask( SIG_SETMASK, &sigset, NULL );
  
++    TRACE("Created thread succesfully, win handle: %04x, pthread: %lx\n", tid, thread_data->pthread_id);
++
 +#ifdef __linux__
 +    if ((void*)start == (void*)&native_unix_start && id)
-+        *(pthread_t*)id = pthread_id;
++        *(pthread_t*)id = thread_data->pthread_id;
 +    else
 +#endif
      if (id) id->UniqueThread = ULongToHandle(tid);
@@ -6206,7 +5872,7 @@ index 6b259ff..541dc62 100644
  #define MAPPER_INDEX 0x3F
  
 diff --git a/libs/wine/loader.c b/libs/wine/loader.c
-index 5c0192d..365144c 100644
+index 3591ede..a8c31b9 100644
 --- a/libs/wine/loader.c
 +++ b/libs/wine/loader.c
 @@ -63,12 +63,23 @@ extern char **environ;
@@ -6253,7 +5919,7 @@ index 5c0192d..365144c 100644
      if (!getrlimit( limit, &rlimit ))
      {
          rlimit.rlim_cur = rlimit.rlim_max;
-@@ -907,6 +922,34 @@ jint JNI_OnLoad( JavaVM *vm, void *reserved )
+@@ -913,6 +928,34 @@ jint JNI_OnLoad( JavaVM *vm, void *reserved )
  #endif  /* __ANDROID__ */
  
  /***********************************************************************
@@ -6288,7 +5954,7 @@ index 5c0192d..365144c 100644
   *           wine_init
   *
   * Main Wine initialisation.
-@@ -925,6 +968,7 @@ void wine_init( int argc, char *argv[], char *error, int error_size )
+@@ -931,6 +974,7 @@ void wine_init( int argc, char *argv[], char *error, int error_size )
  #ifdef RLIMIT_AS
      set_max_limit( RLIMIT_AS );
  #endif
@@ -6383,10 +6049,10 @@ index ac67290..76609e1 100644
      {
          static char noexec[] = "WINELOADERNOEXEC=1";
 diff --git a/programs/winemenubuilder/winemenubuilder.c b/programs/winemenubuilder/winemenubuilder.c
-index 4675369..84e793d 100644
+index fba3664..7e4b565 100644
 --- a/programs/winemenubuilder/winemenubuilder.c
 +++ b/programs/winemenubuilder/winemenubuilder.c
-@@ -2535,7 +2535,7 @@ static BOOL write_freedesktop_association_entry(const char *desktopPath, const c
+@@ -2538,7 +2538,7 @@ static BOOL write_freedesktop_association_entry(const char *desktopPath, const c
          fclose(desktop);
      }
      else
@@ -6836,6 +6502,3 @@ index 996d95b..36f09ce 100644
  };
  
  struct thread_snapshot
--- 
-2.0.1
-

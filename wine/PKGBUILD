@@ -1,16 +1,16 @@
 # maintainer: Giuseppe Cala' <gcala[at]chakra-project[dot]org>
 
 pkgname=wine
-pkgver=1.7.22
+pkgver=1.7.27
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf
-	winemultimedia_1.7.22_20140712.patch)
+	wine-multimedia-1.7.27_20141001.patch)
 
-md5sums=('519319364b0845ffcbeade4a5b98c0d4'
+md5sums=('397889d1d39b913b931b84988d50d3ac'
          '1ff4e467f59409272088d92173a0f801'
-         'c975b349bce41992905891e267ed61a6')
+         'c9b18cc1adfe807acf3e8904bd034fb2')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
@@ -50,6 +50,7 @@ makedepends=(autoconf ncurses bison perl fontforge flex prelink
   openal         lib32-openal
   v4l-utils      lib32-v4l-utils
   alsa-lib       lib32-alsa-lib
+  libpulse        lib32-libpulse
   mesa            lib32-mesa
   mesa-libgl      lib32-mesa-libgl
   libcl           lib32-libcl
@@ -163,6 +164,3 @@ package() {
   ln -s ../conf.avail/30-win32-aliases.conf "$pkgdir/etc/fonts/conf.d/30-win32-aliases.conf"
 }
 
-md5sums=('519319364b0845ffcbeade4a5b98c0d4'
-         '1ff4e467f59409272088d92173a0f801'
-         '3ef55a8345325b15144e2062b627b91f')
