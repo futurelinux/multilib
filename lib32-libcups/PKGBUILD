@@ -5,16 +5,18 @@
 
 _pkgbasename=libcups
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.3
+pkgver=2.0.0
 pkgrel=1
 pkgdesc="The CUPS Printing System - client libraries (32-bit)"
 arch=('x86_64')
 license=('GPL')
 url="http://www.cups.org/"
-depends=(lib32-glibc $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib cups lib32-libusb)
-source=(http://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2)
-md5sums=('946a2d8ad1aec6beced312fce18543da')
+depends=(lib32-krb5 lib32-libtiff lib32-libpng $_pkgbasename=$pkgver)
+makedepends=(gcc-multilib)
+source=(#ftp://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2
+http://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2{,.sig})
+md5sums=('2cdd81fea23e9e29555c24bdfd0d7c89'
+         'SKIP')
 
 build() {
   export CC="gcc -m32"
@@ -36,14 +38,17 @@ build() {
               --enable-ssl=no \
               --disable-gnutls \
               --enable-threads \
+              --enable-libusb=no \
               --with-optim="$CFLAGS" \
               --disable-avahi \
+              --disable-dnssd \
               --libdir=/usr/lib32
-  make
+  make libs
 }
 
 package() {
   cd ${srcdir}/cups-${pkgver}
   make BUILDROOT=${pkgdir} install-libs
+  rm -rf "${pkgdir}/usr/lib"
 }
 
