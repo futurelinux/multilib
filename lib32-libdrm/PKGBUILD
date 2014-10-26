@@ -3,8 +3,8 @@
 
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.54
-pkgrel=3
+pkgver=2.4.58
+pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
 license=('custom')
@@ -12,10 +12,8 @@ depends=('lib32-libpciaccess' 'lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 checkdepends=('lib32-cairo')
 url="http://dri.freedesktop.org/"
-source=("http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2"
-        'no-pthread-stubs.patch')
-sha1sums=('b73d69b42800755ed9dfd8aa9a906fe941cfbb7e'
-          '1602cd40f42238935a3c8d8aebd1fc0afb974379')
+source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2)
+sha256sums=('b155fae6b9c9a3b02ef8b77f58c7c219194c996a4018dc55ba66c03996a365dd')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
@@ -24,17 +22,13 @@ build() {
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  patch -p1 -i "${srcdir}/no-pthread-stubs.patch"
-
+  # pthread is useless in Linux
+  sed -i "/pthread-stubs/d" configure.ac
   autoreconf --force --install
+
   ./configure --prefix=/usr --libdir=/usr/lib32 \
-      --enable-udev \
-      --enable-intel \
-      --enable-radeon \
-      --enable-vmwgfx-experimental-api \
-      --enable-nouveau-experimental-api \
-      --enable-omap-experimental-api \
-      --enable-exynos-experimental-api
+      --enable-udev 
+
   make
 }
 

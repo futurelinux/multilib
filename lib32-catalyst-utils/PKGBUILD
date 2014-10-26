@@ -2,22 +2,29 @@
 
 _pkgsourcename=catalyst-utils
 pkgname=(lib32-$_pkgsourcename 'lib32-catalyst-libgl' 'lib32-opencl-catalyst')
-pkgver=14.4
+pkgver=14.9
 pkgrel=1
-_amdver=14.10.1006.1001
+_amdver=14.201
 url="http://www.amd.com"
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
 arch=(x86_64)
 license=('custom')
 options=('staticlibs' 'libtool' '!strip' '!upx')
 source=(
-        http://www2.ati.com/drivers/linux/amd-catalyst-${pkgver/./-}-rev2-linux-x86-x86-64-may6.zip
+#    http://www2.ati.com/drivers/linux/amd-catalyst-${pkgver/./-}-rev2-linux-x86-x86-64-may6.zip
+    http://archive.ubuntu.com/ubuntu/pool/restricted/f/fglrx-installer/fglrx-installer_14.201.orig.tar.gz
         "lib32-catalyst.sh")
-md5sums=('6e9483e8d34aea68af22fbb70116275f'
+md5sums=('ff3a7604051971de617a5f4703826ec6'
          'af7fb8ee4fc96fd54c5b483e33dc71c4')
 
 build() {
-     /bin/sh ./fglrx-${_amdver}/amd-driver-installer-${_amdver}-x86.x86_64.run --extract archive_files
+  ## Unpack archive
+#      /bin/sh ./amd-catalyst-${pkgver}-linux-x86.x86_64.run --extract archive_files
+#     /bin/sh ./fglrx-${_amdver}/amd-driver-installer-${_amdver}-x86.x86_64.run --extract archive_files
+mkdir common
+mv etc lib usr common
+mkdir archive_files
+mv arch common xpic xpic_64a archive_files
 }
 
 package_lib32-catalyst-libgl() {
