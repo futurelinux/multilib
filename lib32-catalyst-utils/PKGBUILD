@@ -1,9 +1,8 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 
-_pkgsourcename=catalyst-utils
-pkgname=(lib32-$_pkgsourcename 'lib32-catalyst-libgl' 'lib32-opencl-catalyst')
+pkgname=(lib32-catalyst-utils 'lib32-catalyst-libgl' 'lib32-opencl-catalyst')
 pkgver=14.9
-pkgrel=1
+pkgrel=2
 _amdver=14.201
 url="http://www.amd.com"
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
@@ -29,7 +28,7 @@ mv arch common xpic xpic_64a archive_files
 
 package_lib32-catalyst-libgl() {
       pkgdesc="AMD/ATI drivers. Catalyst drivers libraries symlinks (32-bit)"
-      depends=($_pkgsourcename=$pkgver 'lib32-mesa')
+      depends=(lib32-catalyst-utils=$pkgver 'lib32-mesa')
       conflicts=('lib32-libgl')
       provides=('lib32-libgl')
 
