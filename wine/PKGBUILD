@@ -1,16 +1,16 @@
-# maintainer: Giuseppe Cala' <gcala[at]chakra-project[dot]org>
+# maintainer: Giuseppe Calà <jiveaxe@gmail.com>
 
 pkgname=wine
-pkgver=1.7.27
+pkgver=1.7.30
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf
-	wine-multimedia-1.7.27_20141001.patch)
+        https://github.com/wine-compholio/wine-staging/archive/v${pkgver}.tar.gz)
 
-md5sums=('397889d1d39b913b931b84988d50d3ac'
+md5sums=('7b224c30bd1874e79c490393cc1deda6'
          '1ff4e467f59409272088d92173a0f801'
-         'c9b18cc1adfe807acf3e8904bd034fb2')
+         'd36fc1c3392f5d38779b238ec61d4d64')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
@@ -100,7 +100,11 @@ prepare() {
   sed -i 's|lncurses|lncursesw|g' "$srcdir/$pkgname/configure"
 
   cd $pkgname
-  patch -Np1 -i ../winemultimedia_1.7.22_20140712.patch
+  for _patch in $(ls $srcdir/wine-staging-$pkgver/patches/winepulse-PulseAudio_Support/*.patch) ; do
+    patch -p1 < $_patch
+  done
+  
+  autoreconf
   
   # These additional CPPFLAGS solve FS#27662 and FS#34195
   export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
@@ -117,7 +121,6 @@ build() {
     --libdir=/usr/lib \
     --with-x \
     --without-gstreamer \
-    --with-pulse \
     --enable-win64
     # Gstreamer was disabled for FS#33655
 
@@ -136,7 +139,6 @@ build() {
   ../$pkgname/configure \
     --prefix=/usr \
     --with-x \
-    --with-pulse \
     --without-gstreamer \
     "${_wine32opts[@]}"
 
