@@ -1,10 +1,7 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer: Giuseppe Calà <jiveaxe@gmail.com>
 
 pkgname=wine_gecko
-pkgver=2.24
+pkgver=2.34
 pkgrel=1
 pkgdesc="Wine's built-in replacement for Microsoft's Internet Explorer"
 arch=('x86_64')
@@ -13,8 +10,8 @@ license=('MPL')
 depends=('wine')
 source=("http://downloads.sourceforge.net/wine/${pkgname}-${pkgver}-x86.msi"
         "http://downloads.sourceforge.net/wine/${pkgname}-${pkgver}-x86_64.msi")
-md5sums=('766bb034172f7f0a97443951a02a0df8'
-         '1912fd191872c72d5f562283e44e8ab4')
+md5sums=('54bd9d6b4fdcd556d89b4ef83c31ac8c'
+         '2b658806733be574309c418f6c0d4cba')
 
 package() {
   cd "$srcdir"
@@ -25,5 +22,3 @@ package() {
                    "${pkgname}-${pkgver}-x86_64.msi" \
                    "${pkgdir}/usr/share/wine/gecko/"
 }
-
-# vim:set ts=2 sw=2 et:
