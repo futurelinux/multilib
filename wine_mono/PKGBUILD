@@ -1,7 +1,7 @@
 # Apps packages for Chakra
 
 pkgname=wine_mono
-pkgver=4.5.2
+pkgver=4.5.4
 pkgrel=1
 pkgdesc="Mono's built-in replacement for Microsoft's .NET Framework"
 arch=('any')
@@ -10,7 +10,7 @@ license=(MPL)
 depends=('wine>=1.5.6')
 categories=('system')
 source=(http://downloads.sourceforge.net/project/wine/Wine%20Mono/$pkgver/${pkgname/_/-}-$pkgver.msi)
-md5sums=('582a32cde40c165c20d1b4790abab4cd')
+md5sums=('2d12a9475e2986177dc38572592bd94d')
 
 package() {
   cd "$srcdir"
