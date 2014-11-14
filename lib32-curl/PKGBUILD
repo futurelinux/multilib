@@ -1,11 +1,10 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 pkgname=lib32-curl
 _pkgname=curl
-pkgver=7.37.1
+pkgver=7.39.0
 pkgrel=1
 pkgdesc="An URL retrival utility and library (32-bit)"
 arch=('x86_64')
@@ -26,18 +25,18 @@ build() {
   ./configure \
       --prefix=/usr \
       --mandir=/usr/share/man \
+      --libdir=/usr/lib32 \
       --disable-dependency-tracking \
       --disable-ldap \
       --disable-ldaps \
       --enable-ipv6 \
       --enable-manual \
-      --enable-versioned-symbols \
       --enable-threaded-resolver \
-      --with-gssapi \
-      --without-libidn \
-      --with-random=/dev/urandom \
+      --enable-versioned-symbols \
       --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt \
-      --libdir=/usr/lib32
+      --with-gssapi \
+      --with-random=/dev/urandom \
+      --without-libidn
 
   make
 }
