@@ -1,17 +1,68 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
-pkgver=216
+pkgver=217
 pkgrel=1
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/wiki/Software/systemd"
 license=('GPL2' 'LGPL2.1' 'MIT')
 depends=('lib32-glib2' 'lib32-libgcrypt' 'lib32-xz' 'lib32-curl' "$_pkgbasename=$pkgver")
-makedepends=('lib32-gcc-libs' 'gcc-multilib' 'lib32-dbus-core' 'lib32-libcap' 'lib32-acl' 
-             'intltool' 'gperf')
-options=('!libtool')
-source=("http://www.freedesktop.org/software/$_pkgbasename/$_pkgbasename-$pkgver.tar.xz")
-md5sums=('04fda588a04f549da0f397dce3ae6a39')
+makedepends=('lib32-gcc-libs' 'gcc-multilib' 'lib32-libidn' 'lib32-libcap'
+             'lib32-acl' 'intltool' 'gperf')
+source=("http://www.freedesktop.org/software/$_pkgbasename/$_pkgbasename-$pkgver.tar.xz"
+        "git://pkgs.fedoraproject.org/systemd.git#commit=${_fedora_patch}")
+md5sums=('e68dbff3cc19f66e341572d9fb2ffa89'
+         'SKIP')
+
+prepare() {
+  cd "$_pkgbasename-$pkgver"
+  
+  git init
+  git config user.email "chakra-devel@googlegroups.com"
+  git config user.name "Chakra Packager"
+  git add .
+  git commit -a -q -m "${pkgver}} baseline."
+
+  git am \
+        --exclude .gitignore \
+        --exclude docs/.gitignore \
+        --exclude docs/gudev/.gitignore \
+        --exclude docs/libudev/.gitignore \
+        --exclude docs/sysvinit/.gitignore \
+        --exclude docs/var-log/.gitignore \
+        --exclude hwdb/.gitignore \
+        --exclude m4/.gitignore \
+        --exclude man/.gitignore \
+        --exclude po/.gitignore \
+        --exclude rules/.gitignore \
+        --exclude src/.gitignore \
+        --exclude src/analyze/.gitignore \
+        --exclude src/core/.gitignore \
+        --exclude src/gudev/.gitignore \
+        --exclude src/hostname/.gitignore \
+        --exclude src/journal/.gitignore \
+        --exclude src/libsystemd-daemon/.gitignore \
+        --exclude src/libsystemd-id128/.gitignore \
+        --exclude src/libudev/.gitignore \
+        --exclude src/locale/.gitignore \
+        --exclude src/login/.gitignore \
+        --exclude src/python-systemd/.gitignore \
+        --exclude src/python-systemd/docs/.gitignore \
+        --exclude src/timedate/.gitignore \
+        --exclude src/udev/.gitignore \
+        --exclude src/udev/scsi_id/.gitignore \
+        --exclude sysctl.d/.gitignore \
+        --exclude test/.gitignore \
+        --exclude units/.gitignore \
+        --exclude units/user/.gitignore \
+        --exclude src/libsystemd/sd-bus/PORTING-DBUS1 \
+        --exclude CODING_STYLE \
+        --exclude src/readahead/Makefile \
+        --exclude src/libsystemd-terminal/unifont-def.h \
+        ../systemd/00*-*.patch
+
+  autoreconf -i
+}
 
 build() {
   export CC="gcc -m32"
@@ -29,7 +80,6 @@ build() {
     --localstatedir=/var \
     --sysconfdir=/etc \
     --enable-compat-libs \
-    --enable-split-usr \
     --disable-audit \
     --disable-tests \
     --disable-ima \
@@ -41,6 +91,7 @@ build() {
     --disable-blkid \
     --without-python \
     --disable-libcryptsetup \
+    --disable-microhttpd \
     --with-sysvinit-path= \
     --with-sysvrcnd-path= \
     --with-firmware-path="/usr/lib/firmware/updates:/usr/lib/firmware"
@@ -55,7 +106,6 @@ package() {
     
   rm -rf "${pkgdir}"/{etc,var}
   rm -rf "${pkgdir}"/usr/{bin,include,lib,share}
-  rm -rf "${pkgdir}"/usr/lib32/libnss*
 
   install -m755 -d "${pkgdir}/usr/share/licenses"
   ln -s systemd "$pkgdir/usr/share/licenses/lib32-systemd"
