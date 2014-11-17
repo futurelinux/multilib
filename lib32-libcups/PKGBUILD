@@ -5,17 +5,17 @@
 
 _pkgbasename=libcups
 pkgname=lib32-$_pkgbasename
-pkgver=2.0.0
+pkgver=2.0.1
 pkgrel=1
 pkgdesc="The CUPS Printing System - client libraries (32-bit)"
 arch=('x86_64')
 license=('GPL')
 url="http://www.cups.org/"
-depends=(lib32-krb5 lib32-libtiff lib32-libpng $_pkgbasename=$pkgver)
+depends=(lib32-krb5 lib32-libtiff lib32-libpng lib32-gnutls $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 source=(#ftp://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2
 http://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2{,.sig})
-md5sums=('2cdd81fea23e9e29555c24bdfd0d7c89'
+md5sums=('7f7c33071035fb20d0879929a42da711'
          'SKIP')
 
 build() {
@@ -31,12 +31,9 @@ build() {
   ./configure --prefix=/usr \
               --sysconfdir=/etc \
               --localstatedir=/var \
-              --disable-ldap \
               --enable-raw-printing \
               --disable-gssapi \
               --disable-dbus \
-              --enable-ssl=no \
-              --disable-gnutls \
               --enable-threads \
               --enable-libusb=no \
               --with-optim="$CFLAGS" \
