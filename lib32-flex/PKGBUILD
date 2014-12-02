@@ -4,8 +4,8 @@
 
 _pkgbasename=flex
 pkgname=lib32-$_pkgbasename
-pkgver=2.5.37
-pkgrel=2
+pkgver=2.5.39
+pkgrel=1
 pkgdesc="A tool for generating text-scanning programs"
 arch=('x86_64')
 url="http://flex.sourceforge.net"
@@ -16,7 +16,7 @@ options=('libtool' 'staticlibs')
 source=(http://downloads.sourceforge.net/sourceforge/flex/flex-$pkgver.tar.bz2 
         flex-2.5.37-no-bison.patch
         lex.sh)
-sha256sums=('17aa7b4ebf19a13bc2dff4115b416365c95f090061539a932a68092349ac052a'
+sha256sums=('add2b55f3bc38cb512b48fad7d72f43b11ef244487ff25fc00aabec1e32b617f'
             '5ee23f97533c991b82e2aadc06d4682d7d05d99ee2abaf1ef9a82225ba9d0858'
             '9d03016a7c4ae1adb051f50f94407b3d7dee9d55924b5c1904261c9f0c1f86f6')
 
