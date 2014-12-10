@@ -1,29 +1,29 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 
 pkgname=(lib32-catalyst-utils 'lib32-catalyst-libgl' 'lib32-opencl-catalyst')
-pkgver=14.9
-pkgrel=2
-_amdver=14.201
+pkgver=14.12
+pkgrel=1
+_amdver=14.501.1003
 url="http://www.amd.com"
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
 arch=(x86_64)
 license=('custom')
 options=('staticlibs' 'libtool' '!strip' '!upx')
 source=(
-#    http://www2.ati.com/drivers/linux/amd-catalyst-${pkgver/./-}-rev2-linux-x86-x86-64-may6.zip
-    http://archive.ubuntu.com/ubuntu/pool/restricted/f/fglrx-installer/fglrx-installer_14.201.orig.tar.gz
+    http://www2.ati.com/drivers/linux/amd-catalyst-omega-${pkgver}-linux-run-installers.zip
+#    http://archive.ubuntu.com/ubuntu/pool/restricted/f/fglrx-installer/fglrx-installer_14.201.orig.tar.gz
         "lib32-catalyst.sh")
-md5sums=('ff3a7604051971de617a5f4703826ec6'
+md5sums=('ced4329274a02712406bda678ffbd743'
          'af7fb8ee4fc96fd54c5b483e33dc71c4')
 
 build() {
   ## Unpack archive
 #      /bin/sh ./amd-catalyst-${pkgver}-linux-x86.x86_64.run --extract archive_files
-#     /bin/sh ./fglrx-${_amdver}/amd-driver-installer-${_amdver}-x86.x86_64.run --extract archive_files
-mkdir common
-mv etc lib usr common
-mkdir archive_files
-mv arch common xpic xpic_64a archive_files
+     /bin/sh ./fglrx-${_amdver}/amd-driver-installer-${_amdver}-x86.x86_64.run --extract archive_files
+#mkdir common
+#mv etc lib usr common
+#mkdir archive_files
+#mv arch common xpic xpic_64a archive_files
 }
 
 package_lib32-catalyst-libgl() {
