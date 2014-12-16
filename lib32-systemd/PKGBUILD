@@ -1,7 +1,7 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
 pkgver=218
-pkgrel=1
+pkgrel=2
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/wiki/Software/systemd"
@@ -92,6 +92,8 @@ build() {
     --without-python \
     --disable-libcryptsetup \
     --disable-microhttpd \
+    --disable-qrencode \
+    --disable-xkbcommon \
     --with-sysvinit-path= \
     --with-sysvrcnd-path= \
     --with-firmware-path="/usr/lib/firmware/updates:/usr/lib/firmware"
