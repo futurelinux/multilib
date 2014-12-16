@@ -1,0 +1,35 @@
+# Maintainer (i686): Phil Miller <philm@chakra-project[dog]org>
+# Maintainer (x86_64): Manuel Tortosa <manutortosa@chakra-project@org>
+
+pkgname=lib32-libdbusmenu-qt
+_pkgname=libdbusmenu-qt
+pkgver=0.9.2
+pkgrel=1
+pkgdesc="A library that provides a Qt implementation of the DBusMenu spec"
+arch=('i686' 'x86_64')
+url="https://launchpad.net/libdbusmenu-qt"
+license=('GPL')
+depends=('lib32-qt' "${_pkgname}=${pkgver}")
+makedepends=('cmake')
+source=("http://launchpad.net/${_pkgname}/trunk/${pkgver}/+download/${_pkgname}-${pkgver}.tar.bz2")
+md5sums=('9a49484927669cd2ec91b3bf9ba8b79e')
+
+build() {
+  cd "${srcdir}"
+  mkdir -p build
+  cd build
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  cmake ../${_pkgname}-${pkgver} \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DWITH_DOC=OFF \
+    -DLIB_SUFFIX=32
+  make
+}
+
+package() {
+  cd "${srcdir}/build"
+  make DESTDIR="${pkgdir}" install
+  rm -r "${pkgdir}"/usr/include
+}

@@ -1,0 +1,41 @@
+#
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Alcasa Mz <alcasa.mz@gmail.com>
+
+pkgname=lib32-sni-qt
+_pkgname=sni-qt
+pkgver=0.2.6
+pkgrel=1
+pkgdesc='Qt4 plugin which turns all QSystemTrayIcon into StatusNotifierItems (appindicators)'
+arch=('i686' 'x86_64')
+url='https://launchpad.net/sni-qt'
+license=('LGPL3')
+depends=('lib32-libdbusmenu-qt' "${_pkgname}=${pkgver}")
+makedepends=('cmake')
+source=("http://launchpad.net/${_pkgname}/trunk/${pkgver}/+download/${_pkgname}-${pkgver}.tar.bz2"
+        'sni-qt.conf')
+md5sums=('e84c66e776f7c22c961817387f618c81'
+         '5b3fc74b8b7a6b99975312d0411960ed')
+
+prepare() {
+  mkdir -p build
+
+  # Disable building tests
+  sed -i '/tests/ d' ${_pkgname}-${pkgver}/CMakeLists.txt
+}
+
+build() {
+  cd build
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  cmake ../${_pkgname}-${pkgver} \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DQT_PLUGINS_DIR=/usr/lib32/qt/plugins
+  make
+}
+
+package() {
+  cd build
+  make DESTDIR="${pkgdir}" install
+}
