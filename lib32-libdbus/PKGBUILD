@@ -3,19 +3,21 @@
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 
-pkgname=lib32-dbus-core
-_pkgbasename=dbus-core
-pkgver=1.6.12
-pkgrel=2
-pkgdesc="Freedesktop.org message bus system (32-bit)"
+pkgname=lib32-libdbus
+_pkgbasename=libdbus
+pkgver=1.8.12
+pkgrel=1
+pkgdesc="DBus library (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/Software/dbus"
 license=('GPL' 'custom')
-depends=('lib32-glibc' 'lib32-expat' $_pkgbasename=$pkgver)
-makedepends=('gcc-multilib')
-options=(!libtool)
-source=(http://dbus.freedesktop.org/releases/dbus/dbus-${pkgver}.tar.gz)
-md5sums=('a70edc50524f258eaf5c9a9994ed8748')
+depends=('lib32-glibc' 'lib32-expat' 'libdbus' $_pkgbasename=$pkgver)
+makedepends=('gcc-multilib' 'lib32-libx11')
+provides=('lib32-dbus-core')
+conflicts=('lib32-dbus-core')
+replaces=('lib32-dbus-core')
+source=("http://dbus.freedesktop.org/releases/dbus/dbus-${pkgver}.tar.gz")
+md5sums=('0ca23fc84c09cb3d29b9c27811ff4475')
 
 build() {
     export CC="gcc -m32"
@@ -25,11 +27,11 @@ build() {
     cd "${srcdir}/dbus-${pkgver}"
 
     ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libdir=/usr/lib32 \
-        --libexecdir=/usr/lib/dbus-1.0 --with-dbus-user=81 \
+        --libexecdir=/usr/lib/dbus-1.0 --with-dbus-user=dbus \
         --with-system-pid-file=/var/run/dbus.pid \
         --with-system-socket=/run/dbus/system_bus_socket \
         --with-console-auth-dir=/run/console/ \
-        --enable-inotify --disable-dnotify \
+        --enable-inotify \
         --disable-verbose-mode --disable-static \
         --disable-tests --disable-asserts --without-x \
         --disable-systemd
