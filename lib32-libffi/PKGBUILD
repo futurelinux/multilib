@@ -4,28 +4,38 @@
 
 _pkgbasename=libffi
 pkgname=lib32-$_pkgbasename
-pkgver=3.0.13
+pkgver=3.2.1
 pkgrel=1
 pkgdesc="A portable, high level programming interface to various calling conventions (32 bits version)."
 arch=('x86_64')
 license=('MIT')
-url="http://sourceware.org/libffi"
+url="http://sourceware.org/libffi/"
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
-options=('!libtool')
+checkdepends=('dejagnu')
 source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz)
-md5sums=('45f3b6dbc9ee7c7dfbbbc5feba571529')
+sha1sums=('280c265b789e041c02e5c97815793dfc283fb1e6')
 
 build() {
-  cd "${srcdir}/libffi-${pkgver}"
+  cd libffi-${pkgver}
 
   export CC="gcc -m32"
 
   ./configure --prefix=/usr \
-              --libdir=/usr/lib32 \
-              --libexecdir=/usr/lib32
+    --libdir=/usr/lib32 --libexecdir=/usr/lib32 \
+    --disable-static --enable-pax_emutramp
+
   make
+}
+
+check() {
+  make -C libffi-${pkgver} check
+}
+
+package() {
+  cd libffi-${pkgver}
 
   make DESTDIR="${pkgdir}" install
+
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/"
   rm -r "${pkgdir}"/usr/share/{info,man}
