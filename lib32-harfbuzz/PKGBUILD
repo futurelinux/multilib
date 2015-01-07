@@ -2,8 +2,8 @@
 
 _pkgbasename=harfbuzz
 pkgname=lib32-$_pkgbasename
-pkgver=0.9.28
-pkgrel=2
+pkgver=0.9.37
+pkgrel=1
 pkgdesc="OpenType text shaping engine. (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
@@ -11,7 +11,7 @@ license=('MIT')
 depends=('lib32-icu' 'lib32-glib2' 'lib32-freetype2' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 source=("http://www.freedesktop.org/software/harfbuzz/release/${_pkgbasename}-${pkgver}.tar.bz2")
-md5sums=('accbeb679f39d839038b95a87e40870e')
+md5sums=('bfe733250e34629a188d82e3b971bc1e')
 
 build() {
   export CC="gcc -m32"
@@ -20,9 +20,10 @@ build() {
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
-  #autoreconf --force --install --verbose
+  autoreconf --force --install --verbose
   ./configure --prefix=/usr \
               --libdir=/usr/lib32 \
+              --disable-silent-rules \
               --with-glib \
 	      --with-freetype \
 	      --with-icu \
