@@ -3,7 +3,7 @@
 _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-nvidia-libgl' 'lib32-opencl-nvidia')
-pkgver=343.36
+pkgver=346.35
 pkgrel=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
@@ -14,7 +14,7 @@ options=('!strip')
 _ARCH='x86'
 _pkg="NVIDIA-Linux-${_ARCH}-${pkgver}"
 source=("ftp://download.nvidia.com/XFree86/Linux-${_ARCH}/${pkgver}/${_pkg}.run")
-md5sums=('eae5d5407df0b371929a76f96aec4020')
+md5sums=('d2b8f7f90ef5037f03f94519f9809511')
 
 create_links() {
     # create soname links
