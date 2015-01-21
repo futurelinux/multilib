@@ -3,8 +3,8 @@
 
 _pkgbasename=atk
 pkgname=lib32-$_pkgbasename
-pkgver=2.11.6
-pkgrel=3
+pkgver=2.14.0
+pkgrel=1
 pkgdesc="A library providing a set of interfaces for accessibility (32-bit)"
 arch=('x86_64')
 license=('LGPL')
@@ -12,7 +12,7 @@ depends=('lib32-glib2' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver%.*}/${_pkgbasename}-${pkgver}.tar.xz)
 url='http://www.gtk.org/'
-sha256sums=('9035451580efcae3731af02b5e30e44467349574bee90eb361f825377b9bbe42')
+sha256sums=('2875cc0b32bfb173c066c22a337f79793e0c99d2cc5e81c4dac0d5a523b8fbad')
 
 build() {
   export CC="gcc -m32"
