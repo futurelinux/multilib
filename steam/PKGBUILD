@@ -6,7 +6,7 @@
 
 pkgname=steam
 pkgver=1.0.0.49
-pkgrel=1
+pkgrel=2
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
@@ -16,14 +16,11 @@ depends=('bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
       'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib' 'lib32-libgl'
       'lib32-libgcrypt' 'lib32-nss' 'lib32-openal'
       'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxshmfence')
-      
 optdepends=(
-      'lib32-ati-dri: for open source ATI driver users'
+      'lib32-mesa-dri: for open source driver users'
       'lib32-catalyst-utils: for AMD Catalyst users'
-      'lib32-intel-dri: for open source Intel driver users'
-      'lib32-nouveau-dri: for Nouveau users'
-      'lib32-primus: for NVIDIA + Bumblebee users'
       'lib32-nvidia-utils: for NVIDIA proprietary blob users'
+      'lib32-primus: for NVIDIA + Bumblebee users'
       'lib32-flashplugin: for flash video'
       'lib32-alsa-plugins: for pulseaudio on some games')
 
@@ -34,7 +31,6 @@ source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgnam
 md5sums=('2ec8c8172fd34a1c0d007d7250509f42'
          '1d83a1df55d677f35ce415e0750f4448'
          'ac0e03d70f1101331598b2b32ed9bac3')
-
 
 prepare() {
     patch -d "$pkgname" -Np1 -i "$srcdir/lib32-flashplugin-path.patch"
