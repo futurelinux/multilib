@@ -9,17 +9,16 @@
 
 _pkgbasename=celt
 pkgname=lib32-$_pkgbasename
-pkgver=0.11.1
-pkgrel=2
+pkgver=0.11.3
+pkgrel=1
 pkgdesc='Low-latency audio communication codec (32 bit)'
 arch=('x86_64')
 url='http://www.celt-codec.org'
 license=('BSD')
 depends=('lib32-glibc' "${_pkgbasename}=${pkgver}")
 makedepends=('gcc-multilib')
-options=('!libtool')
 source=("http://downloads.xiph.org/releases/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz")
-sha256sums=('01c2579fba8b283c9068cb704a70a6e654aa74ced064c091cafffbe6fb1d4cbf')
+sha256sums=('7e64815d4a8a009d0280ecd235ebd917da3abdcfd8f7d0812218c085f9480836')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
