@@ -1,16 +1,16 @@
 # maintainer: Giuseppe Cala' <jiveaxe@gmail.com>
 
 pkgname=wine
-pkgver=1.7.33
+pkgver=1.7.36
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf
         https://github.com/wine-compholio/wine-staging/archive/v${pkgver}.tar.gz)
 
-md5sums=('5ecc09c8e98c0709eb183993d39c1c72'
+md5sums=('3660517d7c87846f76f8bf40b92a6121'
          '1ff4e467f59409272088d92173a0f801'
-         'e71558cfc3a7b018cd15369d6f38b7ae')
+         '8015fd8766d5421fdeb221b623f6f6b2')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
