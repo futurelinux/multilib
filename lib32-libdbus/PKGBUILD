@@ -5,7 +5,7 @@
 
 pkgname=lib32-libdbus
 _pkgbasename=libdbus
-pkgver=1.8.14
+pkgver=1.8.16
 pkgrel=1
 pkgdesc="DBus library (32-bit)"
 arch=('x86_64')
@@ -17,7 +17,7 @@ provides=('lib32-dbus-core')
 conflicts=('lib32-dbus-core')
 replaces=('lib32-dbus-core')
 source=("http://dbus.freedesktop.org/releases/dbus/dbus-${pkgver}.tar.gz")
-md5sums=('dfb810eda8780cf9debf7169b3ca5fe1')
+md5sums=('020824a38850501e7d6ba8307a7c5ac3')
 
 build() {
     export CC="gcc -m32"
