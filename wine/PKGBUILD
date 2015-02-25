@@ -1,23 +1,23 @@
 # maintainer: Giuseppe Cala' <jiveaxe@gmail.com>
 
 pkgname=wine
-pkgver=1.7.36
+pkgver=1.7.37
 pkgrel=1
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf
         https://github.com/wine-compholio/wine-staging/archive/v${pkgver}.tar.gz)
 
-md5sums=('3660517d7c87846f76f8bf40b92a6121'
+md5sums=('99741c9efece0bf062b39992b63cf5ca'
          '1ff4e467f59409272088d92173a0f801'
-         '8015fd8766d5421fdeb221b623f6f6b2')
+         '40feaf4d51cae9c575f638fbf6634f2b')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
 screenshot=('http://wstaw.org/m/2012/04/28/wine.png')
-arch=(x86_64)
-license=(LGPL)
+arch=('x86_64')
+license=('LGPL')
 install=wine.install
 
 depends=(
@@ -165,4 +165,3 @@ package() {
   install -m644 "$srcdir/30-win32-aliases.conf" "$pkgdir/etc/fonts/conf.avail"
   ln -s ../conf.avail/30-win32-aliases.conf "$pkgdir/etc/fonts/conf.d/30-win32-aliases.conf"
 }
-
