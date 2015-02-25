@@ -12,7 +12,7 @@ arch=(x86_64)
 license=('GPL')
 url="http://www.alsa-project.org"
 options=(!libtool)
-depends=('lib32-glibc' 'lib32-alsa-lib' 'alsa-oss')
+depends=('lib32-glibc' 'lib32-alsa-lib' $_pkgbasename=$pkgver)
 #source=(ftp://ftp.alsa-project.org/pub/oss-lib/${_pkgbasename}-$pkgver.tar.bz2)
 source=(http://alsa.cybermirror.org/oss-lib/${_pkgbasename}-$pkgver.tar.bz2)
 md5sums=('922ea177db15c72f1b5037181c73f934')

@@ -1,0 +1,65 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+
+_pkgsourcename=catalyst-utils
+pkgname=lib32-catalyst-legacy-utils
+pkgver=13.1
+pkgrel=2
+pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
+url="http://www.ati.amd.com"
+arch=(x86_64)
+license=('custom')
+depends=('lib32-libxext' 'lib32-libdrm' "catalyst-legacy-utils=${pkgver}")
+conflicts=('lib32-libgl' 'lib32-nvidia-utils')
+replaces=('lib32-ati-fglrx-utils' 'lib32-fglrx-utils')
+provides=('lib32-libgl')
+source=("http://www2.ati.com/drivers/legacy/amd-driver-installer-catalyst-${pkgver}-legacy-linux-x86.x86_64.zip"
+        "lib32-catalyst.sh")    
+md5sums=('c07fd1332abe4c742a9a0d0e0d0a90de'
+         'af7fb8ee4fc96fd54c5b483e33dc71c4')
+
+build() {
+   # Unpack archive
+   /bin/sh ./amd-driver-installer-catalyst-${pkgver}-legacy-linux-x86.x86_64.run --extract archive_files
+}
+
+package() {
+  cd ${srcdir}
+  install -D -m755 lib32-catalyst.sh ${pkgdir}/etc/profile.d/lib32-catalyst.sh
+
+  # Install lib32 libraries
+  cd "${srcdir}/archive_files/arch/x86/usr"
+  install -dm755 "${pkgdir}/usr/lib32"
+  install -dm755 "${pkgdir}/usr/lib32/fglrx"
+  install -dm755 "${pkgdir}/usr/lib32/xorg/modules/dri"
+  install -m755 lib/*.so* "${pkgdir}/usr/lib32/"
+
+  install -m755 X11R6/lib/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/fglrx"
+  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/fglrx/libGL.so.1.2" # since 11.4
+  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/fglrx-libGL.so.1.2" # since 11.4
+  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/libGL.so.1.2" # since 11.4
+  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/libGL.so.1" # since 11.4
+  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/libGL.so" # since 11.4
+  install -m755 X11R6/lib/libAMDXvBA.so.1.0 "${pkgdir}/usr/lib32/"
+  install -m755 X11R6/lib/libatiadlxx.so "${pkgdir}/usr/lib32/"
+  install -m755 X11R6/lib/libfglrx_dm.so.1.0 "${pkgdir}/usr/lib32/"
+  install -m755 X11R6/lib/libXvBAW.so.1.0 "${pkgdir}/usr/lib32/"
+
+  install -m755 X11R6/lib/modules/dri/*.so "${pkgdir}/usr/lib32/xorg/modules/dri/"
+  ln -snf /usr/lib32/xorg/modules/dri "${pkgdir}/usr/lib32/dri"
+
+  cd "$pkgdir/usr/lib32/"
+  ln -sf libfglrx_dm.so.1.0 libfglrx_dm.so.1
+  ln -sf libAMDXvBA.so.1.0 libAMDXvBA.so.1
+  ln -sf libXvBAW.so.1.0 libXvBAW.so.1
+  ln -sf libatiuki.so.1.0 libatiuki.so.1
+  ln -sf libatiuki.so.1.0 libatiuki.so
+  ln -sf libOpenCL.so.1 libOpenCL.so 
+
+  # since 12.8
+  install -m755 -d "${pkgdir}/etc/OpenCL/vendors"
+  install -m644 "${srcdir}/archive_files/arch/x86/etc/OpenCL/vendors/amdocl32.icd" "${pkgdir}/etc/OpenCL/vendors/"
+
+  # License
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 "${srcdir}/archive_files/LICENSE.TXT" "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

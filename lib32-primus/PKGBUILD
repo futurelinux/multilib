@@ -1,0 +1,32 @@
+# Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
+# Contributions from Arch: https://projects.archlinux.org/svntogit/community.git/tree/trunk?h=packages/lib32-primus
+
+_pkgbasename=primus
+pkgname=lib32-$_pkgbasename
+pkgver=20141228
+pkgrel=1
+pkgdesc="Faster OpenGL offloading for Bumblebee (32-bit library, git sources)"
+arch=('x86_64')
+url="https://github.com/amonakov/primus"
+license=('custom:ISC')
+depends=($_pkgbasename=$pkgver 'bumblebee' 'lib32-mesa-libgl')
+makedepends=('git' 'gcc-multilib')
+source=("git://github.com/amonakov/primus.git#commit=7e21554eb2")
+md5sums=('SKIP')
+
+build() {
+  cd "${srcdir}/${_pkgbasename}"
+  export CC="g++ -m32"
+  export CXX="g++ -m32"
+
+  LIBDIR=lib32 make
+  }
+
+package() {
+  cd "${srcdir}/${_pkgbasename}"
+
+  install -D "lib32/libGL.so.1" "$pkgdir/usr/lib32/primus/libGL.so.1"
+
+  install -D -m644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

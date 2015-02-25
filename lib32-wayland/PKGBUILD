@@ -1,0 +1,35 @@
+# Maintainer: Francesco Marinucci <franzmari [at] chakra-project [dot] it>
+
+_pkgbasename=wayland
+pkgname=lib32-$_pkgbasename
+pkgver=1.6.0
+pkgrel=1
+pkgdesc='A computer display server protocol'
+arch=('x86_64')
+url='http://wayland.freedesktop.org'
+license=('MIT')
+depends=('lib32-libffi' 'lib32-expat' $_pkgbasename=$pkgver )
+source=("http://wayland.freedesktop.org/releases/wayland-${pkgver}.tar.xz")
+sha256sums=('a7d5102dcf53d08c059d24bc62de491d7cd482070abeb6737a20d0d86ba6fc7f')
+
+build() {
+  cd ${_pkgbasename}-${pkgver}
+
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  ./configure --prefix='/usr' --libdir='/usr/lib32' \
+              --disable-{documentation,static}
+  make
+}
+
+package() {
+  cd ${_pkgbasename}-${pkgver}
+
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
+
+  install -dm 755 "${pkgdir}"/usr/share/licenses
+  ln -s ${_pkgbasename} "${pkgdir}"/usr/share/licenses/${pkgname}
+}

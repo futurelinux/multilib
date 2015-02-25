@@ -1,0 +1,35 @@
+# maintainer: Giuseppe Calà <jiveaxe@gmail.com>
+
+_pkgbasename=sdl2_net
+pkgname=lib32-$_pkgbasename
+pkgver=2.0.0
+pkgrel=1
+pkgdesc="A small sample cross-platform networking library (Version 2, 32-bit)"
+arch=('i686' 'x86_64')
+url="http://www.libsdl.org/projects/SDL_net"
+license=('MIT')
+depends=(lib32-sdl2 $_pkgbasename=$pkgver)
+makedepends=('gcc-multilib')
+options=(!libtool)
+source=("$url/release/SDL2_net-${pkgver}.tar.gz")
+md5sums=('83bcd0e67796b81b35b08a014c677200')
+
+build() {
+  cd "${srcdir}/SDL2_net-${pkgver}/"
+  
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  
+  ./configure --disable-static \
+              --prefix=/usr \
+              --libdir=/usr/lib32
+  make
+}
+
+package() {
+  cd "${srcdir}/SDL2_net-${pkgver}/"
+  make DESTDIR="${pkgdir}/" install
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+}
+

@@ -6,7 +6,11 @@
 _pkgbasename=speex
 pkgname=lib32-$_pkgbasename
 pkgver=1.2rc1
+<<<<<<< HEAD
 pkgrel=2
+=======
+pkgrel=3
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 pkgdesc="A free codec for free speech (32-bit)"
 arch=(x86_64)
 license=('BSD')

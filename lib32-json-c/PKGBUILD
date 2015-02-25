@@ -3,6 +3,7 @@
 #
 # Maintainer: Daniele Cocca <jmc@chakra-project.org>
 
+<<<<<<< HEAD
 # include global config
 source ../_buildscripts/${current_repo}-${_arch}-cfg.conf
 
@@ -17,17 +18,40 @@ depends=($_basepkgname)
 license=('GPL')
 source=("http://oss.metaparadigm.com/${_basepkgname}/${_basepkgname}-${pkgver}.tar.gz")
 md5sums=('3a13d264528dcbaf3931b0cede24abae')
+=======
+_pkgbasename=json-c
+pkgname=lib32-$_pkgbasename
+pkgver=0.11
+pkgrel=2
+pkgdesc="JSON-C implements a reference counting object model that allows you to easily construct JSON objects in C, output them as JSON formatted strings and parse JSON formatted strings back into the C representation of JSON objects."
+arch=('x86_64')
+url="https://github.com/json-c/json-c/wiki"
+depends=($_pkgbasename=$pkgver)
+license=('GPL')
+options=(!libtool !makeflags)
+source=("https://s3.amazonaws.com/${_pkgbasename}_releases/releases/${_pkgbasename}-${pkgver}.tar.gz")
+md5sums=('aa02367d2f7a830bf1e3376f77881e98')
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 
 build() {
   export CC="gcc -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+<<<<<<< HEAD
   cd "${srcdir}/${_basepkgname}-${pkgver}"
   ./configure --prefix=/usr --libdir=/usr/lib32
+=======
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  ./configure --prefix=/usr --libdir=/usr/lib32 --disable-static
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
   make
 }
 
 package() {
+<<<<<<< HEAD
   cd "${srcdir}/${_basepkgname}-${pkgver}"
+=======
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
   make DESTDIR="${pkgdir}" install
   rm -rf ${pkgdir}/usr/include
 }

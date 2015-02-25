@@ -1,70 +1,124 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
-_pkgsourcename=catalyst-utils
-pkgname=lib32-$_pkgsourcename
-pkgver=12.12
-pkgrel=2
-_amdver=9.01
+pkgname=(lib32-catalyst-utils 'lib32-catalyst-libgl' 'lib32-opencl-catalyst')
+pkgver=14.12
+pkgrel=1
+_amdver=14.501.1003
+url="http://www.amd.com"
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
-url="http://www.ati.amd.com"
 arch=(x86_64)
 license=('custom')
-depends=('lib32-libxext' 'lib32-libdrm' "catalyst-utils=${pkgver}")
-conflicts=('lib32-libgl' 'lib32-nvidia-utils')
-replaces=('lib32-ati-fglrx-utils' 'lib32-fglrx-utils')
-provides=('lib32-libgl')
-#source=(http://www.ati.com/drivers/linux/amd-driver-installer-${pkgver/./-}-x86.x86_64.run
-source=(http://www2.ati.com/drivers/embedded/9.01-121106a-150335C-EDG_Direct.zip
-		lib32-catalyst.sh)
-md5sums=('8682744e49fcd529a7e0c07a167d9df3'
+options=('staticlibs' 'libtool' '!strip' '!upx')
+source=(
+    http://www2.ati.com/drivers/linux/amd-catalyst-omega-${pkgver}-linux-run-installers.zip
+#    http://archive.ubuntu.com/ubuntu/pool/restricted/f/fglrx-installer/fglrx-installer_14.201.orig.tar.gz
+        "lib32-catalyst.sh")
+md5sums=('ced4329274a02712406bda678ffbd743'
          'af7fb8ee4fc96fd54c5b483e33dc71c4')
 
 build() {
-  # Extract Catalyst driver installer
-  /bin/sh ./amd-driver-installer-${_amdver}-x86.x86_64.run --extract archive_files
+  ## Unpack archive
+#      /bin/sh ./amd-catalyst-${pkgver}-linux-x86.x86_64.run --extract archive_files
+     /bin/sh ./fglrx-${_amdver}/amd-driver-installer-${_amdver}-x86.x86_64.run --extract archive_files
+#mkdir common
+#mv etc lib usr common
+#mkdir archive_files
+#mv arch common xpic xpic_64a archive_files
 }
 
-package() {
-  cd ${srcdir}
-  install -D -m755 lib32-catalyst.sh ${pkgdir}/etc/profile.d/lib32-catalyst.sh || return 1
+package_lib32-catalyst-libgl() {
+      pkgdesc="AMD/ATI drivers. Catalyst drivers libraries symlinks (32-bit)"
+      depends=(lib32-catalyst-utils=$pkgver 'lib32-mesa')
+      conflicts=('lib32-libgl')
+      provides=('lib32-libgl')
 
-  # Install lib32 libraries
-  cd "${srcdir}/archive_files/arch/x86/usr" || return 1
-  install -dm755 "${pkgdir}/usr/lib32" || return 1
-  install -dm755 "${pkgdir}/usr/lib32/fglrx" || return 1 # since 11.4
-  install -dm755 "${pkgdir}/usr/lib32/xorg/modules/dri" || return 1
-  install -m755 lib/*.so* "${pkgdir}/usr/lib32/" || return 1
+      install -dm755 ${pkgdir}/usr/lib32/fglrx
+      ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so.1.2.0
+      ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so.1
+      ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so
+      ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/libGL.so.1.2.0
+      ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/libGL.so.1
+      ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/libGL.so
 
-  install -m755 X11R6/lib/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/fglrx" || return 1 # since 11.5
-  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/fglrx/libGL.so.1.2" # since 11.4
-  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/fglrx-libGL.so.1.2" # since 11.4
-  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/libGL.so.1.2" # since 11.4
-  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/libGL.so.1" # since 11.4
-  ln -sf /usr/lib32/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/libGL.so" # since 11.4
-  install -m755 X11R6/lib/libAMDXvBA.so.1.0 "${pkgdir}/usr/lib32/" || return 1 # since 11.4
-  install -m755 X11R6/lib/libatiadlxx.so "${pkgdir}/usr/lib32/" || return 1 # since 11.4
-  install -m755 X11R6/lib/libfglrx_dm.so.1.0 "${pkgdir}/usr/lib32/" || return 1 # since 11.4
-  install -m755 X11R6/lib/libXvBAW.so.1.0 "${pkgdir}/usr/lib32/" || return 1 # since 11.4
 
-  install -m755 X11R6/lib/modules/dri/*.so "${pkgdir}/usr/lib32/xorg/modules/dri/" || return 1
-  ln -snf /usr/lib32/xorg/modules/dri "${pkgdir}/usr/lib32/dri" || return 1
+    # We have to provide symlinks to lib32-mesa, as catalyst doesn't ship them
+      ln -s /usr/lib32/mesa/libEGL.so.1.0.0 ${pkgdir}/usr/lib32/libEGL.so.1.0.0
+      ln -s libEGL.so.1.0.0	                ${pkgdir}/usr/lib32/libEGL.so.1
+      ln -s libEGL.so.1.0.0                 ${pkgdir}/usr/lib32/libEGL.so
 
-  cd "$pkgdir/usr/lib32/" || return 1
-  ln -sf libfglrx_dm.so.1.0 libfglrx_dm.so.1 || return 1
-  ln -sf libAMDXvBA.so.1.0 libAMDXvBA.so.1 || return 1
-  ln -sf libXvBAW.so.1.0 libXvBAW.so.1 || return 1
-  ln -sf libatiuki.so.1.0 libatiuki.so.1 || return 1
-  ln -sf libatiuki.so.1.0 libatiuki.so || return 1
-  ln -sf libOpenCL.so.1 libOpenCL.so  || return 1 # since 11.11
+      ln -s /usr/lib32/mesa/libGLESv1_CM.so.1.1.0 ${pkgdir}/usr/lib32/libGLESv1_CM.so.1.1.0
+      ln -s libGLESv1_CM.so.1.1.0	              ${pkgdir}/usr/lib32/libGLESv1_CM.so.1
+      ln -s libGLESv1_CM.so.1.1.0                 ${pkgdir}/usr/lib32/libGLESv1_CM.so
 
-  # since 12.8
-  install -m755 -d "${pkgdir}/etc/OpenCL/vendors"
-  install -m644 "${srcdir}/archive_files/arch/x86/etc/OpenCL/vendors/amdocl32.icd" "${pkgdir}/etc/OpenCL/vendors/" || return 1
+      ln -s /usr/lib32/mesa/libGLESv2.so.2.0.0 ${pkgdir}/usr/lib32/libGLESv2.so.2.0.0
+      ln -s libGLESv2.so.2.0.0                 ${pkgdir}/usr/lib32/libGLESv2.so.2
+      ln -s libGLESv2.so.2.0.0                 ${pkgdir}/usr/lib32/libGLESv2.so
 
-  # License
-  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
-  install -m644 "${srcdir}/archive_files/LICENSE.TXT" "${pkgdir}/usr/share/licenses/${pkgname}/" || return 1
+
+     # License
+      install -m755 -d ${pkgdir}/usr/share/licenses
+      ln -s $_pkgbasename ${pkgdir}/usr/share/licenses/${pkgname}
+}
+
+package_lib32-opencl-catalyst() {
+      pkgdesc="AMD/ATI drivers. OpenCL implemention for AMD Catalyst (32-bit)"
+      provides=('lib32-libcl')
+      conflicts=('lib32-libcl')
+      depends=('lib32-gcc-libs')
+      optdepends=('opencl-headers: headers necessary for OpenCL development')
+
+      install -m755 -d ${pkgdir}/etc/OpenCL/vendors
+      install -m644 ${srcdir}/archive_files/arch/x86/etc/OpenCL/vendors/amdocl32.icd ${pkgdir}/etc/OpenCL/vendors
+
+      cd ${srcdir}/archive_files/arch/x86
+      install -m755 -d ${pkgdir}/usr/lib32
+      install -m755 usr/lib/libamdocl*.so ${pkgdir}/usr/lib32
+      install -m755 usr/lib/libOpenCL.so.1 ${pkgdir}/usr/lib32
+      ln -s libOpenCL.so.1 ${pkgdir}/usr/lib32/libOpenCL.so
+
+     # License
+      install -m755 -d ${pkgdir}/usr/share/licenses
+      ln -s $_pkgbasename ${pkgdir}/usr/share/licenses/${pkgname}
+}
+
+package_lib32-catalyst-utils() {
+      pkgdesc="AMD/ATI drivers. Utilities and libraries (32-bit)"
+      depends=('lib32-libxext' 'lib32-libdrm' 'catalyst-utils' 'lib32-libxinerama')
+      conflicts=('lib32-catalyst-utils-pxp')
+      provides=('lib32-dri' 'lib32-libtxc_dxtn')
+      optdepends=('lib32-catalyst-libgl: Catalyst drivers libraries symlinks (32-bit)'
+		  'lib32-opencl-catalyst: OpenCL implemention for AMD Catalyst (32-bit)')
+      install=${pkgname}.install
+
+      cd ${srcdir}
+      install -D -m755 lib32-catalyst.sh ${pkgdir}/etc/profile.d/lib32-catalyst.sh
+      cd ${srcdir}/archive_files/arch/x86/usr
+      install -dm755 ${pkgdir}/usr/lib32/fglrx
+#       install -dm755 ${pkgdir}/usr/lib32/hsa
+      install -dm755 ${pkgdir}/usr/lib32/xorg/modules/dri
+      install -m755 lib/*.so* ${pkgdir}/usr/lib32
+#       install -m755 lib/hsa/* ${pkgdir}/usr/lib32/hsa
+      install -m755 X11R6/lib/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx
+      install -m755 X11R6/lib/libAMDXvBA.so.1.0 ${pkgdir}/usr/lib32
+      install -m755 X11R6/lib/libatiadlxx.so ${pkgdir}/usr/lib32
+      install -m755 X11R6/lib/libfglrx_dm.so.1.0 ${pkgdir}/usr/lib32
+      install -m755 X11R6/lib/libXvBAW.so.1.0 ${pkgdir}/usr/lib32
+      install -m755 X11R6/lib/modules/dri/*.so ${pkgdir}/usr/lib32/xorg/modules/dri
+      ln -snf /usr/lib32/xorg/modules/dri ${pkgdir}/usr/lib32/dri
+
+      ln -sf /usr/lib32/libfglrx_dm.so.1.0	${pkgdir}/usr/lib32/libfglrx_dm.so.1
+      ln -sf /usr/lib32/libfglrx_dm.so.1.0	${pkgdir}/usr/lib32/libfglrx_dm.so
+      ln -sf /usr/lib32/libAMDXvBA.so.1.0	${pkgdir}/usr/lib32/libAMDXvBA.so.1
+      ln -sf /usr/lib32/libAMDXvBA.so.1.0	${pkgdir}/usr/lib32/libAMDXvBA.so
+      ln -sf /usr/lib32/libXvBAW.so.1.0		${pkgdir}/usr/lib32/libXvBAW.so.1
+      ln -sf /usr/lib32/libXvBAW.so.1.0		${pkgdir}/usr/lib32/libXvBAW.so
+      ln -sf /usr/lib32/libatiuki.so.1.0	${pkgdir}/usr/lib32/libatiuki.so.1
+      ln -sf /usr/lib32/libatiuki.so.1.0	${pkgdir}/usr/lib32/libatiuki.so
+
+     # provided in lib32-opencl-catalyst package
+      rm ${pkgdir}/usr/lib32/lib{amdocl*,OpenCL}.so*
+
+     # License
+      install -m755 -d ${pkgdir}/usr/share/licenses
+      ln -s $_pkgbasename ${pkgdir}/usr/share/licenses/${pkgname}
 }

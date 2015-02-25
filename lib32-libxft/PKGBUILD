@@ -5,17 +5,36 @@
 
 _pkgbasename=libxft
 pkgname=lib32-$_pkgbasename
+<<<<<<< HEAD
 pkgver=2.2.0
 pkgrel=2
+=======
+pkgver=2.3.2
+_ubuntu_ver=2.3.1
+pkgrel=1
+_ubuntu_diff_version=${_ubuntu_ver}-2
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 pkgdesc="FreeType-based font drawing library for X (32-bit)"
 arch=('x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('lib32-fontconfig' 'lib32-libxrender')
+depends=('lib32-fontconfig' 'lib32-libxrender' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 options=('!libtool')
+<<<<<<< HEAD
 source=(${url}/releases/individual/lib/libXft-${pkgver}.tar.bz2)
 sha1sums=('ed29784259f4e26df78141035560ae8a7c62e83f')
+=======
+provides=("${pkgname}-ubuntu")
+conflicts=("${pkgname}-ubuntu")
+replaces=("${pkgname}-ubuntu")
+source=(${url}/releases/individual/lib/libXft-${pkgver}.tar.bz2
+        #"http://archive.ubuntu.com/ubuntu/pool/main/x/xft/xft_${_ubuntu_diff_version}.diff.gz"
+        # from original, removed xftglyphs.c patch
+        xft_2.3.2-1.diff)
+sha1sums=('e025d790a7b6c4d283a78d8df06615cb10278e2d'
+          '75bda08fd01faae18a85140fbc577beb0a89e823')
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 
 build() {
   export CC="gcc -m32"
@@ -23,8 +42,19 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd ${srcdir}/libXft-${pkgver}
+  
+  # apply our custom patche
+  patch -Np1 -i ../xft_2.3.2-1.diff
+
+  # apply ubuntu patches
+  #patch -Np1 -i ../xft_${_ubuntu_diff_version}.diff
+  for _f in $(cat "$srcdir/libXft-${pkgver}/debian/patches/series" | grep -v '#') ; do    
+    patch -Np1 -i "$srcdir/libXft-${pkgver}/debian/patches/$_f"
+  done
+  
   ./configure --prefix=/usr \
-    --libdir=/usr/lib32 --disable-static
+              --libdir=/usr/lib32 \
+              --disable-static
   make
 }
 

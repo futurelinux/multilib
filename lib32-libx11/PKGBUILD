@@ -5,7 +5,7 @@
 
 _pkgbasename=libx11
 pkgname=lib32-$_pkgbasename
-pkgver=1.5.0
+pkgver=1.6.2
 pkgrel=1
 pkgdesc="X11 client-side library (32-bit)"
 arch=(x86_64)
@@ -15,7 +15,7 @@ makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto' 'gcc-multilib'
 options=('!libtool')
 license=('custom:XFREE86')
 source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2)
-sha1sums=('8177535c9c59d8c3ab98d55ce53520b5737ccd1a')
+sha1sums=('0dd74854e6f6bb8a322e88ba3e89f87c3dcf9e08')
 
 build() {
   export CC="gcc -m32"

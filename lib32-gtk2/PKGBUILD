@@ -2,7 +2,11 @@
 
 _pkgbasename=gtk2
 pkgname=lib32-$_pkgbasename
+<<<<<<< HEAD
 pkgver=2.24.26
+=======
+pkgver=2.24.24
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 pkgrel=1
 pkgdesc="The GTK+ Toolkit (v2) (32-bit)"
 arch=('x86_64')
@@ -16,7 +20,11 @@ options=('!docs')
 license=('LGPL')
 source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-${pkgver}.tar.xz
         xid-collision-debug.patch)
+<<<<<<< HEAD
 md5sums=('4610cc60ff96073b83dc7de254bdaf38'
+=======
+md5sums=('f80ac8aa95ea8482ad89656d0370752e'
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
          '22355df723f6ca358e30e6b8f0baace5')
 
 build() {

@@ -1,11 +1,10 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=e2fsprogs
 pkgname=lib32-e2fsprogs
-pkgver=1.42.5
+pkgver=1.42.12
 pkgrel=1
 pkgdesc="Ext2 filesystem libraries (32-bit)"
 arch=(x86_64)
@@ -14,7 +13,7 @@ url="http://e2fsprogs.sourceforge.net"
 depends=('lib32-util-linux>=2.22.1' $_pkgbasename=$pkgver)
 makedepends=('bc' 'gcc-multilib')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz")
-md5sums=('aca828bb4bcca20991a442deb950b670')
+md5sums=('68255f51be017a93f2f6402fab06c2bf')
 
 build() {
   export CC="gcc -m32"

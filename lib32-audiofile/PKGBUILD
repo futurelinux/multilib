@@ -1,21 +1,19 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# contributor (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=audiofile
 pkgname=lib32-$_pkgbasename
-pkgver=0.2.7
+pkgver=0.3.6
 pkgrel=1
 pkgdesc="Silicon Graphics Audio File Library (32-bit)"
 arch=('x86_64')
 url="http://www.68k.org/~michael/audiofile/"
 license=('LGPL')
-depends=('lib32-glibc' $_pkgbasename=$pkgver)
+depends=('lib32-glibc' "$_pkgbasename=$pkgver" 'lib32-alsa-lib' 'lib32-flac')
 makedepends=(gcc-multilib)
 options=('!libtool')
-source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/0.2/${_pkgbasename}-${pkgver}.tar.bz2)
-sha256sums=('61efd278627415b5468426fc9e52aef32ea0fdac12b56bcdd72734c2ece5945e')
+source=("http://audiofile.68k.org/$_pkgbasename-$pkgver.tar.gz")
+md5sums=('2731d79bec0acef3d30d2fc86b0b72fd')
 
 build() {
   export CC="gcc -m32"

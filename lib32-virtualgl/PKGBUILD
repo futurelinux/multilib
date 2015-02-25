@@ -1,21 +1,20 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
-#
 # Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
-# Contributor: FigoDaPaura <ffigoDaPaura>
+# Contributions from AUR: https://aur.archlinux.org/packages/lib32-virtualgl/
 
-pkgname=lib32-virtualgl
-pkgver=2.3.1
-pkgrel=1
+_pkgbasename=virtualgl
+pkgname=lib32-${_pkgbasename}
+pkgver=2.3.2
+pkgrel=2
 pkgdesc="32-bit serverside components for 64-bit VirtualGL servers."
 arch=('x86_64')
 url="http://virtualgl.org"
 license=('LGPL')
-depends=('virtualgl' 'lib32-libxv' 'lib32-libjpeg-turbo' 'lib32-mesa' 'lib32-libx11' 'lib32-libxext' 'lib32-libxau')
+depends=('lib32-libxv' 'lib32-libjpeg-turbo' 'lib32-mesa' 'lib32-libx11' 'lib32-libxext' 'lib32-libxau' 'lib32-glu' $_pkgbasename=$pkgver)
 makedepends=('cmake' 'gcc-multilib')
-provides=()
 conflicts=('virtualgl32-bin')
 source=("http://downloads.sourceforge.net/project/virtualgl/VirtualGL/${pkgver}/VirtualGL-$pkgver.tar.gz")
-sha1sums=('087f2c8cab080e7d68d22ee5f08cb39437e63d8d')
+md5sums=('29aaf0607a1031fa326444ff0321bcec')
 
 build() {
   cd "$srcdir/VirtualGL-$pkgver"

@@ -6,12 +6,16 @@
 _pkgbasename=ncurses
 pkgname=lib32-${_pkgbasename}
 pkgver=5.9
+<<<<<<< HEAD
 pkgrel=3
+=======
+pkgrel=4
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 pkgdesc="System V Release 4.0 curses emulation library (32-bit)"
 arch=('x86_64')
 url="http://www.gnu.org/software/ncurses/"
 license=('MIT')
-depends=('lib32-glibc' ${_pkgbasename})
+depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=("gcc-multilib")
 source=(ftp://ftp.gnu.org/pub/gnu/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
 md5sums=('8cb9c412e5f2d96bc6f459aa8c6282a1')
@@ -26,7 +30,7 @@ build() {
 
   cd ${srcdir}/ncursesw-build
   ../${_pkgbasename}-${pkgver}/configure --prefix=/usr --mandir=/usr/share/man \
-     --with-shared --with-normal --without-debug --without-ada \
+     --with-shared --with-normal --without-debug --without-ada --with-gpm=no \
      --with-install-prefix=${pkgdir} --enable-widec --libdir=/usr/lib32
   make
 
@@ -34,7 +38,7 @@ build() {
   cd ${srcdir}/ncurses-build
 #  [ $CARCH = "x86_64" ] && CONFIGFLAG="--with-chtype=long"
   ../${_pkgbasename}-${pkgver}/configure --prefix=/usr \
-    --with-shared --with-normal --without-debug --without-ada \
+    --with-shared --with-normal --without-debug --without-ada --with-gpm=no \
     --with-install-prefix=${pkgdir} $CONFIGFLAG --libdir=/usr/lib32
   make
 }

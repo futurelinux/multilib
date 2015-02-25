@@ -1,12 +1,16 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libxmu
 pkgname=lib32-$_pkgbasename
+<<<<<<< HEAD
 pkgver=1.1.0
 pkgrel=2
+=======
+pkgver=1.1.2
+pkgrel=1
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 pkgdesc="X11 miscellaneous micro-utility library (32-bit)"
 arch=('x86_64')
 url="http://xorg.freedesktop.org/"
@@ -15,7 +19,11 @@ makedepends=('xorg-util-macros' 'gcc-multilib')
 license=('custom')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXmu-${pkgver}.tar.bz2)
+<<<<<<< HEAD
 sha1sums=('81876a0848070bfc4476a2538fc16898eb6d96cd')
+=======
+sha1sums=('7e6aeef726743d21aa272c424e7d7996e92599eb')
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 
 build() {
   cd "${srcdir}/libXmu-${pkgver}"

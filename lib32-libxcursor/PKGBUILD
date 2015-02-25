@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
@@ -6,16 +7,29 @@
 _pkgbasename=libxcursor
 pkgname=lib32-$_pkgbasename
 pkgver=1.1.12
+=======
+# Part of the X.org group
+# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
+# contributor (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+
+_pkgbasename=libxcursor
+pkgname=lib32-$_pkgbasename
+pkgver=1.1.14
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 pkgrel=1
 pkgdesc="X cursor management library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libxfixes' 'lib32-libxrender' $_pkgbasename=$pkgver)
-makedepends=('xorg-util-macros' gcc-multilib)
+makedepends=('xorg-util-macros' 'gcc-multilib')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXcursor-${pkgver}.tar.bz2)
+<<<<<<< HEAD
 sha1sums=('f68d7baed5ecf4b1ae88004dd05ef4680d63ee2c')
+=======
+md5sums=('1e7c17afbbce83e2215917047c57d1b3')
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 
 build() {
   export CC="gcc -m32"

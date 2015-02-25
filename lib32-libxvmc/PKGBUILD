@@ -1,11 +1,10 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
+# Part of the X.org group
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# contributor (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libxvmc
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.7
+pkgver=1.0.8
 pkgrel=1
 pkgdesc="X11 Video Motion Compensation extension library (32-bit)"
 arch=(x86_64)
@@ -15,7 +14,7 @@ depends=('lib32-libxv' $_pkgbasename=$pkgver)
 makedepends=('pkgconfig' gcc-multilib)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXvMC-${pkgver}.tar.bz2)
-sha1sums=('b8ee482514dfdf226694c830bdf292cc14e1cb91')
+sha1sums=('b0fa592cd615aa41290cb8d6f97e6ed53dd21bca')
 
 build() {
   export CC="gcc -m32"

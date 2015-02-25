@@ -1,0 +1,35 @@
+# maintainer: Giuseppe Calà <jiveaxe@gmail.com>
+
+_pkgbasename=sdl2_image
+pkgname=lib32-$_pkgbasename
+pkgver=2.0.0
+pkgrel=2
+pkgdesc="SDL2 image libraries (Version 2, 32-bit)"
+arch=('i686' 'x86_64')
+url="http://www.libsdl.org"
+license=('MIT')
+depends=('lib32-sdl2' 'lib32-libpng' 'lib32-libtiff' 'lib32-libjpeg' 'lib32-libwebp' $_pkgbasename=$pkgver)
+makedepends=('cmake' 'gcc-multilib')
+options=(!libtool)
+source=("http://www.libsdl.org/projects/SDL_image/release/SDL2_image-${pkgver}.tar.gz")
+sha256sums=('b29815c73b17633baca9f07113e8ac476ae66412dec0d29a5045825c27a47234')
+
+build() {
+  cd "${srcdir}/SDL2_image-${pkgver}/"
+  
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  
+  ./configure --disable-static \
+              --prefix=/usr \
+              --libdir=/usr/lib32
+  make
+}
+
+package() {
+  cd "${srcdir}/SDL2_image-${pkgver}/"
+  make DESTDIR="${pkgdir}/" install
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+}
+
