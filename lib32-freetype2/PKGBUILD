@@ -5,7 +5,7 @@
 
 _pkgbasename=freetype2
 pkgname=lib32-$_pkgbasename
-pkgver=2.5.4
+pkgver=2.5.5
 _ubuntu_ver=2.5.2
 pkgrel=1
 _ubuntu_diff_version=${_ubuntu_ver}-1ubuntu2
@@ -14,13 +14,13 @@ arch=(x86_64)
 license=('GPL')
 url="http://freetype.sourceforge.net"
 depends=('lib32-zlib' 'lib32-bzip2' 'lib32-libpng' 'lib32-harfbuzz' $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib)
+makedepends=('gcc-multilib')
 provides=("${pkgname}-ubuntu")
 conflicts=("${pkgname}-ubuntu")
 replaces=("${pkgname}-ubuntu")
 source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
         "http://archive.ubuntu.com/ubuntu/pool/main/f/freetype/freetype_${_ubuntu_diff_version}.diff.gz")
-md5sums=('438585445a2f1f71c77590155fd96616'
+md5sums=('2a7a314927011d5030903179cf183be0'
          'eda9c925032709bbd7463edcded05881')
 
 build() {
