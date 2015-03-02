@@ -2,7 +2,7 @@
 
 pkgname=skype
 pkgver=4.3.0.37
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 pkgdesc="P2P software for high-quality voice communication"
 url="http://www.skype.com/"
@@ -10,7 +10,8 @@ license=('custom')
 options=('!strip')
 install=${pkgname}.install
 depends=('xdg-utils' 'hicolor-icon-theme' lib32-{qt,alsa-lib,libxss,libxv,libxcursor,libpulse})
-optdepends=('lib32-libcanberra: XDG sound support')
+optdepends=('lib32-libcanberra: XDG sound support'
+            'lib32-qtcurve-qt4: QtCurve integration')
 source=("http://download.skype.com/linux/${pkgname}-${pkgver}.tar.bz2"
         'PERMISSION')
 sha256sums=('8c99dc3978a588fb13303df7c8134379fb55b8dd460efefbc79ae594269b892d'
