@@ -1,24 +1,19 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=giflib
 pkgname=lib32-$_pkgbasename
-pkgver=4.1.6
-pkgrel=2
+pkgver=5.1.1
+pkgrel=1
 pkgdesc="A library for reading and writing gif images (32-bit)"
 url="http://sourceforge.net/projects/giflib/"
 arch=('x86_64')
 license=('MIT')
 depends=('lib32-libx11' 'lib32-libsm' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
-provides=("lib32-libungif=${pkgver}")
-conflicts=('lib32-libungif')
-replaces=('lib32-libungif')
 options=('!libtool')
 source=(http://downloads.sourceforge.net/sourceforge/giflib/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('7125644155ae6ad33dbc9fc15a14735f')
+md5sums=('1c39333192712788c6568c78a949f13e')
 
 build() {
   export CC="gcc -m32"
