@@ -1,102 +1,11 @@
-<<<<<<< HEAD
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
-_pkgbasename=boost-libs
-pkgname=lib32-$_pkgbasename
-pkgver=1.48.0
-_boostver=1_48_0
-pkgrel=1
-pkgdesc="Free peer-reviewed portable C++ source libraries - Runtime (32 bit)"
-arch=('x86_64')
-url="http://www.boost.org"
-license=('custom')
-groups=('lib32')
-depends=('lib32-bzip2' 'lib32-zlib' 'lib32-gcc-libs')
-makedepends=('icu' 'bzip2' 'lib32-zlib' 'openmpi' 'gcc-multilib')
-source=(http://downloads.sourceforge.net/sourceforge/boost/boost_${_boostver}.tar.gz)
-md5sums=('313a11e97eb56eb7efd18325354631be')
-
-_stagedir="${srcdir}/stagedir"
-
-build()
-{
-  export CC="gcc"
-  export CFLAGS="-m32"
-  export CXX="g++"
-  export CXXFLAGS="-m32"
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-
-  # set python path for bjam
-  cd "${srcdir}/boost_${_boostver}/tools"
-#  echo "using python : 2.7 : /usr/bin/python2 ;" >> build/v2/user-config.jam
-#  echo "using python : 3.2 : /usr/bin/python3.2 : /usr/include/python3.2mu :
-#  /usr/lib32 ;" >> build/v2/user-config.jam
-#  echo "using mpi ;" >> build/v2/user-config.jam
-
-  # build bjam
-  cd "${srcdir}/boost_${_boostver}/tools/build/v2/engine"
-  ./build.sh cc
-
-  _bindir="bin.linuxx86"
-
-  install -d "${_stagedir}"/usr/bin
-  install ${_bindir}/bjam "${_stagedir}"/usr/bin/bjam
-
-  # build bcp
-  cd "${srcdir}/boost_${_boostver}/tools/bcp"
-  ../build/v2/engine/${_bindir}/bjam --toolset=gcc
-  install -m755 "${srcdir}/boost_${_boostver}/dist/bin/bcp" \
-                ${_stagedir}/usr/bin/bcp
-
-  # build libs
-  cd "${srcdir}/boost_${_boostver}"
-
-  # default "minimal" install: "release link=shared,static
-  # runtime-link=shared threading=single,multi"
-  # --layout=tagged will add the "-mt" suffix for multithreaded libraries
-  # and installs includes in /usr/include/boost.
-  # --layout=system no longer adds the -mt suffix for multi-threaded libs.
-  # install to ${_stagedir} in preparation for split packaging
-
-  ./tools/build/v2/engine/${_bindir}/bjam \
-      release debug-symbols=off threading=multi \
-      runtime-link=shared link=shared,static \
-      cflags=-fno-strict-aliasing \
-      toolset=gcc \
-      address-model=32 \
-      --without-python \
-      --without-mpi \
-      --prefix="${_stagedir}" \
-      -sTOOLS=gcc \
-      --layout=system \
-      ${MAKEFLAGS} \
-      install
-}
-
-package() 
-{
-  install -d "${pkgdir}/usr/lib32"
-
-  #shared libs
-  cp -r "${_stagedir}"/lib/*.so{,.*} "${pkgdir}/usr/lib32/"
-                     
-  # license
-  install -D -m644 "${srcdir}/boost_${_boostver}/LICENSE_1_0.txt" \
-                   "${pkgdir}"/usr/share/licenses/lib32-boost-libs/LICENSE_1_0.txt
-}
-
-=======
 # Maintainer  : Jan Was < janek.jan@gmail.com >
 # Contributor : Dan Vratil <dan@progdan.cz>
 # Contributor  : andy123 < ajs AT online DOT de >
 
 pkgname=lib32-boost-libs
-pkgver=1.54.0
+pkgver=1.55.0
 _boostver=${pkgver//./_}
-pkgrel=3
+pkgrel=1
 url="http://www.boost.org"
 arch=('x86_64')
 pkgdesc="Free peer-reviewed portable C++ source libraries - Runtime (32 bit)"
@@ -105,53 +14,15 @@ groups=('lib32')
 depends=('lib32-bzip2' 'lib32-zlib' 'lib32-icu' 'lib32-gcc-libs')
 makedepends=('lib32-icu>=51.1' 'lib32-bzip2' 'lib32-zlib' 'gcc-multilib' 'python3' 'python2')
 source=(http://downloads.sourceforge.net/sourceforge/boost/boost_${_boostver}.tar.gz
-        boost-1.54.0-Fix-macro-for-int128-detection.patch
-        fix-new-glibc.patch
         # upstream patches
-	coroutine.patch
-	datetime.patch
-	log.patch)
-sha1sums=('069501636097d3f40ddfd996d29748bb23591c53'
-          'bf5177694ab8a0df6bc13aa47b05727c40febebb'
-          'e3a5fac340c12b39add50070efb439b857108a0b'
-          '0dbb0e5709b2b4c3948ce5553f3abf5cab048e8f'
-          'cee711647ef68ca9a2580c93fcd83fbea3b26b55'
-          '2f8f05a79e3b88c7b9eb83c04d8c3ab21bbe991f')
-
+        log_fix_dump_avx2.patch)
+sha1sums=('61ed0e57d3c7c8985805bb0682de3f4c65f4b6e5'
+          '817a1573249e912dc20624f5883bb2d3b84bd278')
 
 prepare() {
-
-   export CC="gcc"
-   export CFLAGS="-m32"
-   export CXX="g++"
-   export CXXFLAGS="-m32"
-   export LDFLAGS="-m32"
-   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-
-   export _stagedir="${srcdir}/stagedir"
-   local JOBS="$(sed -e 's/.*\(-j *[0-9]\+\).*/\1/' <<< ${MAKEFLAGS})"
-
    cd "${srcdir}/boost_${_boostver}"
+   patch -Np0 < ${srcdir}/log_fix_dump_avx2.patch
 
-   patch -Np2 -i ../boost-1.54.0-Fix-macro-for-int128-detection.patch
-   patch -Np2 -i ../fix-new-glibc.patch
-
-   patch -Np1 < ${srcdir}/coroutine.patch
-   patch -Np1 < ${srcdir}/datetime.patch
-   patch -Np1 < ${srcdir}/log.patch
-
-
-   # Shut up strict aliasing warnings
-   echo "using gcc : : : <compileflags>-fno-strict-aliasing ;" >> ./tools/build/v2/user-config.jam
-   # Add an extra python version. This does not replace anything and python 2.x need to be the default.
-   #echo "using python : 3.3 : /usr/bin/python3 : /usr/include/python3.3m : /usr/lib ;" >> ./tools/build/v2/user-config.jam
-   # Support for OpenMPI
-   #echo "using mpi ;" >> ./tools/build/v2/user-config.jam
-
-   ./bootstrap.sh --with-toolset=cc --with-icu --with-python=
-   # --with-python=/usr/bin/python2
-
-   sed -i 's/cc/gcc/g' project-config.jam
 }
 
 build() {
@@ -167,19 +38,13 @@ build() {
    local JOBS="$(sed -e 's/.*\(-j *[0-9]\+\).*/\1/' <<< ${MAKEFLAGS})"
 
    cd "${srcdir}/boost_${_boostver}"
+   
+   ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=
 
-   _bindir="bin.linuxx86"
+   _bindir="bin.linuxx86_64"
 
    install -d -m 755 "${_stagedir}"/bin
-   install "${srcdir}"/boost_${_boostver}/tools/build/v2/engine/${_bindir}/bjam "${_stagedir}"/bin/bjam
-
-   pushd tools
-   for _tool in bcp inspect quickbook compiler_status process_jam_log wave; do
-      "${_stagedir}"/bin/bjam --toolset=gcc $_tool
-   done
-   "${_stagedir}"/bin/bjam --toolset=gcc cflags="-std=gnu++11" library_status
-   popd
-   cp -a dist/bin/* "${_stagedir}"/bin
+   install "${srcdir}"/boost_${_boostver}/tools/build/v2/engine/${_bindir}/b2 "${_stagedir}"/bin/b2
 
    #boostbook is needed by quickbook
    install -d -m 755 "${_stagedir}"/share/boostbook
@@ -191,7 +56,7 @@ build() {
 	# and installs includes in /usr/include/boost.
 	# --layout=system no longer adds the -mt suffix for multi-threaded libs.
 	# install to ${_stagedir} in preparation for split packaging
-	"${_stagedir}"/bin/bjam \
+	"${_stagedir}"/bin/b2 \
 		variant=release \
 		debug-symbols=off \
 		threading=multi \
@@ -199,14 +64,13 @@ build() {
 		link=shared \
 		toolset=gcc \
 		address-model=32 \
+                cflags="${CPPFLAGS} ${CFLAGS} -O3" linkflags="${LDFLAGS}" \
 		--without-python \
 		--without-mpi \
 		--layout=system \
 		--prefix="${_stagedir}" \
 		${JOBS} \
 		install
-
-   find ${_stagedir} -name \*.a -exec rm -f {} \;
 }
 
 package() {
@@ -219,5 +83,3 @@ package() {
 		"${pkgdir}"/usr/share/licenses/lib32-boost-libs/LICENSE_1_0.txt
 }
 
-
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
