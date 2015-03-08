@@ -1,31 +1,20 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
+# Lib32 Packages for Chakra, part of chakraos.org
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
 # maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libgcrypt
 pkgname=lib32-$_pkgbasename
-<<<<<<< HEAD
-pkgver=1.5.0
-=======
-pkgver=1.6.2
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+pkgver=1.6.3
 pkgrel=1
 pkgdesc="A general purpose crypto library based on the code used (32-bit)"
 arch=(x86_64)
 url="http://www.gnupg.org"
 license=('LGPL')
 depends=('lib32-libgpg-error>=1.10' $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib libtool-multilib)
-<<<<<<< HEAD
-options=(!libtool)
-source=(ftp://ftp.gnupg.org/gcrypt/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2)
-
-sha1sums=('3e776d44375dc1a710560b98ae8437d5da6e32cf')
-=======
+makedepends=('gcc-multilib' 'libtool-multilib')
 source=("ftp://ftp.gnupg.org/gcrypt/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2")
-sha1sums=('cc31aca87e4a3769cb86884a3f5982b2cc8eb7ec')
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+sha1sums=('9456e7b64db9df8360a1407a38c8c958da80bbf1')
 
 build() {
   export CC="gcc -m32"
