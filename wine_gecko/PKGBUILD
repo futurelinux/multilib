@@ -1,17 +1,18 @@
 # maintainer: Giuseppe Calà <jiveaxe@gmail.com>
 
 pkgname=wine_gecko
-pkgver=2.34
+pkgver=2.36
 pkgrel=1
 pkgdesc="Wine's built-in replacement for Microsoft's Internet Explorer"
 arch=('x86_64')
 url="http://wiki.winehq.org/Gecko"
 license=('MPL')
 depends=('wine')
-source=("http://downloads.sourceforge.net/wine/${pkgname}-${pkgver}-x86.msi"
-        "http://downloads.sourceforge.net/wine/${pkgname}-${pkgver}-x86_64.msi")
-md5sums=('54bd9d6b4fdcd556d89b4ef83c31ac8c'
-         '2b658806733be574309c418f6c0d4cba')
+_url='http://sourceforge.net/projects/wine/files/Wine%20Gecko'
+source=("${_url}/${pkgver}/${pkgname}-${pkgver}-x86.msi"
+        "${_url}/${pkgver}/${pkgname}-${pkgver}-x86_64.msi")
+md5sums=('490668a7f1cb42ceba56208bfe51334f'
+         '7f0826b2592d35129c54bcbf612eea63')
 
 package() {
   cd "$srcdir"
