@@ -3,7 +3,7 @@
 
 pkgname=wine
 pkgver=1.7.38
-pkgrel=1
+pkgrel=2
 _pkgbasever=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
         30-win32-aliases.conf
