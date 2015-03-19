@@ -1,11 +1,6 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=openssl
 pkgname=lib32-$_pkgbasename
-_ver=1.0.1k
+_ver=1.0.1m
 # use a pacman compatible version scheme
 pkgver=${_ver/[a-z]/.${_ver//[0-9.]/}}
 pkgrel=1
@@ -13,14 +8,15 @@ pkgdesc='The Open Source toolkit for Secure Sockets Layer and Transport Layer Se
 arch=('x86_64')
 url='https://www.openssl.org'
 license=('custom:BSD')
-depends=(lib32-zlib $_pkgbasename=$pkgver)
-optdepends=('ca-certificates' perl gcc-multilib)
+depends=('lib32-zlib' "$_pkgbasename=$pkgver")
+optdepends=('ca-certificates' 
+makedepends=('gcc-multilib')
 options=('!makeflags')
 source=("https://www.openssl.org/source/${_pkgbasename}-${_ver}.tar.gz"
         "https://www.openssl.org/source/${_pkgbasename}-${_ver}.tar.gz.asc"
         'no-rpath.patch'
         'ca-dir.patch')
-md5sums=('d4f002bd22a56881340105028842ae1f'
+md5sums=('d143d1555d842a069cb7cc34ba745a06'
          'SKIP'
          'dc78d3d06baffc16217519242ce92478'
          '3bf51be3a1bbd262be46dc619f92aa90')
