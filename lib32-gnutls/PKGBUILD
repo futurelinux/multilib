@@ -1,66 +1,43 @@
-# Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
+# Contributions from Arch: https://projects.archlinux.org/svntogit/community.git/tree/trunk?h=packages/lib32-gnutls
 
 _pkgbasename=gnutls
 pkgname=lib32-$_pkgbasename
-<<<<<<< HEAD
-pkgver=2.12.7
-=======
-pkgver=3.3.11
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+pkgver=3.3.13
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer (32-bit)"
 arch=('x86_64')
-license=('GPL3' 'LGPL')
-url="http://www.gnu.org/software/gnutls/"
-<<<<<<< HEAD
-options=('!libtool')
-# uses built-in libtasn1 for the moment
-depends=(lib32-{gcc-libs,readline,libgcrypt,zlib})
-makedepends=('gcc-multilib')
-source=(ftp://ftp.gnu.org/gnu/gnutls/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('4b48aa3119f549d30d550bf4162c721b')
-=======
-depends=(lib32-libtasn1
-         lib32-nettle
-         lib32-p11-kit
-         lib32-zlib
-         $_pkgbasename=$pkgver)
+license=('GPL3' 'LGPL2.1')
+url="http://gnutls.org/"
+depends=('lib32-zlib' 'lib32-nettle' 'lib32-p11-kit' 'lib32-libtasn1' $_pkgbasename)
 makedepends=('gcc-multilib' 'lib32-libidn')
-source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${_pkgbasename}-${pkgver}.tar.xz{,.sig})
-md5sums=('b657e3010c10cae2244e7ce79ee3d446'
-         'SKIP')
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${_pkgbasename}-${pkgver}.tar.xz)
+md5sums=('a7387fe8bf3e604bf518a6da9ab2a4e6')
 
 build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-<<<<<<< HEAD
   cd ${srcdir}/${_pkgbasename}-${pkgver}
-  ./configure --prefix=/usr \
-              --libdir=/usr/lib32 \
-              --with-zlib \
-              --with-libgcrypt \
-              --disable-static\
-              --disable-guile
-=======
-  #cd ${srcdir}/${_pkgbasename}-${pkgver}
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  
-  ./configure --prefix=/usr --libdir=/usr/lib32 \
-              --with-zlib \
-              --disable-guile \
-              --disable-static \
-              --disable-valgrind-tests --disable-hardware-acceleration
 
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+  # build fails without --disable-hardware-acceleration because of assembler errors
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+    --with-zlib \
+    --disable-static \
+    --disable-guile \
+    --disable-valgrind-tests --disable-hardware-acceleration
   make
+}
+
+check() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+  #make -k check
 }
 
 package() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
   make DESTDIR="${pkgdir}" install
+  find $pkgdir
 
   rm -rf "${pkgdir}"/usr/{bin,include,share}
 }
