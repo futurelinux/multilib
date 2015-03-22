@@ -2,16 +2,16 @@
 # maintainer: Giuseppe Cala' <jiveaxe@gmail.com>
 
 pkgname=wine
-pkgver=1.7.38
-pkgrel=2
-_pkgbasever=${pkgver/rc/-rc}
-source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
+pkgver=1.7.39
+pkgrel=1
+_pkgver=${pkgver/rc/-rc}
+source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgver.tar.bz2
         30-win32-aliases.conf
-        https://github.com/wine-compholio/wine-staging/archive/v1.7.37.tar.gz)
+        https://github.com/wine-compholio/wine-staging/archive/v${pkgver}.tar.gz)
 
-md5sums=('0e2c4eae7b5093cb4b7018974994915f'
+md5sums=('eada8f9fde77a72e1d1f682020d4cbfe'
          '1ff4e467f59409272088d92173a0f801'
-         '40feaf4d51cae9c575f638fbf6634f2b')
+         '88b30faba37a5889843a96bfbc81af35')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
@@ -93,7 +93,7 @@ prepare() {
   rm -rf $pkgname-{32,64}-build
 
   # Allow ccache to work
-  mv $pkgname-$_pkgbasever $pkgname
+  mv $pkgname-$_pkgver $pkgname
 
   # ncurses fix
   sed -i 's|libncurses|libncursesw|g' "$srcdir/$pkgname/configure"
@@ -101,7 +101,7 @@ prepare() {
 
 
   cd $pkgname
-  for _patch in $(ls $srcdir/wine-staging-1.7.37/patches/winepulse-PulseAudio_Support/*.patch) ; do
+  for _patch in $(ls $srcdir/wine-staging-${pkgver}/patches/winepulse-PulseAudio_Support/*.patch) ; do
     patch -p1 < $_patch
   done
   
