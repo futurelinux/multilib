@@ -5,7 +5,7 @@
 
 _pkgbasename=libx11
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.2
+pkgver=1.6.3
 pkgrel=1
 pkgdesc="X11 client-side library (32-bit)"
 arch=(x86_64)
@@ -14,8 +14,10 @@ depends=('lib32-libxcb' 'xproto' 'kbproto' $_pkgbasename=$pkgver)
 makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto' 'gcc-multilib')
 options=('!libtool')
 license=('custom:XFREE86')
-source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2)
-sha1sums=('0dd74854e6f6bb8a322e88ba3e89f87c3dcf9e08')
+source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2{,.sig})
+sha256sums=('cf31a7c39f2f52e8ebd0db95640384e63451f9b014eed2bb7f5de03e8adc8111'
+            'SKIP')
+validpgpkeys=('4A193C06D35E7C670FA4EF0BA2FB9E081F2D130E')
 
 build() {
   export CC="gcc -m32"
@@ -25,6 +27,11 @@ build() {
   ./configure --prefix=/usr --disable-static --disable-xf86bigfont \
       --libdir=/usr/lib32 --disable-specs
   make
+}
+
+check() {
+  cd "${srcdir}/libX11-${pkgver}"
+
   make check
 }
 
