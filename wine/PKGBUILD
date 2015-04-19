@@ -1,14 +1,14 @@
 pkgname=wine
-pkgver=1.7.40
+pkgver=1.7.41
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgver.tar.bz2
         30-win32-aliases.conf
         https://github.com/wine-compholio/wine-staging/archive/v${pkgver}.tar.gz)
 
-md5sums=('7c1dc804be000d73bc8c2afa623aa9e5'
+md5sums=('c6bc2faa48eab6d7c7fc4a47976e9021'
          '1ff4e467f59409272088d92173a0f801'
-         '0c89fbe48138c919278e5764042814e4')
+         '505313d05c841ef58cf5f72c79a01856')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
