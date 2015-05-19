@@ -13,6 +13,6 @@ post_upgrade() {
   echo 'If you do not accept this license, you must remove the package immediately.'
   echo
   echo 'Beware that some games need extra libraries, for more info please look our wiki page:'
-  echo 'http://chakra-project.org/wiki/index.php?title=Steam'
+  echo 'http://chakraos.org/wiki/index.php?title=Steam'
   echo
 }
