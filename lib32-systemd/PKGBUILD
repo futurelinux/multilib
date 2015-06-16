@@ -1,21 +1,20 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
-pkgver=218
-pkgrel=2
+pkgver=220
+pkgrel=1
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/wiki/Software/systemd"
 license=('GPL2' 'LGPL2.1' 'MIT')
-depends=('lib32-glib2' 'lib32-libgcrypt' 'lib32-xz' 'lib32-curl' "$_pkgbasename=$pkgver")
-makedepends=('lib32-gcc-libs' 'gcc-multilib' 'lib32-libidn' 'lib32-libcap'
-             'lib32-acl' 'intltool' 'gperf')
-source=("http://www.freedesktop.org/software/$_pkgbasename/$_pkgbasename-$pkgver.tar.xz"
+depends=('lib32-glib2' 'lib32-libgcrypt' 'lib32-xz' 'lib32-curl' 'lib32-libcap' 'lib32-bzip2' "$_pkgbasename=$pkgver")
+makedepends=('lib32-gcc-libs' 'gcc-multilib' 'lib32-libidn' 'lib32-acl' 'intltool' 'gperf')
+source=("git://github.com/systemd/systemd.git#tag=v$pkgver"
 #        "git://pkgs.fedoraproject.org/systemd.git#commit=${_fedora_patch}"
 )
-md5sums=('4e2c511b0a7932d7fc9d79822273aac6')
+md5sums=('SKIP')
 
 prepare() {
-  cd "$_pkgbasename-$pkgver"
+  cd "$_pkgbasename"
   
 #  git init
 #  git config user.email "chakra-devel@googlegroups.com"
@@ -62,6 +61,7 @@ prepare() {
 #        ../systemd/00*-*.patch
 #
 #  autoreconf -i
+   ./autogen.sh
 }
 
 build() {
@@ -69,7 +69,7 @@ build() {
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  cd "${srcdir}/systemd-${pkgver}"
+  cd "${_pkgbasename}"
 
   # LTO currently breaks the build because of libtool failures
   CFLAGS+=' -fno-lto'
@@ -89,20 +89,20 @@ build() {
     --disable-kmod \
     --disable-networkd \
     --disable-blkid \
+    --disable-libiptc \
     --without-python \
     --disable-libcryptsetup \
     --disable-microhttpd \
     --disable-qrencode \
     --disable-xkbcommon \
     --with-sysvinit-path= \
-    --with-sysvrcnd-path= \
-    --with-firmware-path="/usr/lib/firmware/updates:/usr/lib/firmware"
+    --with-sysvrcnd-path=
 
   make
 }
 
 package() {
-  cd "${srcdir}/systemd-${pkgver}"
+  cd "${_pkgbasename}"
     
   make DESTDIR="$pkgdir" install
     
