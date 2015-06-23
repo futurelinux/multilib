@@ -1,12 +1,7 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libusb-compat
 pkgname=lib32-$_pkgbasename
-pkgver=0.1.4
-pkgrel=2
+pkgver=0.1.5
+pkgrel=1
 pkgdesc="Library to enable user space application programs to communicate with USB devices (32-bit)"
 arch=('x86_64')
 depends=('lib32-libusb' 'libusb-compat' $_pkgbasename=$pkgver)
@@ -15,7 +10,7 @@ url="http://libusb.sourceforge.net/"
 license=('LGPL')
 source=(http://downloads.sourceforge.net/libusb/libusb-compat-0.1/libusb-compat-$pkgver/libusb-compat-${pkgver}.tar.bz2)
 options=('!libtool')
-md5sums=('2ca521fffadd0c28fdf174e6ec73865b')
+md5sums=('2780b6a758a1e2c2943bdbf7faf740e4')
 
 build() {
   cd ${srcdir}/libusb-compat-${pkgver}
