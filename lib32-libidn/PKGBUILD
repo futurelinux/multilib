@@ -5,32 +5,17 @@
 
 _pkgbasename=libidn
 pkgname=lib32-$_pkgbasename
-<<<<<<< HEAD
-pkgver=1.16
+pkgver=1.32
 pkgrel=1
-_epoch=1
-=======
-pkgver=1.26
-pkgrel=1
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
-pkgdesc="Implementation of the Stringprep, Punycode and IDNA specifications (32-bit)"
-arch=('x86_64')
+pkgdesc="Implementation of the Stringprep, Punycode and IDNA specifications (32 bit)"
 url="http://www.gnu.org/software/libidn/"
-license=('custom')
-<<<<<<< HEAD
-depends=('lib32-gcc-libs' $_pkgbasename)
+arch=('x86_64')
+license=('GPL3' 'LGPL')
+depends=('lib32-glibc' "$_pkgbasename=$pkgver")
 makedepends=('gcc-multilib')
 options=('!libtool')
 source=(http://ftp.gnu.org/gnu/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('33ff88e7111f07f3bb8aa888fdc7848bb319d4ce')
-
-=======
-depends=('lib32-gcc-libs' "${_pkgbasename}=${pkgver}")
-makedepends=('gcc-multilib')
-options=('!libtool')
-source=(http://ftp.gnu.org/gnu/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('b1cb40646a96dadbfc41d060d23dfb382eec1128')
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+sha1sums=('ddd018611b98af7c67d434aa42d15d39f45129f5')
 
 build() {
   export CC="gcc -m32"

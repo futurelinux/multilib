@@ -1,15 +1,16 @@
 pkgname=lib32-curl
 _pkgname=curl
-pkgver=7.42.1
+pkgver=7.43.0
 pkgrel=1
-pkgdesc="An URL retrival utility and library (32-bit)"
+pkgdesc="An URL retrieval utility and library (32-bit)"
 arch=('x86_64')
 url="http://curl.haxx.se"
 license=('MIT')
-depends=('lib32-libssh2' 'lib32-krb5' "${_pkgname}=${pkgver}")
+depends=('lib32-libssh2' 'lib32-krb5' 'lib32-libidn' "${_pkgname}=${pkgver}")
 source=("http://curl.haxx.se/download/$_pkgname-$pkgver.tar.bz2"{,.asc})
-md5sums=('296945012ce647b94083ed427c1877a8'
+md5sums=('11bddbb452a8b766b932f859aaeeed39'
          'SKIP')
+ validpgpkeys=('914C533DF9B2ADA2204F586D78E11C6B279D5C91') # Daniel Stenberg
 
 build() {
   cd "$_pkgname-$pkgver"
@@ -27,12 +28,12 @@ build() {
       --disable-ldaps \
       --enable-ipv6 \
       --enable-manual \
-      --enable-threaded-resolver \
       --enable-versioned-symbols \
-      --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt \
+      --enable-threaded-resolver \
       --with-gssapi \
+      --with-libidn \
       --with-random=/dev/urandom \
-      --without-libidn
+      --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt
 
   make
 }
