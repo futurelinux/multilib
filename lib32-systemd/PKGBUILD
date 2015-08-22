@@ -1,13 +1,13 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
-pkgver=222
+pkgver=224
 pkgrel=1
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/wiki/Software/systemd"
 license=('GPL2' 'LGPL2.1' 'MIT')
 depends=('lib32-glib2' 'lib32-libgcrypt' 'lib32-xz' 'lib32-curl' 'lib32-libcap' 'lib32-bzip2' "$_pkgbasename=$pkgver")
-makedepends=('lib32-gcc-libs' 'gcc-multilib' 'lib32-libidn' 'lib32-acl' 'intltool' 'gperf')
+makedepends=('lib32-gcc-libs' 'gcc-multilib' 'lib32-libidn' 'lib32-acl' 'intltool' 'gperf' 'docbook-xml' 'docbook-xsl')
 source=("git://github.com/systemd/systemd.git#tag=v$pkgver"
 )
 md5sums=('SKIP')
