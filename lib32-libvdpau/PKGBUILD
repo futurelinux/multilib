@@ -1,6 +1,6 @@
 _pkgbasename=libvdpau
 pkgname=lib32-$_pkgbasename
-pkgver=1.1
+pkgver=1.1.1
 pkgrel=1
 pkgdesc='Nvidia VDPAU library'
 arch=('x86_64')
@@ -8,8 +8,8 @@ url='http://cgit.freedesktop.org/~aplattner/libvdpau'
 license=('custom')
 depends=('lib32-gcc-libs' 'lib32-libxext' $_pkgbasename=$pkgver)
 makedepends=('dri2proto')
-source=("http://people.freedesktop.org/~aplattner/vdpau/${_pkgbasename}-${pkgver}.tar.gz")
-sha256sums=('aea4e783f220bf26ba2139ccd866a0ee5005fa03af5e08c41fbc939118263919')
+source=("http://people.freedesktop.org/~aplattner/vdpau/${_pkgbasename}-${pkgver}.tar.bz2")
+sha256sums=('857a01932609225b9a3a5bf222b85e39b55c08787d0ad427dbd9ec033d58d736')
 
 build() {
   cd ${srcdir}/${_pkgbasename}-${pkgver}
