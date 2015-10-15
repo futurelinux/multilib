@@ -1,10 +1,7 @@
-# Lib32 Packages for Chakra, part of chakraos.org
-#
-
 _pkgbasename=qt
 pkgname="lib32-${_pkgbasename}"
 pkgver=4.8.7
-pkgrel=1
+pkgrel=2
 pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
 url='http://www.qt.io'
@@ -82,7 +79,7 @@ package() {
   find "${pkgdir}/usr/lib32" -type f -name '*.prl' \
        -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
 
-  rm -rf "${pkgdir}/usr"/{include,share,bin}
+  rm -rf "${pkgdir}/usr"/{include,share,bin,tests}
   mkdir -p "${pkgdir}/usr/share/licenses"
   ln -s "${_pkgbasename}" "${pkgdir}/usr/share/licenses/${pkgname}"
 }
