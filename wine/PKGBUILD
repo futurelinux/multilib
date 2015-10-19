@@ -1,14 +1,14 @@
 pkgname=wine
-pkgver=1.7.52
+pkgver=1.7.53
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
 source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgver.tar.bz2
         30-win32-aliases.conf
         https://github.com/wine-compholio/wine-staging/archive/v${pkgver}.tar.gz)
 
-md5sums=('70ecd94e17394446ed28ee21282e3e4c'
+md5sums=('199c4adc4f294bdbec51f919b34a3798'
          '1ff4e467f59409272088d92173a0f801'
-         '4418842dafac05d23e666e7695b2bf05')
+         '62df4e7b3d01040e242ba68bf3a28917')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
@@ -19,6 +19,8 @@ install=wine.install
 
 depends=(
   fontconfig            lib32-fontconfig
+  lcms2			lib32-lcms2
+  libxml2		lib32-libxml2
   libxcursor            lib32-libxcursor
   libxrandr             lib32-libxrandr
   libxdamage            lib32-libxdamage
@@ -32,7 +34,6 @@ depends=(
 )
 
 makedepends=(autoconf ncurses bison perl fontforge flex prelink
-  'gcc>=4.5.0-2'
   giflib         lib32-giflib
   libpng         lib32-libpng
   gnutls         lib32-gnutls
@@ -40,9 +41,7 @@ makedepends=(autoconf ncurses bison perl fontforge flex prelink
   libxcomposite  lib32-libxcomposite
   libxmu         lib32-libxmu
   libxxf86vm     lib32-libxxf86vm
-  libxml2        lib32-libxml2
   libldap        lib32-libldap
-  lcms2          lib32-lcms2
   mpg123         lib32-mpg123
   openal         lib32-openal
   v4l-utils      lib32-v4l-utils
@@ -62,8 +61,6 @@ optdepends=(
   libpng          lib32-libpng
   libldap         lib32-libldap
   gnutls          lib32-gnutls
-  lcms2           lib32-lcms2
-  libxml2         lib32-libxml2
   mpg123          lib32-mpg123
   openal          lib32-openal
   v4l-utils       lib32-v4l-utils
@@ -82,6 +79,10 @@ optdepends=(
 
 prepare() {
   cd $srcdir
+  
+  # remove once https://bugs.winehq.org/show_bug.cgi?id=38653 is resolved
+  export CFLAGS="${CFLAGS/-O2/} -O0"
+  export CXXFLAGS="${CXXFLAGS/-O2/} -O0"
   
   # Get rid of old code dir
   rm -rf $pkgname
