@@ -3,17 +3,23 @@
 
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.58
+pkgver=2.4.65
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
 license=('custom')
-depends=('lib32-libpciaccess' 'lib32-glibc' $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib)
+depends=('lib32-libpciaccess' 'lib32-systemd' $_pkgbasename=$pkgver)
+makedepends=(gcc-multilib xorg-util-macros)
 checkdepends=('lib32-cairo')
 url="http://dri.freedesktop.org/"
-source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2)
-sha256sums=('b155fae6b9c9a3b02ef8b77f58c7c219194c996a4018dc55ba66c03996a365dd')
+source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2{,.sig})
+sha256sums=('71960ac8bde7d710992b1bc8879935e8300a870c36bd06f22412d0447e3d96c4'
+            'SKIP')
+validpgpkeys=('B97BD6A80CAC4981091AE547FE558C72A67013C3') # Maarten Lankhorst <maarten.lankhorst@canonical.com>
+validpgpkeys+=('215DEE688925CCB965BE5DA97C03D7797B6E1AE2') # Damien Lespiau <damien.lespiau@intel.com>
+validpgpkeys+=('10A6D91DA1B05BD29F6DEBAC0C74F35979C486BE') # David Airlie <airlied@redhat.com>
+validpgpkeys+=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D') # Emil Velikov <emil.l.velikov@gmail.com>
+validpgpkeys+=('D6285B5E899299F3DA746184191C9B905522B045') # Rob Clark <robclark@freedesktop.org>
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
@@ -26,10 +32,16 @@ build() {
   sed -i "/pthread-stubs/d" configure.ac
   autoreconf --force --install
 
-  ./configure --prefix=/usr --libdir=/usr/lib32 \
-      --enable-udev 
+  ./configure --prefix=/usr \
+     --libdir=/usr/lib32 \
+     --enable-udev
 
   make
+}
+
+check() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  make -k check
 }
 
 package() {

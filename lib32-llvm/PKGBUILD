@@ -5,77 +5,81 @@
 # resynced with Arch's version from https://projects.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/lib32-llvm
 # adjusted for Chakra
 
-pkgname=('lib32-llvm' 'lib32-llvm-libs')
-pkgver=3.5.0
+pkgname=('lib32-llvm' 'lib32-llvm-libs' 'lib32-clang')
+pkgver=3.7.0
 pkgrel=1
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
-makedepends=('lib32-libffi' 'lib32-zlib' 'python2' 'gcc-multilib')
+makedepends=('cmake' 'lib32-libffi' 'lib32-zlib' 'python2' 'gcc-multilib'
+             'lib32-libxml2')
 options=('staticlibs')
 source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
+        http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.xz{,.sig}
         http://llvm.org/releases/$pkgver/compiler-rt-$pkgver.src.tar.xz{,.sig}
-        llvm-3.5.0-force-link-pass.o.patch)
-sha256sums=('28e199f368ef0a4666708f31c7991ad3bcc3a578342b0306526dd35f07595c03'
+        llvm-3.7.0-link-tools-against-libLLVM.patch
+        llvm-3.7.0-export-more-symbols.patch)
+sha256sums=('ab45895f9dcdad1e140a3a79fd709f64b05ad7364e308c0e582c5b02e9cc3153'
             'SKIP'
-            'a4b3e655832bf8d9a357ea2c771db347237460e131988cbb96cda40ff39a8136'
+            '4ed740c5a91df1c90a4118c5154851d6a475f39a91346bdf268c1c29c13aa1cc'
             'SKIP'
-            '5702053503d49448598eda1b8dc8c263f0df9ad7486833273e3987b5dec25a19')
+            '227fa998520bc94974a428dc8e7654d9bdf277e5bc70d4064ebc05691bd62b0b'
+            'SKIP'
+            'cf9c8b4d70b4547eda162644658c5c203c3139fcea6c75003b6cd7dc11a8cccc'
+            'a1c9f36b97c639666ab6a1bd647a08a027e93e3d3cfd6f5af9c36e757599ce81')
+validpgpkeys=('11E521D646982372EB577A1F8F0871F202119294'
+              'B6C8F98282B944E3B0D5C2530FC3042E345AD05D')
 
 prepare() {
   cd "$srcdir/llvm-$pkgver.src"
 
+  # At the present, clang must reside inside the LLVM source code tree to build
+  # See http://llvm.org/bugs/show_bug.cgi?id=4840
+  mv "$srcdir/cfe-$pkgver.src" tools/clang
+  
   mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
 
-  # Fix installation directories, ./configure doesn't seem to set them right
-  sed -i -e 's:\$(PROJ_prefix)/lib:$(PROJ_prefix)/lib32:' \
-         -e 's:\$(PROJ_prefix)/docs/llvm:$(PROJ_prefix)/share/doc/llvm:' \
-    Makefile.config.in
-  sed -i '/ActiveLibDir = ActivePrefix/s:lib:lib32:' \
-    tools/llvm-config/llvm-config.cpp
-  sed -i 's:LLVM_LIBDIR="${prefix}/lib":LLVM_LIBDIR="${prefix}/lib32":' \
-    autoconf/configure.ac \
-    configure
+  # Backport LLVM_LINK_LLVM_DYLIB option
+  # https://bugs.archlinux.org/task/46392
+  patch -Np1 -i ../llvm-3.7.0-link-tools-against-libLLVM.patch
 
-  # Fix build with GCC 4.9 (patch from Debian)
-  # http://llvm.org/bugs/show_bug.cgi?id=20067
-  patch -Np1 -i "$srcdir/llvm-3.5.0-force-link-pass.o.patch"
+  # https://llvm.org/bugs/show_bug.cgi?id=24157
+  patch -Np2 -i ../llvm-3.7.0-export-more-symbols.patch
+
+  mkdir build
 }
 
 build() {
-  cd "$srcdir/llvm-$pkgver.src"
+  cd "$srcdir/llvm-$pkgver.src/build"
 
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  # Apply strip option to configure
-  _optimized_switch="enable"
-  [[ $(check_option strip) == n ]] && _optimized_switch="disable"
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DLLVM_LIBDIR_SUFFIX=32 \
+    -DCMAKE_C_FLAGS:STRING=-m32 \
+    -DCMAKE_CXX_FLAGS:STRING=-m32 \
+    -DLLVM_TARGET_ARCH:STRING=i686 \
+    -DLLVM_DEFAULT_TARGET_TRIPLE="i686-unknown-linux-gnu" \
+    -DLLVM_BUILD_LLVM_DYLIB=ON \
+    -DLLVM_DYLIB_EXPORT_ALL=ON \
+    -DLLVM_LINK_LLVM_DYLIB=ON \
+    -DLLVM_ENABLE_RTTI=ON \
+    -DLLVM_ENABLE_FFI=ON \
+    -DLLVM_BUILD_DOCS=OFF \
+    -DLLVM_ENABLE_SPHINX=OFF \
+    -DLLVM_ENABLE_DOXYGEN=OFF \
+    -DFFI_INCLUDE_DIR=$(pkg-config --variable=includedir libffi) \
+    -DLLVM_BINUTILS_INCDIR=/usr/include \
+    ..
 
-  # Include location of libffi headers in CPPFLAGS
-  CPPFLAGS+=" $(pkg-config --cflags libffi)"
+  make
 
-  # We had to force host and target to get
-  # a proper triplet reported by llvm
-
-  ./configure \
-    --prefix=/usr \
-    --libdir=/usr/lib32 \
-    --sysconfdir=/etc \
-    --enable-shared \
-    --enable-libffi \
-    --enable-targets=all \
-    --disable-expensive-checks \
-    --disable-debug-runtime \
-    --disable-assertions \
-    --with-binutils-include=/usr/include \
-    --with-python=/usr/bin/python2 \
-    --build=i686-pc-linux-gnu \
-    --host=i686-pc-linux-gnu \
-    --$_optimized_switch-optimized
-
-  make REQUIRES_RTTI=1
+  # Disable automatic installation of components that go into subpackages
+  sed -i '/\(clang\|lldb\)\/cmake_install.cmake/d' tools/cmake_install.cmake
+  sed -i '/extra\/cmake_install.cmake/d' tools/clang/tools/cmake_install.cmake
+  sed -i '/compiler-rt\/cmake_install.cmake/d' projects/cmake_install.cmake
 }
 
 package_lib32-llvm() {
@@ -84,32 +88,29 @@ package_lib32-llvm() {
 
   cd "$srcdir/llvm-$pkgver.src"
 
-  make DESTDIR="$pkgdir" install
+  make -C build DESTDIR="$pkgdir" install
 
   # The runtime library goes into lib32-llvm-libs
-  mv "$pkgdir/usr/lib32/libLLVM-$pkgver.so" "$srcdir/"
-  mv "$pkgdir/usr/lib32/libLLVM-${pkgver%.*}.so" "$srcdir/"
+  mv "$pkgdir"/usr/lib32/lib{LLVM,LTO}.so* "$srcdir"
+  mv -f "$pkgdir"/usr/lib32/{LLVMgold,BugpointPasses}.so "$srcdir"
 
   # Fix permissions of static libs
   chmod -x "$pkgdir"/usr/lib32/*.a
 
   mv "$pkgdir/usr/bin/llvm-config" "$pkgdir/usr/lib32/llvm-config"
+  mv "$pkgdir/usr/include/llvm/Config/llvm-config.h" \
+    "$pkgdir/usr/lib32/llvm-config-32.h"
 
   # Get rid of example Hello transformation
   rm "$pkgdir"/usr/lib32/*LLVMHello.*
 
-  # Symlink LLVMgold.so from /usr/lib32/bfd-plugins
-  # https://bugs.archlinux.org/task/28479
-  install -d "$pkgdir/usr/lib32/bfd-plugins"
-  ln -s ../LLVMgold.so "$pkgdir/usr/lib32/bfd-plugins/LLVMgold.so"
-
-  mv "$pkgdir"/usr/include/llvm/Config/*config.h "$pkgdir/"
   rm -rf "$pkgdir"/usr/{bin,include,share/{doc,man,llvm}}
-
+  
+  # Needed for multilib (https://bugs.archlinux.org/task/29951)
+  # Header stub is taken from Fedora
   install -d "$pkgdir/usr/include/llvm/Config"
-  mv "$pkgdir/config.h" "$pkgdir/usr/include/llvm/Config/config-32.h"
-  mv "$pkgdir/llvm-config.h" "$pkgdir/usr/include/llvm/Config/llvm-config-32.h"
-
+  mv "$pkgdir/usr/lib32/llvm-config-32.h" "$pkgdir/usr/include/llvm/Config/"
+  
   mkdir "$pkgdir"/usr/bin
   mv "$pkgdir/usr/lib32/llvm-config" "$pkgdir/usr/bin/llvm-config32"
 
@@ -117,15 +118,35 @@ package_lib32-llvm() {
 }
 
 package_lib32-llvm-libs() {
-  pkgdesc="Low Level Virtual Machine (runtime library)(32-bit)"
-  depends=('lib32-libffi' 'lib32-zlib' 'lib32-gcc-libs')
-
-  cd "$srcdir"
+  pkgdesc="Low Level Virtual Machine (runtime library)(32-bit) "
+  depends=('lib32-libffi' 'lib32-zlib' 'lib32-ncurses' 'lib32-gcc-libs')
 
   install -d "$pkgdir/usr/lib32"
-  cp -P libLLVM-$pkgver.so libLLVM-${pkgver%.*}.so "$pkgdir/usr/lib32/"
+
+  cp -P \
+    "$srcdir"/lib{LLVM,LTO}.so* \
+    "$srcdir"/{LLVMgold,BugpointPasses}.so \
+    "$pkgdir/usr/lib32/"
+
+  # Symlink LLVMgold.so from /usr/lib/bfd-plugins
+  # https://bugs.archlinux.org/task/28479
+  install -d "$pkgdir/usr/lib32/bfd-plugins"
+  ln -s ../LLVMgold.so "$pkgdir/usr/lib32/bfd-plugins/LLVMgold.so"
 
   install -Dm644 llvm-$pkgver.src/LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
-# vim:set ts=2 sw=2 et:
+package_lib32-clang() {
+  pkgdesc="C language family frontend for LLVM"
+  url="http://clang.llvm.org/"
+  depends=("lib32-llvm=$pkgver-$pkgrel" 'clang' 'gcc-multilib')
+
+  cd "$srcdir/llvm-$pkgver.src"
+
+  make -C build/tools/clang DESTDIR="$pkgdir" install
+
+  rm -r "$pkgdir"/usr/{bin,include,share}
+
+  install -Dm644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
