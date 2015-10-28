@@ -5,21 +5,19 @@
 
 pkgname=lib32-libdbus
 _pkgbasename=libdbus
-pkgver=1.10.0
+pkgver=1.10.2
 pkgrel=1
 pkgdesc="DBus library (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/Software/dbus"
 license=('GPL' 'custom')
 depends=('lib32-glibc' 'lib32-expat' 'libdbus' $_pkgbasename=$pkgver)
-makedepends=('gcc-multilib' 'lib32-libx11')
+makedepends=('lib32-libx11' 'lib32-gcc-libs')
 provides=('lib32-dbus-core')
 conflicts=('lib32-dbus-core')
 replaces=('lib32-dbus-core')
-source=(http://dbus.freedesktop.org/releases/dbus/dbus-${pkgver}.tar.gz{,.asc})
-md5sums=('5af6297348107a906c8449817a728b3b'
-         'SKIP')
-validpgpkeys=('DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90') # Simon McVittie <simon.mcvittie@collabora.co.uk>
+source=(http://dbus.freedesktop.org/releases/dbus/dbus-${pkgver}.tar.gz)
+md5sums=('2428919cc77b8d0028d65ee4d5dbef31')
 
 build() {
     export CC="gcc -m32"
