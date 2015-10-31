@@ -1,20 +1,20 @@
 # Lib32 Packages for Chakra, part of chakraos.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# maintainer (x86_64): AlmAck almack@chakraos.org
+
 
 _pkgbasename=libgcrypt
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.3
+pkgver=1.6.4
 pkgrel=1
 pkgdesc="A general purpose crypto library based on the code used (32-bit)"
 arch=(x86_64)
 url="http://www.gnupg.org"
 license=('LGPL')
 depends=('lib32-libgpg-error>=1.10' $_pkgbasename=$pkgver)
-makedepends=('gcc-multilib' 'libtool-multilib')
+makedepends=('lib32-gcc-libs' 'libtool-multilib')
 source=("ftp://ftp.gnupg.org/gcrypt/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2")
-sha1sums=('9456e7b64db9df8360a1407a38c8c958da80bbf1')
+sha1sums=('ed52add1ce635deeb2f5c6650e52667debd4ec70')
 
 build() {
   export CC="gcc -m32"
