@@ -1,19 +1,19 @@
 _pkgbasename=nss
 pkgname=lib32-${_pkgbasename}
-pkgver=3.20
+pkgver=3.20.1
 pkgrel=1
 pkgdesc="Mozilla Network Security Services (32-bit)"
 arch=('x86_64')
 url="http://www.mozilla.org/projects/security/pki/nss/"
 license=('MPL' 'GPL')
-_nsprver=4.10.9
-depends=("lib32-nspr>=${_nsprver}" 'lib32-sqlite3>=3.6.17' 'lib32-zlib' 'lib32-p11-kit' $_pkgbasename=$pkgver)
-makedepends=('perl')
+_nsprver=4.10.10
+depends=("lib32-nspr>=${_nsprver}" 'lib32-sqlite3' 'lib32-zlib' 'lib32-p11-kit' $_pkgbasename=$pkgver)
+makedepends=('perl' 'lib32-gcc-libs')
 options=('!strip' '!makeflags' staticlibs)
 source=(https://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${_pkgbasename}-${pkgver}.tar.gz
         nss.pc.in
         ssl-renegotiate-transitional.patch)
-sha256sums=('5e38d4b9837ca338af966b97fc91c07f67ad647fb38dc4af3cfd0d84e477d15c'
+sha256sums=('ad3c8f11dfd9570c2d04a6140d5ef7c2bdd0fe30d6c9e5548721a4251a5e8c97'
             'b9f1428ca2305bf30b109507ff335fa00bce5a7ce0434b50acd26ad7c47dd5bd'
             '12df04bccbf674db1eef7a519a28987927b5e9c107b1dc386686f05e64f49a97')
 
