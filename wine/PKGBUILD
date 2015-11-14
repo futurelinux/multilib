@@ -1,14 +1,12 @@
 pkgname=wine
-pkgver=1.7.54
+pkgver=1.7.55
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
-source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgver.tar.bz2
-        30-win32-aliases.conf
-        https://github.com/wine-compholio/wine-staging/archive/v${pkgver}.tar.gz)
+source=(https://dl.winehq.org/wine/source/1.7/$pkgname-$_pkgver.tar.bz2
+        30-win32-aliases.conf)
 
-md5sums=('155bbbed0465e8d56d5e6cb14a51fb6e'
-         '1ff4e467f59409272088d92173a0f801'
-         'a33b2975dca2468dd83b84bb844d666d')
+md5sums=('161b37f57ed21508d9171df664ff5e13'
+         '1ff4e467f59409272088d92173a0f801')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
@@ -96,14 +94,6 @@ prepare() {
   # ncurses fix
   sed -i 's|libncurses|libncursesw|g' "$srcdir/$pkgname/configure"
   sed -i 's|lncurses|lncursesw|g' "$srcdir/$pkgname/configure"
-
-
-  cd $pkgname
-  for _patch in $(ls $srcdir/wine-staging-${pkgver}/patches/winepulse-PulseAudio_Support/*.patch) ; do
-    patch -p1 < $_patch
-  done
-  
-  autoreconf -vfi
   
   # These additional CPPFLAGS solve FS#27662 and FS#34195
   export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
