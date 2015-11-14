@@ -5,9 +5,9 @@
 
 _pkgbasename=libpng
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.17
-_apngver=1.6.17
-_libversion=17
+pkgver=1.6.19
+_apngver=1.6.19
+_libversion=16
 pkgrel=1
 pkgdesc="A collection of routines used to create PNG format graphics files (32-bit)"
 arch=('x86_64')
@@ -17,10 +17,10 @@ depends=('lib32-zlib' $_pkgbasename=$pkgver 'sh')
 makedepends=(gcc-multilib)
 options=('!libtool')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.xz"{,.asc}
-        "http://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-${_apngver}-apng.patch.gz")
-md5sums=('430a9b76b78533235cd4b9b26ce75c7e'
+        "http://downloads.sourceforge.net/sourceforge/apng/libpng-${_apngver}-apng.patch.gz")
+md5sums=('1e6a458429e850fc93c1f3b6dc00a48f'
          'SKIP'
-         'f68d34f10bcc7f43b8c3dce5708e1933')
+         'fed59de43c7968773bb7f2b34b428917')
 validpgpkeys=(8048643BA2C840F4F92A195FF54984BFA16C640F)
 
 build() {
@@ -31,8 +31,8 @@ build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
   # Add animated PNG (apng) support
-  # see http://sourceforge.net/projects/libpng-apng/
-  patch -p1 -i "${srcdir}/libpng-${_apngver}-apng.patch"
+  # see http://sourceforge.net/projects/apng/
+  patch -Np0 -i "${srcdir}/libpng-${_apngver}-apng.patch"
 
   ./configure --prefix=/usr --libdir=/usr/lib32 --program-suffix=-32 --disable-static
   make
