@@ -2,7 +2,7 @@
 
 _pkgbasename=pixman
 pkgname=lib32-$_pkgbasename
-pkgver=0.32.6
+pkgver=0.32.8
 pkgrel=1
 pkgdesc="Pixman library (32-bit)"
 arch=('x86_64')
@@ -10,9 +10,9 @@ url="http://xorg.freedesktop.org"
 license=('custom')
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
-options=('!libtool')
+checkdepends=('lib32-libpng')
 source=(http://xorg.freedesktop.org/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('8a9e8f14743a39cf303803f369c1f344')
+sha1sums=('5c57045622265b877c9bf02d531973eadf942140')
 
 build() {
   export CC="gcc -m32"
@@ -20,10 +20,13 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  ./configure --prefix=/usr \
-              --libdir=/usr/lib32 \
-              --disable-static
+  ./configure --prefix=/usr --libdir=/usr/lib32 --disable-static
   make
+}
+
+check() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  make check
 }
 
 package() {

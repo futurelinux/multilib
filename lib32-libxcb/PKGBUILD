@@ -5,20 +5,19 @@
 
 _pkgbasename=libxcb
 pkgname=lib32-$_pkgbasename
-pkgver=1.11
+pkgver=1.11.1
 pkgrel=1
 pkgdesc="X11 client-side library (32-bit)"
 arch=(x86_64)
 url="http://xcb.freedesktop.org/"
-depends=('lib32-libxdmcp' 'lib32-libxau'
-         $_pkgbasename=$pkgver)
-makedepends=('pkg-config' 'libxslt' 'python3' 'gcc-multilib' 'libtool-multilib'
+depends=('lib32-libxdmcp' 'lib32-libxau' $_pkgbasename=$pkgver)
+makedepends=('pkg-config' 'libxslt' 'python3' 'xorg-util-macros' 'gcc-multilib'
              'autoconf')
 conflicts=('libx11<1.1.99.2')
 license=('custom')
 source=(${url}/dist/${_pkgbasename}-${pkgver}.tar.bz2
         libxcb-1.1-no-pthread-stubs.patch)
-sha256sums=('03635d70045b9ede90778e67516135828a57de87ac508f987024f43c03620ff7'
+sha256sums=('b720fd6c7d200e5371affdb3f049cc8f88cff9aed942ff1b824d95eedbf69d30'
             '3923bcb1930b851012968435909597d8d5251c72153511cb2982636c97100cc3')
 
 prepare() {
