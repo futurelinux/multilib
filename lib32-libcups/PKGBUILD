@@ -1,23 +1,15 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libcups
 pkgname=lib32-$_pkgbasename
-pkgver=2.1.0
+pkgver=2.1.2
 pkgrel=1
 pkgdesc="The CUPS Printing System - client libraries (32-bit)"
 arch=('x86_64')
 license=('GPL')
 url="http://www.cups.org/"
-depends=(lib32-krb5 lib32-libtiff lib32-libpng lib32-gnutls $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib)
-source=(#ftp://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2
-http://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2{,.sig})
-md5sums=('c4e57a66298bfdba66bb3d5bedd317a4'
-         'SKIP')
-validpgpkeys=(3737FD0D0E63B30172440D2DDBA3A7AB08D76223)
+depends=('lib32-krb5' 'lib32-libtiff' 'lib32-libpng' 'lib32-gnutls' $_pkgbasename=$pkgver)
+makedepends=('lib32-gcc-libs')
+source=(http://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2)
+md5sums=('b3ba0ca676d56857bbd9b182ef4b14b3')
 
 build() {
   export CC="gcc -m32"
@@ -42,4 +34,3 @@ package() {
   make BUILDROOT=${pkgdir} install-libs
   rm -rf "$pkgdir/usr/lib"
 }
-
