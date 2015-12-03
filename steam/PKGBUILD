@@ -1,5 +1,5 @@
 pkgname=steam
-pkgver=1.0.0.50
+pkgver=1.0.0.51
 pkgrel=1
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
@@ -22,7 +22,7 @@ install=steam.install
 source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgname}_$pkgver.tar.gz"
         'lib32-flashplugin-path.patch'
         'alsa_sdl_audiodriver.patch')
-md5sums=('2fab57a606705012a4f800a28670dc3a'
+md5sums=('eb4eeb7b7088f7434d65a09c768f266b'
          '1d83a1df55d677f35ce415e0750f4448'
          'ac0e03d70f1101331598b2b32ed9bac3')
 
