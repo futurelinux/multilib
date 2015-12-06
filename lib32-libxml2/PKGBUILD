@@ -5,17 +5,17 @@
 
 _pkgbasename=libxml2
 pkgname=lib32-$_pkgbasename
-pkgver=2.9.1
+pkgver=2.9.3
 pkgrel=1
 pkgdesc="XML parsing library, version 2 (32-bit)"
 arch=(x86_64)
 license=('custom')
 depends=('lib32-zlib>=1.2.4' 'lib32-readline>=6.1' 'lib32-ncurses>=5.7' $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib)
+makedepends=('lib32-gcc-libs')
 options=('!libtool')
 url="http://www.xmlsoft.org/"
 source=(ftp://ftp.xmlsoft.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-md5sums=('9c0cfef285d5c4a5c80d00904ddab380')
+md5sums=('daece17e045f1c107610e137ab50c179')
 
 build() {
   export CC="gcc -m32"
@@ -25,7 +25,7 @@ build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
   autoreconf -fi
-  ./configure --prefix=/usr --with-threads --with-history --libdir=/usr/lib32
+  ./configure --prefix=/usr --with-threads --with-history --libdir=/usr/lib32 --without-lzma
   make
 }
 
