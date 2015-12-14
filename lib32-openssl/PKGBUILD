@@ -1,6 +1,6 @@
 _pkgbasename=openssl
 pkgname=lib32-$_pkgbasename
-_ver=1.0.1p
+_ver=1.0.1q
 # use a pacman compatible version scheme
 pkgver=${_ver/[a-z]/.${_ver//[0-9.]/}}
 pkgrel=1
@@ -10,13 +10,13 @@ url='https://www.openssl.org'
 license=('custom:BSD')
 depends=('lib32-zlib' "$_pkgbasename=$pkgver")
 optdepends=('ca-certificates')
-makedepends=('gcc-multilib')
+makedepends=('lib32-gcc-libs')
 options=('!makeflags')
 source=("https://www.openssl.org/source/${_pkgbasename}-${_ver}.tar.gz"
         "https://www.openssl.org/source/${_pkgbasename}-${_ver}.tar.gz.asc"
         'no-rpath.patch'
         'ca-dir.patch')
-md5sums=('7563e92327199e0067ccd0f79f436976'
+md5sums=('54538d0cdcb912f9bc2b36268388205e'
          'SKIP'
          'dc78d3d06baffc16217519242ce92478'
          '3bf51be3a1bbd262be46dc619f92aa90')
