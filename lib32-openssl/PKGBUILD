@@ -1,6 +1,6 @@
 _pkgbasename=openssl
 pkgname=lib32-$_pkgbasename
-_ver=1.0.1q
+_ver=1.0.2e
 # use a pacman compatible version scheme
 pkgver=${_ver/[a-z]/.${_ver//[0-9.]/}}
 pkgrel=1
@@ -16,7 +16,7 @@ source=("https://www.openssl.org/source/${_pkgbasename}-${_ver}.tar.gz"
         "https://www.openssl.org/source/${_pkgbasename}-${_ver}.tar.gz.asc"
         'no-rpath.patch'
         'ca-dir.patch')
-md5sums=('54538d0cdcb912f9bc2b36268388205e'
+md5sums=('5262bfa25b60ed9de9f28d5d52d77fc5'
          'SKIP'
          'dc78d3d06baffc16217519242ce92478'
          '3bf51be3a1bbd262be46dc619f92aa90')
