@@ -1,11 +1,11 @@
 pkgname=wine
-pkgver=1.7.55
+pkgver=1.8
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
-source=(https://dl.winehq.org/wine/source/1.7/$pkgname-$_pkgver.tar.bz2
+source=(https://dl.winehq.org/wine/source/1.8/$pkgname-$_pkgver.tar.bz2
         30-win32-aliases.conf)
 
-md5sums=('161b37f57ed21508d9171df664ff5e13'
+md5sums=('96b51a2f2ae727802d71095354e69fef'
          '1ff4e467f59409272088d92173a0f801')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
@@ -31,7 +31,7 @@ depends=(
   desktop-file-utils
 )
 
-makedepends=(autoconf ncurses bison perl fontforge flex prelink
+makedepends=(autoconf ncurses bison perl fontforge flex
   giflib         lib32-giflib
   libpng         lib32-libpng
   gnutls         lib32-gnutls
