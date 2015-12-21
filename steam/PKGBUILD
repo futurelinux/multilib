@@ -1,10 +1,12 @@
 pkgname=steam
 pkgver=1.0.0.51
-pkgrel=2
+pkgrel=3
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
 license=('custom')
+depends=('kde-baseapps-kdialog' 'bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
+    'dbus' 'freetype2'  'gdk-pixbuf2' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss')
 optdepends=(
       'lib32-mesa-dri: for open source driver users'
       'lib32-catalyst-utils: for AMD Catalyst users'
@@ -49,9 +51,9 @@ prepare() {
 }
 
 package() {
-  # Install license
   make -C "$pkgname" DESTDIR="$pkgdir" install
   
+# Install license
   install -Dm644 "$pkgdir/usr/share/doc/steam/steam_install_agreement.txt" "$pkgdir/usr/share/licenses/steam/LICENSE"
 
   # blank steamdeps because apt-get
