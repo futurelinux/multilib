@@ -1,6 +1,6 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
-pkgver=227
+pkgver=228
 pkgrel=1
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
@@ -9,13 +9,13 @@ license=('GPL2' 'LGPL2.1' 'MIT')
 depends=('lib32-libgcrypt' 'lib32-xz' 'lib32-libcap' 'lib32-acl' 'lib32-libidn' 'lib32-gcc-libs' "$_pkgbasename=$pkgver")
 makedepends=('lib32-gcc-libs' 'gcc-multilib' 'lib32-libidn' 'lib32-glib2' 'intltool' 'gperf'
              'lib32-curl' 'lib32-bzip2' 'git')
-source=("git://github.com/systemd/systemd.git#tag=v$pkgver")
+source=("git+https://github.com/systemd/systemd.git#tag=v$pkgver")
 md5sums=('SKIP')
 
 prepare() {
   cd "$_pkgbasename"
-  
-   ./autogen.sh
+
+  ./autogen.sh
 }
 
 build() {
@@ -36,13 +36,13 @@ build() {
     --disable-audit \
     --disable-tests \
     --disable-ima \
-    --disable-kdbus \
     --disable-seccomp \
     --disable-pam \
     --disable-kmod \
     --disable-networkd \
     --disable-blkid \
     --disable-libiptc \
+    --disable-lz4 \
     --disable-manpages \
     --without-python \
     --disable-libcryptsetup \
