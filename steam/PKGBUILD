@@ -1,14 +1,12 @@
 pkgname=steam
 pkgver=1.0.0.51
-pkgrel=3
+pkgrel=4
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
 license=('custom')
-depends=('kde-baseapps-kdialog' 'bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
-    'dbus' 'freetype2'  'gdk-pixbuf2' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss')
 optdepends=(
-      'lib32-mesa-dri: for open source driver users'
+      'lib32-mesa: for open source driver users'
       'lib32-catalyst-utils: for AMD Catalyst users'
       'lib32-nvidia-utils: for NVIDIA proprietary blob users'
       'lib32-primus: for NVIDIA + Bumblebee users'
@@ -26,7 +24,7 @@ sha256sums=('bf766db05fcc3a8079e7e514accfbd2503813a3c70ff8336aa93e554ed7719be'
          '87b9e9f74709a43fb8424d7bb3074fb576f72c56d78a045e3b4ed4719600b0fa'
          '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
          'ae933bda073e11ad6ae61d0ede0b472ba598df251c30690592a61c11779c7ee4'
-         'cfc2f1042cc890cbd0c0e0396fb10a836cacf3cfc97124a8dc78b54696a142a8'
+         'b13ee5fe50494b57e712118605a942e4b907a129b6bc5d7223a0f5a223ba1550'
          'ab6efa7c0aaf408f51eee8e1d83ec07004730848bdef3ab9e091847fb915f240')
 
 
@@ -34,6 +32,7 @@ prepare() {
     patch -d "$pkgname" -Np1 -i "$srcdir/lib32-flashplugin-path.patch"
     patch -d "$pkgname" -Np1 -i "$srcdir/alsa_sdl_audiodriver.patch"
     
+    ##patches for to be able to approve the 'install agreement' other than through the terminal
     patch -d "$pkgname" -Np1 -i "$srcdir/steam.patch"
     
     # patch steam.sh that is inside an archive
@@ -51,6 +50,13 @@ prepare() {
 }
 
 package() {
+  depends=(
+  'bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
+  'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-font' 'kde-baseapps-kdialog'
+  'python3' 'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib'
+  'lib32-libgl' 'lib32-libgcrypt' 'lib32-nss' 'lib32-openal' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss' 'lib32-libxshmfence')
+
+
   make -C "$pkgname" DESTDIR="$pkgdir" install
   
 # Install license

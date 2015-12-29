@@ -1,5 +1,5 @@
-*** a/steam.sh	2015-05-05 22:50:40.000000000 +0200
---- b/steam.sh	2015-10-17 15:00:23.000000000 +0200
+*** a/steam.sh	Tue Nov 17 21:07:52 2015
+--- b/steam.sh	Thu Dec 24 12:40:13 2015
 ***************
 *** 55,61 ****
   	--error)
@@ -52,43 +52,9 @@
   			answer=accepted
   		else
   			answer=declined
-! 			kdialog --textbox $LICENSE 650 500 --title=$"Steam Install Agreement"
+! 			
   			STATUS=$?
-! 	
+! 			kdialog --textbox $LICENSE 650 500 --title=$"Steam Install Agreement"
   			case $STATUS in
   			0)	# The agreement was accepted
   				answer=accepted
-***************
-*** 314,320 ****
-  
-  function download_archive()
-  {
-! 	curl -#Of "$2" 2>&1 | tr '\r' '\n' | sed 's,[^0-9]*\([0-9]*\).*,\1,' | zenity --progress --auto-close --no-cancel --width 400 --text="$1\n$2"
-  	return ${PIPESTATUS[0]}
-  }
-  
---- 311,317 ----
-  
-  function download_archive()
-  {
-! 	curl -#Of "$2" 2>&1 | tr '\r' '\n' | sed 's,[^0-9]*\([0-9]*\).*,\1,' | kdialog --progressbar "$1\n$2" start
-  	return ${PIPESTATUS[0]}
-  }
-  
-***************
-*** 332,338 ****
-  		;;
-  	esac
-  	if [ "${BF}" ]; then
-! 		tar --blocking-factor=${BF} --checkpoint=1 --checkpoint-action='exec=echo $TAR_CHECKPOINT' -xf "$2" -C "$3" | zenity --progress --auto-close --no-cancel --width 400 --text="$1"
-  		return ${PIPESTATUS[0]}
-  	else
-  		echo "$1"
---- 329,335 ----
-  		;;
-  	esac
-  	if [ "${BF}" ]; then
-! 		tar --blocking-factor=${BF} --checkpoint=1 --checkpoint-action='exec=echo $TAR_CHECKPOINT' -xf "$2" -C "$3" | kdialog --progressbar "$1" start
-  		return ${PIPESTATUS[0]}
-  	else
-  		echo "$1"
