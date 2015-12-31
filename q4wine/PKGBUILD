@@ -1,32 +1,22 @@
-# maintainer (x86_64): Giuseppe calà <jiveaxe@gmail.com>
-
 pkgname=q4wine
-<<<<<<< HEAD
-pkgver=1.1_r1
-=======
-pkgver=1.1_r2
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+pkgver=1.2_r1
 pkgrel=1
-pkgdesc="A Qt4 GUI for Wine"
+pkgdesc="Qt GUI for Wine"
 arch=("x86_64")
 url="http://sourceforge.net/projects/${pkgname}/"
 license=("GPL3")
-depends=("qt" "wine" "sqlite3" "which" "icoutils")
-makedepends=("cmake")
+depends=("qt5-base" "wine" "sqlite3" "which" "icoutils" "fuseiso")
+makedepends=("cmake" "qt5-tools")
 optdepends=("winetricks")
 options=('!emptydirs')
 source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver/_/-}.tar.bz2")
-<<<<<<< HEAD
-md5sums=('59ce6b2036a99217d572536a4f9c2555')
-=======
-md5sums=('56675d0a3494e0e91b235c8821e53961')
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+md5sums=('56725dd863463a68a39b090e6f80402a')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver/_/-}
 
   cmake -DCMAKE_INSTALL_PREFIX=/usr \
-        -DWITH_WINETRIKS=ON \
+        -DQT5=ON \
         -DLIBS_ENTRY_PATH=/usr/lib/$pkgname .
   make
 }
