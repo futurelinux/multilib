@@ -3,24 +3,29 @@
 _pkgbasename=pulseaudio
 pkgname=lib32-libpulse
 pkgdesc="A featureful, general-purpose sound server. (32-bit client libraries)"
-pkgver=6.0
+pkgver=7.1
 pkgrel=1
-arch=('x86_64')
-url="http://pulseaudio.org/"
-license=('GPL' 'LGPL')
-depends=(lib32-{dbus-core,xcb-util,json-c,systemd}
-         lib32-lib{asyncns,cap,xtst,sm,sndfile}
-         'webrtc-audio-processing' 'systemd'
-         "$_pkgbasename=${pkgver}")
-makedepends=('pkgconfig' 'gcc-multilib' 'lib32-libtool' 'intltool'
-		         'lib32-glib2' 'lib32-speex')
+arch=(x86_64)
+url="http://www.freedesktop.org/wiki/Software/PulseAudio"
+license=(LGPL)
+depends=(lib32-libdbus lib32-json-c lib32-systemd
+         lib32-libasyncns lib32-libcap lib32-libxtst lib32-libsm lib32-libsndfile
+         $_pkgbasename)
+makedepends=(gcc-multilib libtool-multilib intltool lib32-glib2 lib32-speexdsp git)
 optdepends=('lib32-alsa-plugins: ALSA support')
 options=(!emptydirs !libtool)
-source=("http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${pkgver}.tar.xz")
-sha256sums=('b50640e0b80b1607600accfad2e45aabb79d379bf6354c9671efa2065477f6f6')
+source=("http://freedesktop.org/software/pulseaudio/releases/pulseaudio-$pkgver.tar.xz")
+sha256sums=('e667514a28328f92aceea754a224a0150dddfe7e9a71b4c6d31489220153b9d9')
+
+_pulsever=$pkgver
+[[ $_pulsever = *.*.* ]] && _pulsever=${_pulsever%.*}
 
 _libs="libpulse.la libpulse-simple.la libpulse-mainloop-glib.la"
-_pkglibs="libpulsecommon-${pkgver}.la libpulsedsp.la"
+_pkglibs="libpulsecommon-${_pulsever}.la libpulsedsp.la"
+
+prepare() {
+  cd pulseaudio-$pkgver
+}
 
 build() {
   cd pulseaudio-$pkgver
@@ -36,16 +41,16 @@ build() {
     --localstatedir=/var \
     --disable-hal \
     --disable-tcpwrap \
-    --disable-rpath \
-    --disable-bluez5-ofono-headset \
-    --enable-bluez5-native-headset \
     --disable-bluez4 \
-    --disable-default-build-tests
+    --disable-samplerate \
+    --disable-rpath \
+    --disable-default-build-tests \
+    DATADIRNAME=share
 
   # fight unused direct deps
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
-  make -C src ${_libs} ${_pkglibs}
+  make -C src $_libs $_pkglibs
 }
 
 package() {
