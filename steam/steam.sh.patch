@@ -1,5 +1,5 @@
-*** a/steam.sh	Tue Nov 17 21:07:52 2015
---- b/steam.sh	Thu Dec 24 12:40:13 2015
+*** a/steam.sh	Thu Jan  7 23:54:26 2016
+--- b/steam.sh	Fri Jan  8 00:08:14 2016
 ***************
 *** 55,61 ****
   	--error)
@@ -35,26 +35,40 @@
   			tmpfile="$(mktemp || echo "/tmp/steam_message.txt")"
   			echo -e "$*" >"$tmpfile"
 ***************
-*** 97,108 ****
+*** 97,114 ****
   			answer=accepted
   		else
   			answer=declined
 ! 			output=$(zenity --width 650 --height 500 --text-info --title=$"Steam Install Agreement" --filename="$LICENSE" --checkbox=$"I have read and accept these terms." 2>&1)
   			STATUS=$?
-! 			if echo $output | grep "status 1:" >/dev/null; then
-! 				# Zenity couldn't launch a window
-! 				STATUS=-1
-! 			fi
+- 			if echo $output | grep "status 1:" >/dev/null; then
+- 				# Zenity couldn't launch a window
+- 				STATUS=-1
+- 			fi
   			case $STATUS in
   			0)	# The agreement was accepted
   				answer=accepted
---- 97,105 ----
+  				;;
+  			1)	# The agreement was declined
+  				;;
+  			*)	# zenity wasn't available, try a fallback
+  				tmpfile="$(mktemp || echo "/tmp/steam_message.txt")"
+  				command="more \"$LICENSE\" || cat \"$LICENSE\"; echo -n $'Do you accept the terms of this agreement? [y/N]: '; read input; if [ x\$input = xy -o x\$input = xY ]; then echo accepted >\"$tmpfile\"; fi"
+--- 97,113 ----
   			answer=accepted
   		else
   			answer=declined
 ! 			
-  			STATUS=$?
 ! 			kdialog --textbox $LICENSE 650 500 --title=$"Steam Install Agreement"
+  			STATUS=$?
   			case $STATUS in
   			0)	# The agreement was accepted
   				answer=accepted
+  				;;
+  			1)	# The agreement was declined
+  				;;
++                         2)	# The agreement was canceled
++ 				;;
+  			*)	# zenity wasn't available, try a fallback
+  				tmpfile="$(mktemp || echo "/tmp/steam_message.txt")"
+  				command="more \"$LICENSE\" || cat \"$LICENSE\"; echo -n $'Do you accept the terms of this agreement? [y/N]: '; read input; if [ x\$input = xy -o x\$input = xY ]; then echo accepted >\"$tmpfile\"; fi"
