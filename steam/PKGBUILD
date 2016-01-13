@@ -1,24 +1,18 @@
 pkgname=steam
 pkgver=1.0.0.51
-pkgrel=5
+pkgrel=6
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
 license=('custom')
 optdepends=('lib32-flashplugin: for flash video'
             'freshplayerplugin: alternative flash video support'
-            'lib32-alsa-plugins: for pulseaudio on some games')
+            'lib32-alsa-plugins: for pulseaudio on some games'
+            'lib32-mesa: for open source driver users'
+            'lib32-catalyst-utils: for AMD Catalyst users'
+            'lib32-nvidia-utils: for NVIDIA proprietary blob users'
+            'lib32-primus: for NVIDIA + Bumblebee users')
             
-# check kind of graphic card
-    if [ -f /usr/bin/nvidia-settings ]; then
-optdepends+=('lib32-nvidia-utils: for NVIDIA proprietary blob users'
-             'lib32-primus: for NVIDIA + Bumblebee users')
-   elif [ -f /usr/bin/aticonfig ]; then
-optdepends+=('lib32-catalyst-utils: for AMD Catalyst users')
-else
-optdepends+=('lib32-mesa: for open source driver users')
-fi
-
 install=steam.install  
 source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgname}_$pkgver.tar.gz"
         'alsa_sdl_audiodriver.patch'
@@ -29,7 +23,7 @@ sha256sums=('bf766db05fcc3a8079e7e514accfbd2503813a3c70ff8336aa93e554ed7719be'
          '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
          'ae933bda073e11ad6ae61d0ede0b472ba598df251c30690592a61c11779c7ee4'
          '7d33435937e553a6cb1e6918d1024d96c6081e8df560ea5bd1252146cfe670a8'
-         '0459f7b1eea483d1ae0690978654ca29b2dddcae10e1508e4490873c38a7fca9')
+         '9b54b38abd3b8b449a445069d21f042b542ca5c4edd82908b5f68c7377dd7f19')
 
 
 prepare() {
@@ -60,8 +54,8 @@ package() {
   depends=(
   'bash' 'xterm' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
   'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-font' 'kde-baseapps-kdialog'
-  'python3' 'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib'
-  'lib32-libgl' 'lib32-libgcrypt' 'lib32-nss' 'lib32-openal' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss' 'lib32-libxshmfence')
+  'python3' 'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib' 'lib32-libgl'
+  'lib32-libgcrypt' 'lib32-nss' 'lib32-openal' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss' 'lib32-libxshmfence')
 
   make -C "$pkgname" DESTDIR="$pkgdir" install
   

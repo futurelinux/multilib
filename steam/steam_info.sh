@@ -7,7 +7,7 @@
 # also a "don't show this message again" checkbox is present
 # then start steam normally
 #
-# if you are a Catalyst user this hack will be used to make steam works for you
+# then a hack will be used to make steam works
 # see here https://chakraos.org/wiki/index.php?title=Steam#Missing_Direct_Rendering
 
 kdialog --dontagain steam_warnings_chakra:nofilemsg --msgbox \
@@ -15,4 +15,5 @@ kdialog --dontagain steam_warnings_chakra:nofilemsg --msgbox \
 For help visit the wiki page of Steam https://chakraos.org/wiki/index.php?title=Steam
 or ask for help in the forum"
 
-exec /usr/bin/steam %U
+
+LD_PRELOAD="/usr/lib/libstdc++.so.6 /usr/lib32/libstdc++.so.6 /usr/lib/libgcc_s.so.1 /usr/lib32/libgcc_s.so.1" /usr/bin/steam %U
