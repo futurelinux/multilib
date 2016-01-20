@@ -1,10 +1,7 @@
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=sdl_mixer
 pkgname=lib32-$_pkgbasename
 pkgver=1.2.12
-pkgrel=3
+pkgrel=4
 pkgdesc="A simple multi-channel audio mixer (32-bit)"
 arch=('x86_64')
 url="http://www.libsdl.org/projects/SDL_mixer/"
