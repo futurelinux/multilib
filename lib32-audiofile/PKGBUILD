@@ -1,10 +1,7 @@
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# contributor (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=audiofile
 pkgname=lib32-$_pkgbasename
 pkgver=0.3.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Silicon Graphics Audio File Library (32-bit)"
 arch=('x86_64')
 url="http://www.68k.org/~michael/audiofile/"
