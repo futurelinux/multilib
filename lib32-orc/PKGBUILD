@@ -1,13 +1,6 @@
-#
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# Maintainer: kote <koteccr at gmail dot com>
-# Arch linux maintainer:
-# Maintainer: SpepS <dreamspepser at yahoo dot it>
-
 _pkgbasename=orc
 pkgname=lib32-${_pkgbasename}
-pkgver=0.4.23
+pkgver=0.4.24
 pkgrel=1
 pkgdesc="The Oild Runtime Compiler. Multilib"
 arch=('x86_64')
@@ -16,7 +9,7 @@ url='http://code.entropywave.com/projects/orc/'
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('valgrind')
 source=("http://gstreamer.freedesktop.org/data/src/orc/orc-${pkgver}.tar.xz")
-sha256sums=('767eaebce2941737b43368225ec54598b3055ca78b4dc50c4092f5fcdc0bdfe7')
+md5sums=('9e793ec34c0e20339659dd4bbbf62135')
 
 build() {
   cd orc-${pkgver}
