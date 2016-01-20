@@ -1,12 +1,7 @@
-# Lib32 packages for Chakra, part of The Chakra Project
-#
-# Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
-# Contributor from AUR: josephgbr <rafael.f.f1@gmail.com>
-
 _pkgbasename=portaudio
 pkgname=lib32-${_pkgbasename}
 pkgver=19_20140130
-pkgrel=1
+pkgrel=2
 pkgdesc="A free, cross platform, open-source, audio I/O library. (32 bit)"
 arch=('x86_64')
 url="http://www.portaudio.com"
