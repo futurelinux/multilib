@@ -1,14 +1,8 @@
-
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): AlmAck <AlmAck[at]chakraos[dot]org>
-
 _pkgbasename=fontconfig
 pkgname=lib32-$_pkgbasename
 pkgver=2.11.1
-pkgrel=1
-_ubuntu_diff_version=${pkgver}-0ubuntu3
+pkgrel=2
+_ubuntu_diff_version=${pkgver}-0ubuntu6
 pkgdesc="A library for configuring and customizing font access (32-bit)"
 arch=('x86_64')
 url="http://www.fontconfig.org/release/"
@@ -21,7 +15,7 @@ replaces=("${pkgname}-ubuntu")
 source=("http://www.fontconfig.org/release/$_pkgbasename-$pkgver.tar.bz2"
         "http://archive.ubuntu.com/ubuntu/pool/main/f/fontconfig/fontconfig_${_ubuntu_diff_version}.debian.tar.xz")
 md5sums=('824d000eb737af6e16c826dd3b2d6c90'
-         'c445273d4c1e8d4fa3cc9542d06b486f')
+         '5d8e082f4d36d6c82853f6b6a5f6997a')
 
 build() {
   export CC="gcc -m32"
