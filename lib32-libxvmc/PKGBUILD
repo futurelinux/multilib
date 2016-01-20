@@ -1,20 +1,17 @@
 # Part of the X.org group
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# contributor (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=libxvmc
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.8
+pkgver=1.0.9
 pkgrel=1
 pkgdesc="X11 Video Motion Compensation extension library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libxv' $_pkgbasename=$pkgver)
-makedepends=('pkgconfig' gcc-multilib)
-options=('!libtool')
+makedepends=('pkgconfig' 'lib32-gcc-libs')
 source=(${url}/releases/individual/lib/libXvMC-${pkgver}.tar.bz2)
-sha1sums=('b0fa592cd615aa41290cb8d6f97e6ed53dd21bca')
+sha1sums=('6fc54831734e781b2848b6f7e3bcc4f752665f21')
 
 build() {
   export CC="gcc -m32"
