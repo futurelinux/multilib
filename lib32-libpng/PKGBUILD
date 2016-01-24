@@ -1,12 +1,7 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-
 _pkgbasename=libpng
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.19
-_apngver=1.6.19
+pkgver=1.6.21
+_apngver=1.6.21
 _libversion=16
 pkgrel=1
 pkgdesc="A collection of routines used to create PNG format graphics files (32-bit)"
@@ -16,12 +11,10 @@ license=('custom')
 depends=('lib32-zlib' $_pkgbasename=$pkgver 'sh')
 makedepends=(gcc-multilib)
 options=('!libtool')
-source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.xz"{,.asc}
+source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.xz"
         "http://downloads.sourceforge.net/sourceforge/apng/libpng-${_apngver}-apng.patch.gz")
-md5sums=('1e6a458429e850fc93c1f3b6dc00a48f'
-         'SKIP'
-         'fed59de43c7968773bb7f2b34b428917')
-validpgpkeys=(8048643BA2C840F4F92A195FF54984BFA16C640F)
+md5sums=('3bacb4728f6694a64ad9052769d6a4ce'
+         '7c44c3950c1886115c33ee2ab4d8417d')
 
 build() {
   export CC="gcc -m32"
