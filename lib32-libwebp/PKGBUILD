@@ -1,20 +1,15 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer: Giuseppe Calà <jiveaxe@gmail.com>
-
 _pkgbasename=libwebp
 pkgname=lib32-$_pkgbasename
-pkgver=0.3.1
+pkgver=0.5.0
 pkgrel=1
 pkgdesc="WebP library and conversion tools (32-bit)."
-arch=('x86_64' 'i686')
+arch=('x86_64')
 url="http://code.google.com/intl/en/speed/webp/"
 license=('BSD')
 depends=('lib32-libpng' 'lib32-libjpeg' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
-options=('!libtool')
-source=("http://webp.googlecode.com/files/$_pkgbasename-$pkgver.tar.gz")
-md5sums=('dc862bb4006d819b7587767a9e83d31f')
+source=("http://downloads.webmproject.org/releases/webp/$_pkgbasename-$pkgver.tar.gz")
+md5sums=('ba81eb9bf23e3c69a2f5cc8dcdb5938f')
 
 build() {
   cd "$srcdir/$_pkgbasename-$pkgver"
