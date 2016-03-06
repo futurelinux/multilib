@@ -1,7 +1,7 @@
 _pkgbasename=qt
 pkgname="lib32-${_pkgbasename}"
 pkgver=4.8.7
-pkgrel=2
+pkgrel=3
 pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
 url='http://www.qt.io'
@@ -9,13 +9,15 @@ license=('GPL3' 'LGPL')
 depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gstreamer0.10,gstreamer0.10-base}
          lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi,xml2}
          "${_pkgbasename}=${pkgver}")
-makedepends=('cups' 'gcc-multilib' lib32-{mesa,libcups,libxfixes} 'lib32-icu')
+makedepends=('cups' 'gcc-multilib' lib32-{mesa,libcups,libxfixes} 'lib32-icu' 'clang')
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
 source=("http://download.qt.io/official_releases/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
         "kubuntu_14_systemtrayicon.diff")
 md5sums=('d990ee66bf7ab0c785589776f35ba6ad'
          'a523644faa8f98a73f55c4aa23c114a6')
-
+ 
+export CC='clang'
+export CXX='clang++'
 prepare() {
   cd "${srcdir}/${_pkgfqn}"
   patch -Np1 -i ../kubuntu_14_systemtrayicon.diff
