@@ -1,12 +1,14 @@
 pkgname=wine
-pkgver=1.9.4
+pkgver=1.9.5
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
 source=(https://dl.winehq.org/wine/source/1.9/$pkgname-$_pkgver.tar.bz2
-        30-win32-aliases.conf)
+        30-win32-aliases.conf
+        bug40253.patch)
 
-md5sums=('28e703edf86a9fb9f6b11bf61b9e0d1d'
-         '1ff4e467f59409272088d92173a0f801')
+md5sums=('c5f2f2e7dc2f0fe84d75833bc90ebd4f'
+         '1ff4e467f59409272088d92173a0f801'
+         '7df69e2e37637d57c8ec1ca034e18639')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
@@ -51,6 +53,7 @@ makedepends=(autoconf ncurses bison perl fontforge flex
   libxslt        lib32-libxslt
   jack           lib32-jack
   samba
+  gst-plugins-base-libs lib32-gst-plugins-base-libs
   opencl-headers
 )
 
@@ -73,6 +76,8 @@ optdepends=(
   libxslt         lib32-libxslt
   cups
   samba           dosbox
+  gst-plugins-base-libs lib32-gst-plugins-base-libs
+  opencl-headers
 )
 
 prepare() {
@@ -90,6 +95,8 @@ prepare() {
 
   # Allow ccache to work
   mv $pkgname-$_pkgver $pkgname
+  
+  sed 's|OpenCL/opencl.h|CL/opencl.h|g' -i $pkgname/configure*
 
   # ncurses fix
   sed -i 's|libncurses|libncursesw|g' "$srcdir/$pkgname/configure"
@@ -97,6 +104,10 @@ prepare() {
   
   # These additional CPPFLAGS solve FS#27662 and FS#34195
   export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
+  
+  cd $pkgname
+  # https://bugs.winehq.org/show_bug.cgi?id=40253
+  patch -p1 -i ../bug40253.patch
 }
 
 build() {
@@ -111,9 +122,8 @@ build() {
     --prefix=/usr \
     --libdir=/usr/lib \
     --with-x \
-    --without-gstreamer \
+    --with-gstreamer \
     --enable-win64
-    # Gstreamer was disabled for FS#33655
 
   make
 
@@ -130,12 +140,8 @@ build() {
   ../$pkgname/configure \
     --prefix=/usr \
     --with-x \
-    --without-gstreamer \
+    --with-gstreamer \
     "${_wine32opts[@]}"
-
-
-  # These additional flags solve FS#23277
-  make CFLAGS+="-mstackrealign -mincoming-stack-boundary=2" CXXFLAGS+="-mstackrealign -mincoming-stack-boundary=2"
 }
 
 package() {
