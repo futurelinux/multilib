@@ -5,7 +5,7 @@
 
 _pkgbasename=cracklib
 pkgname=lib32-$_pkgbasename
-pkgver=2.8.18
+pkgver=2.9.6
 pkgrel=1
 pkgdesc="Password Checking Library (32 bit)"
 arch=('x86_64')
@@ -14,8 +14,8 @@ license=('LGPL')
 depends=('lib32-glibc' 'lib32-zlib' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 options=('!libtool')
-source=(http://downloads.sourceforge.net/sourceforge/$_pkgbasename/$_pkgbasename-$pkgver.tar.gz)
-md5sums=('79053ad8bc714a44cd660cb12116211b')
+source=(https://github.com/cracklib/cracklib/releases/download/${_pkgbasename}-${pkgver}/${_pkgbasename}-${pkgver}.tar.gz)
+md5sums=('c52f463585d85924b28cdc1e373ae06d')
 
 build() {
   cd "$srcdir/$_pkgbasename-$pkgver"
