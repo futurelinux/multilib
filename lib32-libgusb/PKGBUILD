@@ -1,24 +1,21 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# Maintainer:  AlmAck <almack@chakra-project.org>
-# Contributor: jtts
-
 _pkgbasename=libgusb
 pkgname=lib32-$_pkgbasename
-pkgver=0.1.6
+pkgver=0.2.6
 pkgrel=1
 pkgdesc="GLib wrapper around libusb1 (32 bit)"
 arch=(x86_64)
 url="https://gitorious.org/gusb/"
 license=(LGPL2.1)
-depends=('lib32-systemd' 'lib32-libusb' $_pkgbasename=$pkgver)
+depends=('lib32-glib2' 'lib32-systemd' 'lib32-libusb' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib' 'gobject-introspection')
 source=(http://people.freedesktop.org/~hughsient/releases/$_pkgbasename-$pkgver.tar.xz)
-options=('!libtool')
-sha256sums=('900103ff24a851ef8395b992236ced0aedb4c265ef2264f6ad8349300095198b')
+sha256sums=('6f638bdbc4e77643c0a198a300e50b592ad326e56bddf359de15e04689209c06')
 
 build() {
   export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+  
   cd $_pkgbasename-$pkgver
   ./configure --prefix=/usr --disable-static --libdir=/usr/lib32
   make
