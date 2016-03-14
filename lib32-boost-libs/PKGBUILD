@@ -2,8 +2,9 @@
 # Contributor : Dan Vratil <dan@progdan.cz>
 # Contributor  : andy123 < ajs AT online DOT de >
 
-pkgname=lib32-boost-libs
-pkgver=1.55.0
+_pkgbasename=boost-libs
+pkgname=lib32-$_pkgbasename
+pkgver=1.60.0
 _boostver=${pkgver//./_}
 pkgrel=1
 url="http://www.boost.org"
@@ -11,18 +12,18 @@ arch=('x86_64')
 pkgdesc="Free peer-reviewed portable C++ source libraries - Runtime (32 bit)"
 license=('custom')
 groups=('lib32')
-depends=('lib32-bzip2' 'lib32-zlib' 'lib32-icu' 'lib32-gcc-libs')
-makedepends=('lib32-icu>=51.1' 'lib32-bzip2' 'lib32-zlib' 'gcc-multilib' 'python3' 'python2')
+depends=('lib32-bzip2' 'lib32-zlib' 'lib32-icu' 'lib32-gcc-libs' "$_pkgbasename=$pkgver")
+makedepends=('lib32-icu>=56.1' 'lib32-bzip2' 'lib32-zlib' 'gcc-multilib' 'python3' 'python2')
 source=(http://downloads.sourceforge.net/sourceforge/boost/boost_${_boostver}.tar.gz
         # upstream patches
-        log_fix_dump_avx2.patch)
-sha1sums=('61ed0e57d3c7c8985805bb0682de3f4c65f4b6e5'
-          '817a1573249e912dc20624f5883bb2d3b84bd278')
+        cuda_float128.patch::"https://github.com/boostorg/config/commit/a332112317450457c715675686386ec81214b863.patch")
+sha1sums=('ac74db1324e6507a309c5b139aea41af624c8110'
+          'bdc6486e0d90368bbfd872fed8ee3d3c73483933')
 
 prepare() {
-   cd "${srcdir}/boost_${_boostver}"
-   patch -Np0 < ${srcdir}/log_fix_dump_avx2.patch
-
+  cd "${srcdir}/boost_${_boostver}"
+  # fix https://svn.boost.org/trac/boost/ticket/11852
+  patch -p2 -i ../cuda_float128.patch
 }
 
 build() {
@@ -38,15 +39,15 @@ build() {
    local JOBS="$(sed -e 's/.*\(-j *[0-9]\+\).*/\1/' <<< ${MAKEFLAGS})"
 
    cd "${srcdir}/boost_${_boostver}"
-   
+
    ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=
 
    _bindir="bin.linuxx86_64"
 
    install -d -m 755 "${_stagedir}"/bin
-   install "${srcdir}"/boost_${_boostver}/tools/build/v2/engine/${_bindir}/b2 "${_stagedir}"/bin/b2
+   install "${srcdir}"/boost_${_boostver}/tools/build/src/engine/${_bindir}/b2 "${_stagedir}"/bin/b2
 
-   #boostbook is needed by quickbook
+   # boostbook is needed by quickbook
    install -d -m 755 "${_stagedir}"/share/boostbook
    cp -a tools/boostbook/{xsl,dtd} "${_stagedir}"/share/boostbook/
 
