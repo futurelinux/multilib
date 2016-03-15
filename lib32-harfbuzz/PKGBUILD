@@ -2,7 +2,7 @@
 
 _pkgbasename=harfbuzz
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.2
+pkgver=1.2.3
 pkgrel=1
 pkgdesc="OpenType text shaping engine. (32-bit)"
 arch=('x86_64')
@@ -11,7 +11,7 @@ license=('MIT')
 depends=('lib32-icu' 'lib32-glib2' 'lib32-freetype2' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 source=(http://www.freedesktop.org/software/harfbuzz/release/${_pkgbasename}-${pkgver}.tar.bz2)
-sha256sums=('4a2c5790bd3db7c3ca8c02e4858f2fd592df7932c1d2fa9f6b99acbce0f8461f')
+sha256sums=('8216d2404aaab7fde87be0365a90d64aa6c55928e104557cfcb37b54a096cb8c')
 
 build() {
   export CC="gcc -m32"
