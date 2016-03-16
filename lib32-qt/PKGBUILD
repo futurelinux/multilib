@@ -1,7 +1,7 @@
 _pkgbasename=qt
 pkgname="lib32-${_pkgbasename}"
 pkgver=4.8.7
-pkgrel=3
+pkgrel=4
 pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
 url='http://www.qt.io'
