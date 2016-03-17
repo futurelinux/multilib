@@ -5,32 +5,34 @@
 
 _pkgbasename=krb5
 pkgname=lib32-$_pkgbasename
-pkgver=1.11.3
+pkgver=1.14.1
 pkgrel=1
 pkgdesc="The Kerberos network authentication system (32-bit)"
 arch=('x86_64')
 url="http://web.mit.edu/kerberos/"
 license=('custom')
 depends=('lib32-e2fsprogs' 'lib32-libldap' 'lib32-keyutils' $_pkgbasename=$pkgver)
-makedepends=('perl' 'gcc-multilib')
+makedepends=('perl' 'lib32-gcc-libs')
 provides=('lib32-heimdal')
 replaces=('lib32-heimdal')
 conflicts=('lib32-heimdal')
-source=("http://web.mit.edu/kerberos/dist/${_pkgbasename}/1.11/${_pkgbasename}-${pkgver}-signed.tar"
+source=("http://web.mit.edu/kerberos/dist/${_pkgbasename}/1.14/${_pkgbasename}-${pkgver}.tar.gz"
         'krb5-config_LDFLAGS.patch')
-sha1sums=('df708a530a22ed09c7825742c108180319b10463'
+sha1sums=('f12dc3b8630fd1fefb7058cd782754489377308b'
           '09e478cddfb9d46d2981dd25ef96b8c3fd91e1aa')
 
 options=('!emptydirs')
 
-build() {
-   tar zxvf ${_pkgbasename}-${pkgver}.tar.gz
-   cd "${srcdir}/${_pkgbasename}-${pkgver}/src"
+prepare() {
+   cd "${srcdir}/${_pkgbasename}-${pkgver}/src/build-tools"
 
    # cf https://bugs.gentoo.org/show_bug.cgi?id=448778
-   patch -Np2 -i "${srcdir}"/krb5-config_LDFLAGS.patch
-   
-   rm lib/krb5/krb/deltat.c
+   patch  -Np2  -i "${srcdir}"/krb5-config_LDFLAGS.patch
+
+}
+
+build() {
+   cd "${srcdir}/${_pkgbasename}-${pkgver}/src"
 
    export CC="gcc -m32"
    export CXX="g++ -m32"
