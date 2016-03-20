@@ -1,31 +1,17 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libgpg-error
 pkgname=lib32-$_pkgbasename
-<<<<<<< HEAD
-pkgver=1.10
-=======
-pkgver=1.17
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+pkgver=1.21
 pkgrel=1
 pkgdesc="Support library for libgcrypt (32-bit)"
 arch=(x86_64)
 url="http://www.gnupg.org"
 license=('LGPL')
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib)
-options=(!libtool)
-source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${_pkgbasename}-${pkgver}.tar.bz2)
-  #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
-<<<<<<< HEAD
-sha1sums=('95b324359627fbcb762487ab6091afbe59823b29')
-=======
-md5sums=('b4f8d8b9ff14aed41f279aa844563539')
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
-
+makedepends=('gcc' 'lib32-gcc-libs')
+source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${_pkgbasename}-${pkgver}.tar.bz2{,.sig})
+sha1sums=('ef1dfb2f8761f019091180596e9e638d8cc37513'
+          'SKIP')
+validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6')
 
 build() {
   export CC="gcc -m32"
