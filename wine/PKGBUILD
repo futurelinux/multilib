@@ -1,14 +1,12 @@
 pkgname=wine
-pkgver=1.9.5
+pkgver=1.9.6
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
 source=(https://dl.winehq.org/wine/source/1.9/$pkgname-$_pkgver.tar.bz2
-        30-win32-aliases.conf
-        bug40253.patch)
+        30-win32-aliases.conf)
 
-md5sums=('c5f2f2e7dc2f0fe84d75833bc90ebd4f'
-         '1ff4e467f59409272088d92173a0f801'
-         '7df69e2e37637d57c8ec1ca034e18639')
+md5sums=('a18d9054e84e0a12e08d4d84f902c6a6'
+         '1ff4e467f59409272088d92173a0f801')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 categories=('system')
@@ -104,10 +102,6 @@ prepare() {
   
   # These additional CPPFLAGS solve FS#27662 and FS#34195
   export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
-  
-  cd $pkgname
-  # https://bugs.winehq.org/show_bug.cgi?id=40253
-  patch -p1 -i ../bug40253.patch
 }
 
 build() {
