@@ -1,6 +1,6 @@
 pkgname=steam
-pkgver=1.0.0.51
-pkgrel=6
+pkgver=1.0.0.52
+pkgrel=1
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
@@ -19,7 +19,7 @@ source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgnam
         'steam.patch'
         'steam.sh.patch'
         'steam_info.sh')
-sha256sums=('bf766db05fcc3a8079e7e514accfbd2503813a3c70ff8336aa93e554ed7719be'
+sha256sums=('dd3b1a9f597bf0e088094d6fd1e495068434b604346139f277ea26c41e009304'
          '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
          'ae933bda073e11ad6ae61d0ede0b472ba598df251c30690592a61c11779c7ee4'
          '7d33435937e553a6cb1e6918d1024d96c6081e8df560ea5bd1252146cfe670a8'
@@ -53,7 +53,7 @@ install_agreement_window() {
 package() {
   depends=(
   'bash' 'xterm' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
-  'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-font' 'kde-baseapps-kdialog'
+  'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'kde-baseapps-kdialog'
   'python3' 'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib' 'lib32-libgl'
   'lib32-libgcrypt' 'lib32-nss' 'lib32-openal' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss' 'lib32-libxshmfence')
 
