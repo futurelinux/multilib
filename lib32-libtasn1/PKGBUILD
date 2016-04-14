@@ -1,19 +1,18 @@
-# maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
 # contributions from Arch: https://www.archlinux.org/packages/multilib/x86_64/lib32-libtasn1/
 
 _pkgbasename=libtasn1
 pkgname=lib32-${_pkgbasename}
-pkgver=4.6
+pkgver=4.8
 pkgrel=1
 pkgdesc="The ASN.1 library used in GNUTLS (32 bit)"
 arch=('x86_64')
 license=('GPL3' 'LGPL')
 url="http://www.gnu.org/software/libtasn1/"
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
-makedepends=('gcc-multilib')
+makedepends=('lib32-gcc-libs')
 options=('!libtool')
 source=(http://ftp.gnu.org/gnu/libtasn1/${_pkgbasename}-${pkgver}.tar.gz{,.sig})
-md5sums=('454a7f80362f38bd2335b6e9d95f57a6'
+md5sums=('9a6767705725544f2b86670dcfb34107'
          'SKIP')
 validpgpkeys=('1F42418905D8206AA754CCDC29EE58B996865171') #Nikos Mavrogiannopoulos <nmav@gnutls.org>
 
