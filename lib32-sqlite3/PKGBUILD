@@ -1,7 +1,7 @@
 _pkgbasename=sqlite3
 pkgname=lib32-sqlite3
-_amalgamationver=3110100
-pkgver=3.11.1
+_amalgamationver=3120100
+pkgver=3.12.1
 pkgrel=1
 pkgdesc="A C library that implements an SQL database engine (32-bit)"
 arch=('x86_64')
@@ -10,7 +10,7 @@ url="http://www.sqlite.org/"
 depends=(lib32-glibc $_pkgbasename=$pkgver 'lib32-gcc-libs')
 makedepends=('tcl' 'gcc' 'lib32-readline')
 source=(https://www.sqlite.org/2016/sqlite-autoconf-${_amalgamationver}.tar.gz)
-sha1sums=('c4b4dcd735a4daf5a2e2bb90f374484c8d4dad29')
+sha1sums=('fa1f3dbf6e2e8c6d14125b2eceda5b2e16a19f1f')
 options=('!makeflags')
 
 build() {
@@ -21,10 +21,22 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   export LTLINK_EXTRAS="-ldl"
-  export CFLAGS="$CFLAGS -DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_SECURE_DELETE"
+  export CFLAGS="$CFLAGS -DSQLITE_ENABLE_COLUMN_METADATA=1 \
+                         -DSQLITE_ENABLE_UNLOCK_NOTIFY \
+                         -DSQLITE_SECURE_DELETE \
+                         -DSQLITE_ENABLE_DBSTAT_VTAB \
+                         -DSQLITE_ENABLE_FTS3_TOKENIZER=1 \
+                         -DSQLITE_ENABLE_API_ARMOR"
 
-  ./configure --prefix=/usr --libdir=/usr/lib32 \
-    --disable-static
+  ./configure --prefix=/usr \
+              --libdir=/usr/lib32 \
+              --disable-static \
+              --disable-amalgamation \
+              --enable-fts3 \
+              --enable-fts4 \
+              --enable-fts5 \
+              --enable-rtree \
+              --enable-json1
 
   make
 }
