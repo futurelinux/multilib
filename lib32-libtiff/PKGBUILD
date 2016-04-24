@@ -1,7 +1,7 @@
 _pkgbasename=libtiff
 pkgname=lib32-$_pkgbasename
 pkgver=4.0.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Library for manipulation of TIFF images (32-bit)"
 arch=('x86_64')
 url="http://www.remotesensing.org/libtiff/"
@@ -9,8 +9,15 @@ license=('custom')
 depends=('lib32-libjpeg-turbo' 'lib32-zlib' $_pkgbasename=$pkgver)
 makedepends=('lib32-libgl' 'lib32-libxmu' 'lib32-libxi' gcc-multilib)
 options=('!libtool')
-source=(ftp://ftp.remotesensing.org/pub/libtiff/tiff-${pkgver}.tar.gz)
-md5sums=('d1d2e940dea0b5ad435f21f03d96dd72')
+source=(ftp://ftp.remotesensing.org/pub/libtiff/tiff-${pkgver}.tar.gz
+        tiff-4.0.6-buffer-overflow.patch)
+md5sums=('d1d2e940dea0b5ad435f21f03d96dd72'
+         'cdf40bed7ca47252cc7104a17ac0b4da')
+
+prepare() {
+   cd tiff-${pkgver}
+   patch -Np1 -i ${srcdir}/tiff-4.0.6-buffer-overflow.patch
+}
 
 build() {
   export CC="gcc -m32"
