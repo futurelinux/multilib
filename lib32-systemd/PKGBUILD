@@ -1,6 +1,6 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
-pkgver=228
+pkgver=229
 pkgrel=1
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
@@ -32,7 +32,6 @@ build() {
     --libdir=/usr/lib32 \
     --localstatedir=/var \
     --sysconfdir=/etc \
-    --enable-compat-libs \
     --disable-audit \
     --disable-tests \
     --disable-ima \
