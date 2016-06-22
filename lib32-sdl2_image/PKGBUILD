@@ -2,17 +2,16 @@
 
 _pkgbasename=sdl2_image
 pkgname=lib32-$_pkgbasename
-pkgver=2.0.0
-pkgrel=2
+pkgver=2.0.1
+pkgrel=1
 pkgdesc="SDL2 image libraries (Version 2, 32-bit)"
-arch=('i686' 'x86_64')
+arch=('x86_64')
 url="http://www.libsdl.org"
 license=('MIT')
 depends=('lib32-sdl2' 'lib32-libpng' 'lib32-libtiff' 'lib32-libjpeg' 'lib32-libwebp' $_pkgbasename=$pkgver)
 makedepends=('cmake' 'gcc-multilib')
-options=(!libtool)
 source=("http://www.libsdl.org/projects/SDL_image/release/SDL2_image-${pkgver}.tar.gz")
-sha256sums=('b29815c73b17633baca9f07113e8ac476ae66412dec0d29a5045825c27a47234')
+sha256sums=('3a3eafbceea5125c04be585373bfd8b3a18f259bd7eae3efc4e6d8e60e0d7f64')
 
 build() {
   cd "${srcdir}/SDL2_image-${pkgver}/"
@@ -31,5 +30,9 @@ package() {
   cd "${srcdir}/SDL2_image-${pkgver}/"
   make DESTDIR="${pkgdir}/" install
   rm -rf "${pkgdir}"/usr/{include,share,bin}
+  
+  # link license
+  install -d "$pkgdir"/usr/share/licenses
+  ln -s ${pkgname#*-} "$pkgdir"/usr/share/licenses/$pkgname
 }
 
