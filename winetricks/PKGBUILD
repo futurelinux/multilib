@@ -1,5 +1,5 @@
 pkgname=winetricks
-pkgver=20160627
+pkgver=20160724
 pkgrel=1
 pkgdesc='Script to install various redistributable runtime libraries in Wine.'
 url='http://wiki.winehq.org/winetricks'
@@ -8,7 +8,7 @@ arch=('any')
 depends=('wine' 'cabextract' 'unzip' 'xorg-apps')
 optdepends=('kde-baseapps-kdialog: GUI for KDE desktop')
 source=(https://github.com/Winetricks/winetricks/archive/${pkgver}.tar.gz)
-md5sums=('21779ec1eadfcd6bcc59c6e2fc353207')
+md5sums=('ff9c6e35e3f7d3ed2e006d4d1df0dd5b')
 
 package() {
   cd winetricks-${pkgver}
