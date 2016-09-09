@@ -1,21 +1,16 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-
 _pkgbasename=libidn
 pkgname=lib32-$_pkgbasename
-pkgver=1.32
+pkgver=1.33
 pkgrel=1
 pkgdesc="Implementation of the Stringprep, Punycode and IDNA specifications (32 bit)"
 url="http://www.gnu.org/software/libidn/"
 arch=('x86_64')
 license=('GPL3' 'LGPL')
 depends=('lib32-glibc' "$_pkgbasename=$pkgver")
-makedepends=('gcc-multilib')
+makedepends=('lib32-gcc-libs')
 options=('!libtool')
 source=(http://ftp.gnu.org/gnu/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('ddd018611b98af7c67d434aa42d15d39f45129f5')
+sha1sums=('57872fdc665dcc585e16f4ac0bb35374b1103f7e')
 
 build() {
   export CC="gcc -m32"
