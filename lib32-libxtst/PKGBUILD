@@ -1,29 +1,16 @@
-# Part of the X.org group
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# Contributor (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libxtst
 pkgname=lib32-$_pkgbasename
-<<<<<<< HEAD
-pkgver=1.2.0
-pkgrel=2
-=======
-pkgver=1.2.2
+pkgver=1.2.3
 pkgrel=1
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 pkgdesc="X11 Testing -- Resource extension library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libxext' 'lib32-libxi' 'recordproto' $_pkgbasename=$pkgver)
-makedepends=('gcc-multilib' 'xorg-util-macros')
+makedepends=('lib32-gcc-libs' 'xorg-util-macros')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXtst-${pkgver}.tar.bz2)
-<<<<<<< HEAD
-sha1sums=('9fb06ed599caf7f9e7115cbbfadf02b47c17aa72')
-=======
-md5sums=('25c6b366ac3dc7a12c5d79816ce96a59')
->>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
+md5sums=('ef8c2c1d16a00bd95b9fdcef63b8a2ca')
 
 build() {
   cd "${srcdir}/libXtst-${pkgver}"
