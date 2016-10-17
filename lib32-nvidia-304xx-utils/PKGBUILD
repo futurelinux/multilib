@@ -1,9 +1,8 @@
-# Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
 # Contributions from AUR file: https://aur.archlinux.org/packages/lib32-nvidia-utils-304xx/
 
 _pkgbasename=nvidia-304xx-utils
 pkgname=lib32-$_pkgbasename
-pkgver=304.131
+pkgver=304.132
 pkgrel=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
@@ -17,7 +16,7 @@ options=('!strip')
 _parch='x86'
 _pkg="NVIDIA-Linux-${_parch}-${pkgver}"
 source=("ftp://download.nvidia.com/XFree86/Linux-${_parch}/${pkgver}/${_pkg}.run")
-md5sums=('9f3222fd7287d9b31f54f1d75760e183')
+md5sums=('1149ec562ba16843eb3b957ec8238de2')
 
 
 build() {
