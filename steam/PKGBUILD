@@ -1,5 +1,5 @@
 pkgname=steam
-pkgver=1.0.0.52
+pkgver=1.0.0.53
 pkgrel=1
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
@@ -19,11 +19,11 @@ source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgnam
         'steam.patch'
         'steam.sh.patch'
         'steam_info.sh')
-sha256sums=('dd3b1a9f597bf0e088094d6fd1e495068434b604346139f277ea26c41e009304'
-         '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
-         'ae933bda073e11ad6ae61d0ede0b472ba598df251c30690592a61c11779c7ee4'
-         '7d33435937e553a6cb1e6918d1024d96c6081e8df560ea5bd1252146cfe670a8'
-         '9b54b38abd3b8b449a445069d21f042b542ca5c4edd82908b5f68c7377dd7f19')
+sha256sums=('10932f2e58b0d0288e0820b8e97e6f3112409f770ecb64c3cd44e87450c1c944'
+            '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
+            'ae933bda073e11ad6ae61d0ede0b472ba598df251c30690592a61c11779c7ee4'
+            '7d33435937e553a6cb1e6918d1024d96c6081e8df560ea5bd1252146cfe670a8'
+            '9b54b38abd3b8b449a445069d21f042b542ca5c4edd82908b5f68c7377dd7f19')
 
 
 prepare() {
