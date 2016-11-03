@@ -1,23 +1,44 @@
+# WARNING!!!!!
+# If you are going to modify this package (other than just update it) keep in mind that:
+# the launcher is steam_launcher.sh that 
+# a) prints a warning about Chakra not being officially supported by steam and points to the Chakra wiki for games that don't work. This requires kdialog
+# b) add an hack to use Chakra libs than steam owns that give a lot of problems
+# https://chakralinux.org/wiki/index.php?title=Steam#Missing_Direct_Rendering
+#
+# The steam.sh launcher needs zenity but we have qarma that is a replacement of it written in Qt
+# I don't want to add qarma as direct dependency because a user can chose to install qarma or zenity and it doesn't change anything, rather than installing qarma as hard dep in any case (and this is not KISS)
+# Also pacman installs qarma fine
+#
+# NOTE If you are thinking something like:
+# "I don't like this, put everything under optdepends because it's easier to do/I don't like hack, who cares, I don't even use steam"
+# keep in mind everytime steam won't work we have a new issue on the forum to take care or an user we lost because she can't play games on Chakra
+# Are you going to accept responsibility for that?
+# Are you going to help EVERY user that has problem with steam that this hack could prevent?
+# And do this for the next years? If the answer's no, then don't touch this PKGBUILD (you can just update it)
+
+
 pkgname=steam
 pkgver=1.0.0.53
-pkgrel=3
+pkgrel=4
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
 license=('custom')
 optdepends=('lib32-flashplugin: for flash video'
-            'qarma: for qt5 warning dialogs'
             'freshplayerplugin: alternative flash video support'
             'lib32-alsa-plugins: for pulseaudio on some games'
             'lib32-mesa: for open source driver users'
             'lib32-catalyst-utils: for AMD Catalyst users'
             'lib32-nvidia-utils: for NVIDIA proprietary blob users'
             'lib32-primus: for NVIDIA + Bumblebee users')
-install=steam.install
+            
+install=steam.install  
 source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgname}_$pkgver.tar.gz"
-        'alsa_sdl_audiodriver.patch')
+        'alsa_sdl_audiodriver.patch'
+        'steam_launcher.sh')
 sha256sums=('10932f2e58b0d0288e0820b8e97e6f3112409f770ecb64c3cd44e87450c1c944'
-            '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e')
+            '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
+            '9b54b38abd3b8b449a445069d21f042b542ca5c4edd82908b5f68c7377dd7f19')
 
 
 prepare() {
@@ -25,22 +46,25 @@ prepare() {
 }
 
 package() {
-  depends=('bash' 'xterm' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
-    'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'python3' 'lib32-sdl'
-    'lib32-libvorbis' 'lib32-alsa-lib' 'lib32-libgl' 'lib32-libgcrypt'
-    'lib32-nss' 'lib32-openal' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss'
-    'lib32-libxshmfence'
-  )
+  depends=(
+  'bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
+  'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'kde-baseapps-kdialog'
+  'python3' 'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib' 'lib32-libgl'
+  'lib32-libgcrypt' 'lib32-nss' 'lib32-openal' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss' 'lib32-libxshmfence' 'zenity')
 
   make -C "$pkgname" DESTDIR="$pkgdir" install
-
+  
 # Install license
-  install -Dm644 "$pkgdir/usr/share/doc/steam/steam_install_agreement.txt" \
-    "$pkgdir/usr/share/licenses/steam/LICENSE"
+  install -Dm644 "$pkgdir/usr/share/doc/steam/steam_install_agreement.txt" "$pkgdir/usr/share/licenses/steam/LICENSE"
 
   # blank steamdeps because apt-get
   ln -sf /bin/true "$pkgdir/usr/bin/steamdeps"
-
-  install -Dm644 steam/lib/udev/rules.d/99-steam-controller-perms.rules \
-    "$pkgdir"/usr/lib/udev/rules.d/99-steam-controller-perms.rules
+  
+  install -Dm644 $srcdir/steam/lib/udev/rules.d/99-steam-controller-perms.rules $pkgdir/usr/lib/udev/rules.d/99-steam-controller-perms.rules
+  
+  # window that points the user to the Steam's wiki page
+  # and also add an hack to load chakra libs instead of steam ones
+  install -D steam_launcher.sh $pkgdir/usr/bin/steam_launcher.sh
+  sed -i s!"Exec=/usr/bin/steam %U"!"Exec=/usr/bin/steam_launcher.sh"! \
+  $pkgdir/usr/share/applications/steam.desktop
 }
