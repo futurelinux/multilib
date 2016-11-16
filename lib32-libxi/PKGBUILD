@@ -1,6 +1,6 @@
 _pkgbasename=libxi
 pkgname=lib32-$_pkgbasename
-pkgver=1.7.7
+pkgver=1.7.8
 pkgrel=1
 pkgdesc="X11 Input extension library (32-bit)"
 arch=('x86_64')
@@ -9,7 +9,7 @@ depends=('lib32-libxext' 'lib32-libxfixes' 'inputproto' $_pkgbasename=$pkgver)
 makedepends=('pkgconfig' 'xorg-util-macros' 'lib32-gcc-libs' 'automake')
 license=('custom')
 source=(${url}/releases/individual/lib/libXi-${pkgver}.tar.bz2)
-sha256sums=('996f834fa57b9b33ba36690f6f5c6a29320bc8213022943912462d8015b1e030')
+sha256sums=('d8f2fa8d53141c41ff521627df9b2fa9c05f6f142fd9881152bab36549ac27bb')
 
 build() {
   export CC="gcc -m32"
