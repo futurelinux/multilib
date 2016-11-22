@@ -4,7 +4,7 @@
 _pkgbasename=mesa
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-mesa-vdpau' 'lib32-mesa' 'lib32-mesa-libgl')
-pkgver=13.0.0
+pkgver=13.0.1
 pkgrel=1
 arch=('x86_64')
 makedepends=('python2-mako' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'dri3proto' 'presentproto'
@@ -16,11 +16,11 @@ license=('custom')
 source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/mesa-${pkgver}.tar.xz{,.sig}
 	LICENSE
         remove-libpthread-stubs.patch)
-sha256sums=('94edb4ebff82066a68be79d9c2627f15995e1fe10f67ab3fc63deb842027d727'
+sha256sums=('71962fb2bf77d33b0ad4a565b490dbbeaf4619099c6d9722f04a73187957a731'
             'SKIP'
             '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2'
             'fdbdeffd3a227c789de787a2a07f6cd0352b772dbdc16471aa3df1cb72f587a3')
-validpgpkeys=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D') # Emil Velikov <emil.l.velikov@gmail.com>
+validpgpkeys=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D') # Emil Velikov
 
 prepare() {
   cd ${srcdir}/?esa-*
