@@ -6,7 +6,7 @@
 # https://chakralinux.org/wiki/index.php?title=Steam#Missing_Direct_Rendering
 #
 # The steam.sh launcher needs zenity but we have qarma that is a replacement of it written in Qt
-# I don't want to add qarma as direct dependency because a user can chose to install qarma or zenity and it doesn't change anything, rather than installing qarma as hard dep in any case (and this is not KISS)
+# I don't want to add qarma as direct dependency because a user can choose to install qarma or zenity and it doesn't change anything, rather than installing qarma as hard dep in any case (and this is not KISS)
 # Also pacman installs qarma fine
 #
 # NOTE If you are thinking something like:
@@ -18,8 +18,8 @@
 
 
 pkgname=steam
-pkgver=1.0.0.53
-pkgrel=4
+pkgver=1.0.0.54
+pkgrel=1
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
@@ -36,13 +36,19 @@ install=steam.install
 source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgname}_$pkgver.tar.gz"
         'alsa_sdl_audiodriver.patch'
         'steam_launcher.sh')
-sha256sums=('10932f2e58b0d0288e0820b8e97e6f3112409f770ecb64c3cd44e87450c1c944'
+sha256sums=('42531bf2615afed54c333ae9afeebe8cb68a31304ddfcf90e61b3532a5597386'
             '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
             '9b54b38abd3b8b449a445069d21f042b542ca5c4edd82908b5f68c7377dd7f19')
 
 
 prepare() {
-    patch -d "$pkgname" -Np1 -i "$srcdir/alsa_sdl_audiodriver.patch"
+    cd ${pkgname}
+    patch -Np1 < "${srcdir}/alsa_sdl_audiodriver.patch"
+
+    # apply roundups for udev rules
+    sed -r 's|("0666")|"0660", TAG+="uaccess"|g' -i lib/udev/rules.d/99-steam-controller-perms.rules
+    sed -r 's|("misc")|\1, OPTIONS+="static_node=uinput"|g' -i lib/udev/rules.d/99-steam-controller-perms.rules
+    sed -r 's|(, TAG\+="uaccess")|, MODE="0660"\1|g' -i lib/udev/rules.d/60-HTC-Vive-perms.rules
 }
 
 package() {
@@ -54,14 +60,17 @@ package() {
 
   make -C "$pkgname" DESTDIR="$pkgdir" install
   
-# Install license
+  # Install license
   install -Dm644 "$pkgdir/usr/share/doc/steam/steam_install_agreement.txt" "$pkgdir/usr/share/licenses/steam/LICENSE"
 
   # blank steamdeps because apt-get
   ln -sf /bin/true "$pkgdir/usr/bin/steamdeps"
   
   install -Dm644 $srcdir/steam/lib/udev/rules.d/99-steam-controller-perms.rules $pkgdir/usr/lib/udev/rules.d/99-steam-controller-perms.rules
+  install -Dm644 $srcdir/steam/lib/udev/rules.d/60-HTC-Vive-perms.rules $pkgdir/usr/lib/udev/rules.d/70-htc-vive.rules
   
+  install -Dm 644 $srcdir/steam/debian/changelog -t "${pkgdir}/usr/share/doc/${pkgname}"
+
   # window that points the user to the Steam's wiki page
   # and also add an hack to load chakra libs instead of steam ones
   install -D steam_launcher.sh $pkgdir/usr/bin/steam_launcher.sh
