@@ -19,7 +19,7 @@
 
 pkgname=steam
 pkgver=1.0.0.54
-pkgrel=1
+pkgrel=2
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
@@ -54,7 +54,7 @@ prepare() {
 package() {
   depends=(
   'bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
-  'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'kde-baseapps-kdialog'
+  'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'kdialog'
   'python3' 'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib' 'lib32-libgl'
   'lib32-libgcrypt' 'lib32-nss' 'lib32-openal' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss' 'lib32-libxshmfence' 'zenity')
 
