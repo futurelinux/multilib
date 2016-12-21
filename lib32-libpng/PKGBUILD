@@ -1,7 +1,7 @@
 _pkgbasename=libpng
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.21
-_apngver=1.6.21
+pkgver=1.6.24
+_apngver=${pkgver}
 _libversion=16
 pkgrel=1
 pkgdesc="A collection of routines used to create PNG format graphics files (32-bit)"
@@ -9,12 +9,12 @@ arch=('x86_64')
 url="http://www.libpng.org/pub/png/libpng.html"
 license=('custom')
 depends=('lib32-zlib' $_pkgbasename=$pkgver 'sh')
-makedepends=(gcc-multilib)
+makedepends=('lib32-gcc-libs')
 options=('!libtool')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.xz"
         "http://downloads.sourceforge.net/sourceforge/apng/libpng-${_apngver}-apng.patch.gz")
-md5sums=('3bacb4728f6694a64ad9052769d6a4ce'
-         '7c44c3950c1886115c33ee2ab4d8417d')
+md5sums=('ffcdbd549814787fa8010c372e35ff25'
+         '83ec257f89327e8af1f688e0db17bc67')
 
 build() {
   export CC="gcc -m32"

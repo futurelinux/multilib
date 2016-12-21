@@ -1,11 +1,6 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-
 pkgname=lib32-libdbus
 _pkgbasename=libdbus
-pkgver=1.10.2
+pkgver=1.10.12
 pkgrel=1
 pkgdesc="DBus library (32-bit)"
 arch=('x86_64')
@@ -17,7 +12,7 @@ provides=('lib32-dbus-core')
 conflicts=('lib32-dbus-core')
 replaces=('lib32-dbus-core')
 source=(http://dbus.freedesktop.org/releases/dbus/dbus-${pkgver}.tar.gz)
-md5sums=('2428919cc77b8d0028d65ee4d5dbef31')
+md5sums=('bacef77336bbe588efa3124102d5fcdb')
 
 build() {
     export CC="gcc -m32"

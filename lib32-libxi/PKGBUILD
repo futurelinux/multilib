@@ -1,23 +1,15 @@
-# Part of X.org group
-
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libxi
 pkgname=lib32-$_pkgbasename
-pkgver=1.7.5
+pkgver=1.7.8
 pkgrel=1
 pkgdesc="X11 Input extension library (32-bit)"
 arch=('x86_64')
 url="http://xorg.freedesktop.org"
 depends=('lib32-libxext' 'lib32-libxfixes' 'inputproto' $_pkgbasename=$pkgver)
-makedepends=('pkgconfig' 'xorg-util-macros' gcc-multilib automake)
-options=(!libtool)
+makedepends=('pkgconfig' 'xorg-util-macros' 'lib32-gcc-libs' 'automake')
 license=('custom')
-source=(${url}/releases/individual/lib/libXi-${pkgver}.tar.bz2{,.sig})
-sha256sums=('d964d7deb5d8f7d6b9c358969c625073d7ab273dbda94693130b3540bc0ca229'
-            'SKIP')
-validpgpkeys=('3C2C43D9447D5938EF4551EBE23B7E70B467F0BF') # Peter Hutterer
+source=(${url}/releases/individual/lib/libXi-${pkgver}.tar.bz2)
+sha256sums=('d8f2fa8d53141c41ff521627df9b2fa9c05f6f142fd9881152bab36549ac27bb')
 
 build() {
   export CC="gcc -m32"
