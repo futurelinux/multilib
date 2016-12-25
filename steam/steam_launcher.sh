@@ -6,14 +6,13 @@
 #
 # also a "don't show this message again" checkbox is present
 # then start steam normally
-#
-# then a hack will be used to make steam works
-# see here https://chakraos.org/wiki/index.php?title=Steam#Missing_Direct_Rendering
 
 kdialog --dontagain steam_warnings_chakra:nofilemsg --msgbox \
 "Chakra Linux is not officially supported by Valve.
 For help visit the wiki page of Steam https://chakraos.org/wiki/index.php?title=Steam
 or ask for help in the forum"
 
+# see https://chakraos.org/wiki/index.php?title=Steam#Missing_Direct_Rendering
+export LD_PRELOAD="/usr/lib/libstdc++.so.6 /usr/lib32/libstdc++.so.6 /usr/lib/libgcc_s.so.1 /usr/lib32/libgcc_s.so.1"
 
-LD_PRELOAD="/usr/lib/libstdc++.so.6 /usr/lib32/libstdc++.so.6 /usr/lib/libgcc_s.so.1 /usr/lib32/libgcc_s.so.1" /usr/bin/steam %U
+/usr/bin/steam %U
