@@ -5,6 +5,11 @@ pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
 license=('custom')
+depends=('bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
+         'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'python3'
+         'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib' 'lib32-libgl'
+         'lib32-libgcrypt' 'lib32-nss' 'lib32-openal' 'lib32-gcc-libs'
+         'lib32-libx11' 'lib32-libxss' 'lib32-libxshmfence' 'zenity')
 optdepends=('lib32-flashplugin: for flash video'
             'freshplayerplugin: alternative flash video support'
             'lib32-alsa-plugins: for pulseaudio on some games'
@@ -12,14 +17,13 @@ optdepends=('lib32-flashplugin: for flash video'
             'lib32-catalyst-utils: for AMD Catalyst users'
             'lib32-nvidia-utils: for NVIDIA proprietary blob users'
             'lib32-primus: for NVIDIA + Bumblebee users')
-            
-install=steam.install  
+install=steam.install
 source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgname}_$pkgver.tar.gz"
         'alsa_sdl_audiodriver.patch'
-        'steam_launcher.sh')
+        'steam-runtime.sh')
 sha256sums=('42531bf2615afed54c333ae9afeebe8cb68a31304ddfcf90e61b3532a5597386'
             '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
-            '9b54b38abd3b8b449a445069d21f042b542ca5c4edd82908b5f68c7377dd7f19')
+            'ab6535e17882fcfc59d6712f76f760ef49600f0ef60c2c199b5698aed8b3043e')
 
 
 prepare() {
@@ -33,28 +37,23 @@ prepare() {
 }
 
 package() {
-  depends=(
-  'bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl'
-  'dbus' 'freetype2'  'gdk-pixbuf2' 'ttf-liberation'
-  'python3' 'lib32-sdl' 'lib32-libvorbis' 'lib32-alsa-lib' 'lib32-libgl'
-  'lib32-libgcrypt' 'lib32-nss' 'lib32-openal' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss' 'lib32-libxshmfence' 'zenity')
-
   make -C "$pkgname" DESTDIR="$pkgdir" install
-  
-  # Install license
-  install -Dm644 "$pkgdir/usr/share/doc/steam/steam_install_agreement.txt" "$pkgdir/usr/share/licenses/steam/LICENSE"
+
+  install -Dm755 steam-runtime.sh $pkgdir/usr/bin/steam-runtime
+  install -d "$pkdir"/usr/lib/steam
+  mv "$pkgdir"/usr/bin/steam "$pkgdir"/usr/lib/steam/steam
+  ln -sf steam-runtime "$pkgdir"/usr/bin/steam
+
+  install -Dm644 "$pkgdir/usr/share/doc/steam/steam_install_agreement.txt" \
+    "$pkgdir/usr/share/licenses/steam/LICENSE"
+  install -Dm 644 $srcdir/steam/debian/changelog -t "${pkgdir}/usr/share/doc/${pkgname}"
 
   # blank steamdeps because apt-get
   ln -sf /bin/true "$pkgdir/usr/bin/steamdeps"
-  
-  install -Dm644 $srcdir/steam/lib/udev/rules.d/99-steam-controller-perms.rules $pkgdir/usr/lib/udev/rules.d/99-steam-controller-perms.rules
-  install -Dm644 $srcdir/steam/lib/udev/rules.d/60-HTC-Vive-perms.rules $pkgdir/usr/lib/udev/rules.d/70-htc-vive.rules
-  
-  install -Dm 644 $srcdir/steam/debian/changelog -t "${pkgdir}/usr/share/doc/${pkgname}"
 
-  # window that points the user to the Steam's wiki page
-  # and also add an hack to load chakra libs instead of steam ones
-  install -D steam_launcher.sh $pkgdir/usr/bin/steam_launcher.sh
-  sed -i s!"Exec=/usr/bin/steam %U"!"Exec=/usr/bin/steam_launcher.sh"! \
-  $pkgdir/usr/share/applications/steam.desktop
+  cd "$pkgname"
+  install -Dm644 lib/udev/rules.d/99-steam-controller-perms.rules \
+    $pkgdir/usr/lib/udev/rules.d/99-steam-controller-perms.rules
+  install -Dm644 lib/udev/rules.d/60-HTC-Vive-perms.rules \
+    $pkgdir/usr/lib/udev/rules.d/70-htc-vive.rules
 }
