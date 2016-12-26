@@ -1,10 +1,7 @@
-# Maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# Contributor: (x86_64): AlmAck  almack@chakraos.org
-
 _pkgbasename=mesa
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-mesa-vdpau' 'lib32-mesa' 'lib32-mesa-libgl')
-pkgver=13.0.1
+pkgver=13.0.2
 pkgrel=1
 arch=('x86_64')
 makedepends=('python2-mako' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'dri3proto' 'presentproto'
@@ -16,7 +13,7 @@ license=('custom')
 source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/mesa-${pkgver}.tar.xz{,.sig}
 	LICENSE
         remove-libpthread-stubs.patch)
-sha256sums=('71962fb2bf77d33b0ad4a565b490dbbeaf4619099c6d9722f04a73187957a731'
+sha256sums=('a6ed622645f4ed61da418bf65adde5bcc4bb79023c36ba7d6b45b389da4416d5'
             'SKIP'
             '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2'
             'fdbdeffd3a227c789de787a2a07f6cd0352b772dbdc16471aa3df1cb72f587a3')
