@@ -38,7 +38,7 @@ package() {
   make -C "$pkgname" DESTDIR="$pkgdir" install
 
   install -Dm755 steam-runtime.sh $pkgdir/usr/bin/steam-runtime
-  install -d "$pkdir"/usr/lib/steam
+  install -d "$pkgdir"/usr/lib/steam
   mv "$pkgdir"/usr/bin/steam "$pkgdir"/usr/lib/steam/steam
   ln -sf steam-runtime "$pkgdir"/usr/bin/steam
 
