@@ -21,7 +21,7 @@ source=("http://repo.steampowered.com/$pkgname/pool/$pkgname/s/$pkgname/${pkgnam
         'steam-runtime.sh')
 sha256sums=('42531bf2615afed54c333ae9afeebe8cb68a31304ddfcf90e61b3532a5597386'
             '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
-            '3e41154cd071198bc8662d29295be0da1a1d2f7d4ff1df834e2b13289af6d3e3')
+            'fbaeb962f68a5cec26f09864a6b86776f54b5ce18dc000dcab7169443e09c3a6')
 
 
 prepare() {
