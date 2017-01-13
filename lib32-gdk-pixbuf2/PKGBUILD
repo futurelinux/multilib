@@ -1,24 +1,19 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=gdk-pixbuf2
 pkgname=lib32-$_pkgbasename
-pkgver=2.26.4
-pkgrel=2
+pkgver=2.36.3
+pkgrel=1
 pkgdesc="An image loading library for gtk2 (32-bit)"
-arch=('i686' 'x86_64')
+arch=('x86_64')
 url="http://www.gtk.org/"
 license=('GPL2')
 depends=('lib32-glib2'
           lib32-lib{'png','tiff','jpeg','ffi','x11'}
           $_pkgbasename)
-makedepends=(gcc-multilib)
-options=('!libtool' '!docs')
+makedepends=('gcc' 'lib32-gcc-libs')
+options=('!docs')
 install=gdk-pixbuf2.install
-source=(http://download.gnome.org/sources/gdk-pixbuf/2.26/gdk-pixbuf-${pkgver}.tar.xz)
-sha256sums=('a91458645f078debf204fef8bb06b30f356fcb5d48f65395132a5dba2b3510be')
+source=(https://download.gnome.org/sources/gdk-pixbuf/${pkgver:0:4}/gdk-pixbuf-${pkgver}.tar.xz)
+sha256sums=('5223138f7d31afc6b356a049930304ec0abd6ac1113a5d3d1dba5cd4a4d639ec')
 
 build() {
   export CC="gcc -m32"
