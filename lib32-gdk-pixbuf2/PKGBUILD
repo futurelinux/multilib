@@ -1,18 +1,18 @@
 _pkgbasename=gdk-pixbuf2
 pkgname=lib32-$_pkgbasename
-pkgver=2.36.0
-pkgrel=1
+pkgver=2.36.3
+pkgrel=2
 pkgdesc="An image loading library (32-bit)"
 arch=('x86_64')
 url="http://www.gtk.org/"
 license=('LGPL2.1')
 depends=(lib32-glib2 lib32-libpng lib32-libtiff lib32-libjpeg lib32-libx11
          "$_pkgbasename=$pkgver")
-makedepends=(gcc-multilib)
+makedepends=(gcc lib32-gcc-libs)
 options=('!docs')
 install=gdk-pixbuf2.install
 source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-${pkgver}.tar.xz)
-sha256sums=('85ab52ce9f2c26327141b3dcf21cca3da6a3f8de84b95fa1e727d8871a23245c')
+sha256sums=('5223138f7d31afc6b356a049930304ec0abd6ac1113a5d3d1dba5cd4a4d639ec')
 
 build() {
   export CC="gcc -m32"
@@ -36,9 +36,9 @@ package() {
   rm -rf "${pkgdir}"/usr/{include,share}
 
   cd "${pkgdir}"/usr/bin
-  mv gdk-pixbuf-query-loaders gdk-pixbuf-query-loaders-32
-  rm gdk-pixbuf-pixdata
-  rm gdk-pixbuf-csource
+  mv -v gdk-pixbuf-query-loaders{,-32}
+  mv -v gdk-pixbuf-thumbnailer{,-32}
+  rm -v gdk-pixbuf-pixdata gdk-pixbuf-csource
 }
 
 # vim:set ts=2 sw=2 et:
