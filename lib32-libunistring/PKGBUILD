@@ -1,0 +1,31 @@
+_pkgname=libunistring
+pkgname=lib32-$_pkgname
+pkgver=0.9.7
+pkgrel=1
+pkgdesc='Library for manipulating Unicode strings and C strings (lib32 version)'
+url='http://www.gnu.org/software/libunistring/'
+arch=('x86_64')
+license=('GPL')
+depends=('lib32-glibc')
+makedepends=('gcc' 'lib32-gcc-libs')
+source=(https://ftp.gnu.org/gnu/${_pkgname}/${_pkgname}-${pkgver}.tar.xz{,.sig})
+validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871') # Daiki Ueno <ueno@unixuser.org>
+md5sums=('82e0545363d111bfdfec2ddbfe62ffd3'
+         'SKIP')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  cd $_pkgname-$pkgver
+  ./configure --prefix=/usr
+  make
+}
+
+check() {
+  make -C $_pkgname-$pkgver check
+}
+
+package() {
+  make -C $_pkgname-$pkgver DESTDIR="$pkgdir" install
+}
