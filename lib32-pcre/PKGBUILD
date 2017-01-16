@@ -1,18 +1,14 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-
 _pkgbasename=pcre
 pkgname=lib32-$_pkgbasename
-pkgver=8.38
+pkgver=8.39
 pkgrel=1
 pkgdesc="A library that implements Perl 5-style regular expressions (32-bit)"
 arch=('x86_64')
 url="http://pcre.sourceforge.net"
 license=('custom')
 depends=('lib32-gcc-libs' $_pkgbasename=$pkgver)
-makedepends=('lib32-gcc-libs')
-source=(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${_pkgbasename}-${pkgver}.tar.bz2{,.sig})
-md5sums=('00aabbfe56d5a48b270f999b508c5ad2'
+source=(https://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${_pkgbasename}-${pkgver}.tar.bz2{,.sig})
+md5sums=('e3fca7650a0556a2647821679d81f585'
          'SKIP')
 validpgpkeys=('45F68D54BBE23FB3039B46E59766E084FB0F43D8') # Philip Hazel
 
