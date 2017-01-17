@@ -12,13 +12,17 @@ makedepends=('cmake' 'lib32-libffi' 'lib32-zlib' 'python2' 'gcc-libs'
 options=('staticlibs')
 source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
         http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.xz{,.sig}
-        http://llvm.org/releases/$pkgver/compiler-rt-$pkgver.src.tar.xz{,.sig})
+        http://llvm.org/releases/$pkgver/compiler-rt-$pkgver.src.tar.xz{,.sig}
+        AMDGPU-Fix-an-interaction-between-WQM-and-polygon-stippling.patch
+        msan-prevent-initialization-failure-with-newer-glibc.patch)
 sha256sums=('1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee'
             'SKIP'
             'e6c4cebb96dee827fa0470af313dff265af391cb6da8d429842ef208c8f25e63'
             'SKIP'
             'd30967b1a5fa51a2503474aacc913e69fd05ae862d37bf310088955bdb13ec99'
-            'SKIP')
+            'SKIP'
+            'adadc41090ab0eb33fe4449a0ea3f02b15d03f186262dd89576848a2c66d0ce6'
+            '8e4f194c2283b91644a7fff43bc4e58c36b5507f2a4d90b72f275c0bd7511c20')
 validpgpkeys=('11E521D646982372EB577A1F8F0871F202119294'
               'B6C8F98282B944E3B0D5C2530FC3042E345AD05D')
 
@@ -29,6 +33,12 @@ prepare() {
   # See http://llvm.org/bugs/show_bug.cgi?id=4840
   mv "$srcdir/cfe-$pkgver.src" tools/clang 
   mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
+
+  # https://bugs.freedesktop.org/show_bug.cgi?id=99078
+  patch -Rp1 -i ../AMDGPU-Fix-an-interaction-between-WQM-and-polygon-stippling.patch
+
+  # https://reviews.llvm.org/D24736
+  patch -Np0 -d projects/compiler-rt <../msan-prevent-initialization-failure-with-newer-glibc.patch
 
   # Somehow CMake finds the 64-bit library in /lib first,
   # so let's preseed CMAKE_LIBRARY_PATH with /lib32.
