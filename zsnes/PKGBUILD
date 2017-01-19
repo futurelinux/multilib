@@ -2,7 +2,7 @@
 
 pkgname=zsnes
 pkgver=1.51
-pkgrel=5
+pkgrel=6
 pkgdesc="Super Nintendo emulator"
 url="http://www.zsnes.com/"
 arch=('x86_64')
@@ -35,10 +35,11 @@ build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
 
-  ./autogen.sh --prefix=/usr \
+  ./configure \
+    --prefix=/usr \
+    --enable-release \
     x_libraries=/usr/lib \
-    force_arch=i686 \
-    --enable-release
+    force_arch=i686
 
   make
 }

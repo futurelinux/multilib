@@ -6,7 +6,7 @@
 _pkgbasename=libxml2
 pkgname=lib32-$_pkgbasename
 pkgver=2.9.4
-pkgrel=1
+pkgrel=2
 pkgdesc="XML parsing library, version 2 (32-bit)"
 arch=(x86_64)
 license=('custom')
@@ -25,7 +25,10 @@ build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
   autoreconf -fi
-  ./configure --prefix=/usr --with-threads --with-history --libdir=/usr/lib32 --without-lzma
+  ./configure --prefix=/usr --with-threads --with-history --libdir=/usr/lib32 --without-lzma --without-python
+
+  # added without-python : https://bugzilla.redhat.com/show_bug.cgi?id=139911
+
   make
 }
 
