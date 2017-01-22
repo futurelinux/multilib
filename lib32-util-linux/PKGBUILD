@@ -4,20 +4,20 @@
 
 _pkgbasename=util-linux
 pkgname=lib32-$_pkgbasename
-pkgver=2.27
+pkgver=2.29
 _pkgver=(${pkgver//./ })
 _pkgver=${_pkgver[0]}.${_pkgver[1]}
 pkgrel=1
 pkgdesc="Miscellaneous system utilities for Linux (32-bit)"
 url='http://www.kernel.org/pub/linux/utils/util-linux/'
 arch=('x86_64')
-depends=('lib32-glibc' $_pkgbasename=$pkgver)
+depends=('lib32-gcc-libs' $_pkgbasename=$pkgver)
 provides=('libuuid.so' 'libblkid.so' 'libfdisk.so' 'libmount.so' 'libsmartcols.so')
 makedepends=('gcc-multilib')
 license=('GPL2')
 options=('!libtool' '!emptydirs')
 source=("ftp://ftp.kernel.org/pub/linux/utils/util-linux/v${_pkgver}/util-linux-$pkgver.tar.xz")
-md5sums=('5b06bbda9309624ee7add15bc8d8ca22')
+md5sums=('07b6845f48a421ad5844aa9d58edb837')
 
 build() {
   cd "$_pkgbasename-$pkgver"
