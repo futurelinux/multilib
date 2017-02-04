@@ -3,7 +3,7 @@
 
 pkgname=('lib32-llvm' 'lib32-llvm-libs' 'lib32-clang')
 pkgver=3.9.1
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
@@ -136,7 +136,7 @@ package_lib32-llvm-libs() {
 package_lib32-clang() {
   pkgdesc="C language family frontend for LLVM"
   url="http://clang.llvm.org/"
-  depends=("lib32-llvm=$pkgver-$pkgrel" 'clang' 'gcc-multilib')
+  depends=("lib32-llvm=$pkgver-$pkgrel" 'clang' 'gcc')
 
   cd "$srcdir/llvm-$pkgver.src"
 
@@ -146,4 +146,3 @@ package_lib32-clang() {
 
   install -Dm644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
-

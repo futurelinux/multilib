@@ -1,12 +1,12 @@
 _pkgbasename=fluidsynth
 pkgname=lib32-${_pkgbasename}
 pkgver=1.1.6
-pkgrel=4
+pkgrel=5
 pkgdesc="A real-time software synthesizer based on the SoundFont 2 specifications (32bit)"
 arch=('x86_64')
 url="http://www.fluidsynth.org/"
 depends=("$_pkgbasename=$pkgver" 'lib32-glib2' 'lib32-jack' 'lib32-alsa-lib' 'lib32-libpulse')
-makedepends=('cmake' 'gcc-multilib')
+makedepends=('cmake' 'gcc' 'lib32-gcc-libs')
 license=('LGPL')
 source=("http://downloads.sourceforge.net/$_pkgbasename/$_pkgbasename-$pkgver.tar.gz")
 md5sums=('ae5aca6de824b4173667cbd3a310b263')
