@@ -3,7 +3,7 @@
 
 pkgname=('lib32-llvm' 'lib32-llvm-libs' 'lib32-clang')
 pkgver=3.9.1
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
@@ -142,7 +142,7 @@ package_lib32-clang() {
 
   make -C build/tools/clang DESTDIR="$pkgdir" install
 
-  rm -r "$pkgdir"/usr/{bin,include,share}
+  rm -r "$pkgdir"/usr/{bin,include,share,libexec}
 
   install -Dm644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
