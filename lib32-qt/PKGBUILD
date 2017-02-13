@@ -1,34 +1,24 @@
 _pkgbasename=qt
 pkgname="lib32-${_pkgbasename}"
 pkgver=4.8.7
-pkgrel=4
+pkgrel=5
 pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
 url='http://www.qt.io'
 license=('GPL3' 'LGPL')
-depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gstreamer0.10,gstreamer0.10-base}
+depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gstreamer,gst-plugins-base}
          lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi,xml2}
          "${_pkgbasename}=${pkgver}")
-makedepends=('cups' 'gcc-multilib' lib32-{mesa,libcups,libxfixes} 'lib32-icu' 'clang')
+makedepends=('cups' lib32-{mesa,libcups,libxfixes,icu,clang} )
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
 source=("http://download.qt.io/official_releases/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
         "kubuntu_14_systemtrayicon.diff")
 md5sums=('d990ee66bf7ab0c785589776f35ba6ad'
          'a523644faa8f98a73f55c4aa23c114a6')
  
-export CC='clang'
-export CXX='clang++'
 prepare() {
   cd "${srcdir}/${_pkgfqn}"
   patch -Np1 -i ../kubuntu_14_systemtrayicon.diff
-}
-
-build() {
-  cd "${srcdir}/${_pkgfqn}"
-
-  export QT4DIR=$srcdir/$_pkgfqn
-  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   sed -i "/^QMAKE_LINK\s/s|g++|g++ -m32|g" mkspecs/common/g++-base.conf
   sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/g++-base.conf
@@ -41,6 +31,16 @@ build() {
       -e "/^QMAKE_LINK\s/s|g++|g++ -m32|g" \
       -e "/^QMAKE_LFLAGS\s/s|+=|+= $LDFLAGS|g" \
       -i mkspecs/common/g++.conf
+}
+
+build() {
+  cd "${srcdir}/${_pkgfqn}"
+
+  export CC='clang'
+  export CXX='clang++'
+  export QT4DIR=$srcdir/$_pkgfqn
+  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   ./configure -confirm-license -opensource -v -platform linux-g++-32 \
               -prefix /usr \
@@ -85,4 +85,3 @@ package() {
   mkdir -p "${pkgdir}/usr/share/licenses"
   ln -s "${_pkgbasename}" "${pkgdir}/usr/share/licenses/${pkgname}"
 }
-
