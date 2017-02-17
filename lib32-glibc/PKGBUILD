@@ -1,34 +1,25 @@
-# maintainer: Manuel Tortosa <manutortoasa@chakra-project.org>
-
 # toolchain build order: 
 # lib32-glibc > binutils-multilib > gcc-multilib > binutils-multilib > lib32-glibc
 
 _pkgbasename=glibc
 pkgname=lib32-$_pkgbasename
-pkgver=2.22
+pkgver=2.24
 pkgrel=1
 pkgdesc="GNU C Library (32-bit)"
 arch=('x86_64')
 url="http://www.gnu.org/software/libc"
 license=('GPL' 'LGPL')
-#depends=($_pkgbasename=$pkgver)
-makedepends=('gcc-multilib>=4.9')
-source=(http://ftp.gnu.org/gnu/libc/${_pkgbasename}-${pkgver}.tar.xz{,.sig}
-        dtv_surplus.patch
-        lib32-glibc.conf
-)
-md5sums=('e51e02bf552a0a1fbbdc948fb2f5e83c'
-         'SKIP'
-         '6469cba12e2252e16e32db0353ed3f21'
+depends=($_pkgbasename=$pkgver)
+makedepends=('gcc>=5.2' 'git' 'lib32-gcc-libs')
+options=('!strip' 'staticlibs')
+source=(git://sourceware.org/git/glibc.git#commit=fdfc9260
+        lib32-glibc.conf)
+md5sums=('SKIP'
          '6e052f1cb693d5d3203f50f9d4e8c33b')
 validpgpkeys=('F37CDAB708E65EA183FD1AF625EF0A436C2A4AFF')  # Carlos O'Donell
 
 prepare() {
-  cd ${srcdir}/glibc-${pkgver}
-
-  # http://chakraos.org/bugtracker/index.php?do=details&task_id=1060&project=8
-  patch -p1 -i $srcdir/dtv_surplus.patch
-
+  cd ${srcdir}/glibc
   mkdir ${srcdir}/glibc-build
 }
 
@@ -43,24 +34,21 @@ build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
 
-
   # remove hardening options for building libraries
   CFLAGS=${CFLAGS/-fstack-protector-strong/}
   CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
 
-  ${srcdir}/${_pkgbasename}-${pkgver}/configure --prefix=/usr \
+  ${srcdir}/glibc/configure --prefix=/usr \
       --libdir=/usr/lib32 --libexecdir=/usr/lib32 \
       --with-headers=/usr/include \
-      --with-bugurl=https://chakraos.org/bugtracker \
+      --with-bugurl=https://chakralinux.org/bugtracker \
       --enable-add-ons \
-      --enable-obsolete-rpc \
       --enable-kernel=2.6.32 \
       --enable-bind-now --disable-profile \
       --enable-stackguard-randomization \
       --enable-multi-arch \
       --disable-werror \
       --enable-multi-arch i686-unknown-linux-gnu
-#     --enable-lock-elision \
 
   # build libraries with hardening disabled
   echo "build-programs=no" >> configparms
@@ -71,17 +59,13 @@ build() {
   echo "CC += -fstack-protector-strong -D_FORTIFY_SOURCE=2" >> configparms
   echo "CXX += -fstack-protector-strong -D_FORTIFY_SOURCE=2" >> configparms
   make
-
-  # remove harding in preparation to run test-suite
-  sed -i '5,7d' configparms
-
 }
 
 check() {
-  # the linker commands need to be reordered - fixed in 2.19
-  LDFLAGS=${LDFLAGS/--as-needed,/}
-
   cd ${srcdir}/glibc-build
+
+  # remove harding in preparation to run test-suite
+  sed -i '/FORTIFY/d' configparms
 
   # tst-cleanupx4 failure on i686 is "expected"
   make check || true
