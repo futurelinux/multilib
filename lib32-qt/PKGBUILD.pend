@@ -6,19 +6,32 @@ pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
 url='http://www.qt.io'
 license=('GPL3' 'LGPL')
-depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl}
+depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gst-plugins-base}
          lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi,xml2}
          "${_pkgbasename}=${pkgver}")
-makedepends=('cups' lib32-{mesa,libcups,libxfixes,icu,clang} )
+makedepends=('cups' lib32-{mesa,libcups,libxfixes,icu,clang} 'gperf' 'python2' 'ruby' 'git' 'mesa' 'gst-plugins-base-libs')
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
 source=("http://download.qt.io/official_releases/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
-        "kubuntu_14_systemtrayicon.diff")
+        'http://download.kde.org/stable/qtwebkit-2.3/2.3.4/src/qtwebkit-2.3.4.tar.gz'
+        "kubuntu_14_systemtrayicon.diff"
+        'disable-sslv3.patch'
+        'qtwebkit-2.3.4-gcc5-1.patch'
+        'qtwebkit-2.3-debuginfo.patch'
+        'qtwebkit-2.3-save_memory.patch')
 md5sums=('d990ee66bf7ab0c785589776f35ba6ad'
-         'a523644faa8f98a73f55c4aa23c114a6')
+         '42ef76d0cf7d0c611ef83418e9f297ff'
+         'a523644faa8f98a73f55c4aa23c114a6'
+         '1803ab6313df762d807678e58fc85f53'
+         'b12602b7460914994354a5c2cae83df2'
+         'ab784b24965ef9bbe42f875e98e43ac0'
+         'e588c0c49b72951c68358970db75b4fd')
  
 prepare() {
   cd "${srcdir}/${_pkgfqn}"
   patch -Np1 -i ../kubuntu_14_systemtrayicon.diff
+
+  # disable SSLv3
+  patch -p1 -i "${srcdir}"/disable-sslv3.patch
 
   sed -i "/^QMAKE_LINK\s/s|g++|g++ -m32|g" mkspecs/common/g++-base.conf
   sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/g++-base.conf
@@ -31,17 +44,26 @@ prepare() {
       -e "/^QMAKE_LINK\s/s|g++|g++ -m32|g" \
       -e "/^QMAKE_LFLAGS\s/s|+=|+= $LDFLAGS|g" \
       -i mkspecs/common/g++.conf
+
+  cd $srcdir/
+
+  # reduce debug info, to avoid the error "ar: libWebCore.a: File truncated" of 4GB file max exceed
+  patch -p1 -i "${srcdir}"/qtwebkit-2.3-debuginfo.patch
+  patch -p1 -i "${srcdir}"/qtwebkit-2.3-save_memory.patch
+
+  # Fix build with GCC 5 (LFS)
+  patch -p1 -i "$srcdir"/qtwebkit-2.3.4-gcc5-1.patch
 }
 
 build() {
-  cd "${srcdir}/${_pkgfqn}"
-
-  export CC='clang'
-  export CXX='clang++'
+  export CC='clang -m32'
+  export CXX='clang++ -m32'
   export QT4DIR=$srcdir/$_pkgfqn
   export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
+  # The bundled QtWebkit of Qt-4.8.7 requires legacy gstreamer support, but we know that qtwebkit-2.3.4 supports gst1.x
+  cd "${srcdir}/${_pkgfqn}"
   ./configure -confirm-license -opensource -v -platform linux-g++-32 \
               -prefix /usr \
               -libdir /usr/lib32 \
@@ -68,9 +90,24 @@ build() {
               -xcursor 
 
   make
+  #
+  cd $srcdir
+  export QTDIR=/usr
+  export PATH=$QT4DIR/bin:$PATH
+  Tools/Scripts/build-webkit --qt \
+                             --no-webkit2 \
+                             --prefix=/usr --install-libs=/usr/lib32 \
+                             --makeargs="$MAKEFLAGS" \
+                             --release \
+                             --qmakearg="CONFIG+=production_build" \
+                             --system-malloc
 }
 
 package() {
+  # install QtWebkit
+  make -C WebKitBuild/Release INSTALL_ROOT="${pkgdir}" install
+
+  # Qt4 part
   cd "${srcdir}/${_pkgfqn}"
   make install INSTALL_ROOT="${pkgdir}"
 
