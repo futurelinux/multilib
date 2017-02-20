@@ -45,7 +45,6 @@ build() {
                              --no-webkit2 \
                              --prefix=/usr --install-libs=/usr/lib32 \
                              --makeargs="$MAKEFLAGS" \
-                             --cmakearg="-DENABLE_GLIB_SUPPORT=0" \
                              --release \
                              --qmakearg="CONFIG+=production_build" \
                              --system-malloc
