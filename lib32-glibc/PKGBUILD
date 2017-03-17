@@ -3,25 +3,32 @@
 
 _pkgbasename=glibc
 pkgname=lib32-$_pkgbasename
-pkgver=2.24
+pkgver=2.25
 pkgrel=1
-_commit=fdfc9260
+_commit=69e0a87cc4c570e3b7218392fc3e743b5bddcce2
 pkgdesc="GNU C Library (32-bit)"
 arch=('x86_64')
 url="http://www.gnu.org/software/libc"
 license=('GPL' 'LGPL')
-depends=($_pkgbasename=$pkgver)
+depends=($_pkgbasename>=$pkgver)
 makedepends=('gcc>=5.2' 'git' 'lib32-gcc-libs')
 options=('!strip' 'staticlibs' '!emptydirs')
-source=(git://sourceware.org/git/glibc.git#commit=${_commit}
+
+source=(git+https://sourceware.org/git/glibc.git#commit=${_commit}
         lib32-glibc.conf)
+
 md5sums=('SKIP'
          '6e052f1cb693d5d3203f50f9d4e8c33b')
-validpgpkeys=('F37CDAB708E65EA183FD1AF625EF0A436C2A4AFF')  # Carlos O'Donell
 
 prepare() {
-  cd ${srcdir}/glibc
-  mkdir ${srcdir}/glibc-build
+  mkdir glibc-build
+  
+  cd glibc
+  # avoid crashes on i686 memchr-sse2.S
+  # https://sourceware.org/bugzilla/show_bug.cgi?id=21182
+  _revert_commit="23d27709a423aec32821e9a5198a10267107bae2"
+  _revert_file="sysdeps/i386/i686/multiarch/memchr-sse2.S"
+  git show ${_revert_commit} -- ${_revert_file} | git apply -R
 }
 
 build() {
@@ -36,59 +43,61 @@ build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
 
-  # remove hardening options for building libraries
-  CFLAGS=${CFLAGS/-fstack-protector-strong/}
+  # remove fortify for building libraries
   CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
 
-  ${srcdir}/glibc/configure --prefix=/usr \
-      --libdir=/usr/lib32 --libexecdir=/usr/lib32 \
+  ../glibc/configure \
+      --prefix=/usr \
+      --libdir=/usr/lib32 \
+      --libexecdir=/usr/lib32 \
       --with-headers=/usr/include \
       --with-bugurl=https://chakralinux.org/bugtracker \
       --enable-add-ons \
+      --enable-obsolete-rpc \
       --enable-kernel=2.6.32 \
-      --enable-bind-now --disable-profile \
+      --enable-bind-now \
+      --disable-profile \
       --enable-stackguard-randomization \
+      --enable-stack-protector=strong \
       --enable-lock-elision \
       --enable-multi-arch \
       --disable-werror \
-      i686-unknown-linux-gnu
+      i686-pc-linux-gnu
 
-  # build libraries with hardening disabled
+  # build libraries with fortify disabled
   echo "build-programs=no" >> configparms
   make
 
-  msg "building programs"
-  
-  # re-enable hardening for programs
+  # re-enable fortify for programs
   sed -i "/build-programs=/s#no#yes#" configparms
-  # ToDo: check why does not compile with this hardening flags enabled
-  #echo "CC += -fstack-protector-strong -D_FORTIFY_SOURCE=2" >> configparms
-  #echo "CXX += -fstack-protector-strong -D_FORTIFY_SOURCE=2" >> configparms
+
+  echo "CC += -D_FORTIFY_SOURCE=2" >> configparms
+  echo "CXX += -D_FORTIFY_SOURCE=2" >> configparms
   make
 }
 
 check() {
-  cd ${srcdir}/glibc-build
+  cd glibc-build
 
-  # remove harding in preparation to run test-suite
+  # remove fortify in preparation to run test-suite
   sed -i '/FORTIFY/d' configparms
 
-  # tst-cleanupx4 failure on i686 is "expected"
+  # some failures are "expected"
   make check || true
 }
 
 package() {
-  cd ${srcdir}/glibc-build
+  cd glibc-build
+
   make install_root=${pkgdir} install
 
   rm -rf ${pkgdir}/{etc,sbin,usr/{bin,sbin,share},var}
 
-  # We need one 32 bit specific header file
-  find ${pkgdir}/usr/include -type f -not -name stubs-32.h -delete
-
+  # We need to keep 32 bit specific header files
+  find ${pkgdir}/usr/include -type f -not -name '*-32.h' -delete
 
   # Dynamic linker
-  install -d -m755 ${pkgdir}/usr/lib
+  mkdir ${pkgdir}/usr/lib
   ln -s ../lib32/ld-linux.so.2 ${pkgdir}/usr/lib/
 
   # Add lib32 paths to the default library search path
@@ -96,11 +105,6 @@ package() {
 
   # Symlink /usr/lib32/locale to /usr/lib/locale
   ln -s ../lib/locale "$pkgdir/usr/lib32/locale"
-
-  # remove the static libraries that have a shared counterpart
-  # libc, libdl, libm and libpthread are required for toolchain testsuites
-  # in addition libcrypt appears widely required
-  rm $pkgdir/usr/lib32/lib{anl,BrokenLocale,nsl,resolv,rt,util}.a
 
   # Do not strip the following files for improved debugging support
   # ("improved" as in not breaking gdb and valgrind...):
@@ -116,11 +120,24 @@ package() {
                         usr/lib32/getconf/*
 
 
-  strip $STRIP_STATIC usr/lib32/*.a
 
-  strip $STRIP_SHARED usr/lib32/{libanl,libBrokenLocale,libcidn,libcrypt}-*.so \
+
+  strip $STRIP_STATIC usr/lib32/lib{anl,BrokenLocale,c{,_nonshared},crypt}.a \
+                      usr/lib32/lib{dl,g,ieee,mcheck,nsl,pthread{,_nonshared}}.a \
+                      usr/lib32/lib{resolv,rpcsvc,rt,util}.a
+
+  strip $STRIP_SHARED usr/lib32/lib{anl,BrokenLocale,cidn,crypt}-${pkgver}.so \
                       usr/lib32/libnss_{compat,db,dns,files,hesiod,nis,nisplus}-*.so \
-                      usr/lib32/{libdl,libm,libnsl,libresolv,librt,libutil}-*.so \
-                      usr/lib32/{libmemusage,libpcprofile,libSegFault}.so \
-                      usr/lib32/{audit,gconv}/*.so
+                      usr/lib32/lib{dl,m,nsl,resolv,rt,util}-${pkgver}.so \
+                      usr/lib32/lib{memusage,pcprofile,SegFault}.so \
+                      usr/lib32/{audit,gconv}/*.so || true
+
+
+
+
+
+
+  #if [[ $CARCH = "i686" ]]; then
+    strip $STRIP_STATIC usr/lib32/libm.a
+  #fi
 }
