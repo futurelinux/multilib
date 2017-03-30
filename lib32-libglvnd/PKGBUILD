@@ -1,14 +1,12 @@
-# Lib32 Packages for Chakra, part of chakraos.org
-
 pkgname=lib32-libglvnd
-pkgver=0.1.0.20160411
-_commit=5a69af6
+pkgver=0.2.999+g4ba53457
+_commit=4ba5345742d6c98b528ac28fb7127006d2cc3f75
 pkgrel=1
 pkgdesc="The GL Vendor-Neutral Dispatch library"
 arch=('x86_64')
 url="https://github.com/NVIDIA/libglvnd"
 license=('custom:BSD-like')
-depends=('lib32-libxext' 'libglvnd')
+depends=('lib32-libxext' 'libglvnd' 'lib32-mesa')
 makedepends=('xorg-server-devel' 'git' 'python2' 'lib32-gcc-libs' )
 source=("git+https://github.com/NVIDIA/libglvnd.git#commit=$_commit")
 sha1sums=('SKIP')
@@ -30,13 +28,7 @@ package() {
 
   rm -r "$pkgdir/usr/include"
 
-  # For compatibility with older nvidia drivers for bumblebee
-  # Symlinks to /usr/lib will be in nvidia-libgl
-  mkdir "$pkgdir/usr/lib32/nvidia"
-  for _lib in libGL.so libGLESv1_CM.so libGLESv2.so; do
-    mv "$pkgdir"/usr/lib32/$_lib* "$pkgdir"/usr/lib32/nvidia/
-  done
-
   mkdir -p "$pkgdir/usr/share/licenses"
   ln -s libglvnd "$pkgdir/usr/share/licenses/$pkgname"
 }
+
