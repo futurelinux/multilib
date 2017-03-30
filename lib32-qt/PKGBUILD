@@ -9,7 +9,7 @@ license=('GPL3' 'LGPL')
 depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gstreamer,gst-plugins-base}
          lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi,xml2}
          "${_pkgbasename}=${pkgver}")
-makedepends=('cups' lib32-{mesa,libcups,libxfixes,icu,clang} )
+makedepends=('cups' lib32-{mesa,libcups,libxfixes,icu} )
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
 source=("http://download.qt.io/official_releases/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
         "kubuntu_14_systemtrayicon.diff")
