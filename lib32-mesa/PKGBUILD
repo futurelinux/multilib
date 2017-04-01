@@ -2,7 +2,7 @@ _pkgbasename=mesa
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-vulkan-intel' 'lib32-vulkan-radeon' 'lib32-mesa-vdpau' 'lib32-mesa')
 pkgver=17.0.2
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 makedepends=('python2-mako' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'dri3proto' 'presentproto'
              'lib32-libxshmfence' 'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd'
@@ -105,7 +105,7 @@ package_lib32-vulkan-intel() {
 
 package_lib32-vulkan-radeon() {
   pkgdesc="Radeon's Vulkan mesa driver (32-bit)"
-  depends=('lib32-wayland' 'lib32-libx11' 'lib32-llvm-libs' 'lib32-libdrm' 'lib32-libelf' 'lib32-libxshmfence')
+  depends=('lib32-wayland' 'lib32-libx11' 'lib32-llvm-libs' 'lib32-libdrm' 'lib32-elfutils' 'lib32-libxshmfence')
   provides=('lib32-vulkan-driver')
 
   install -m755 -d ${pkgdir}/usr/share/vulkan/icd.d
@@ -120,7 +120,7 @@ package_lib32-vulkan-radeon() {
 
 package_lib32-mesa-vdpau() {
   pkgdesc="Mesa VDPAU drivers (32-bit)"
-  depends=('lib32-libdrm' 'lib32-libx11' 'lib32-expat' 'lib32-llvm-libs' 'lib32-libelf' 'lib32-libxshmfence')
+  depends=('lib32-libdrm' 'lib32-libx11' 'lib32-expat' 'lib32-llvm-libs' 'lib32-elfutils' 'lib32-libxshmfence')
 
   install -m755 -d ${pkgdir}/usr/lib32
   cp -rv ${srcdir}/fakeinstall/usr/lib32/vdpau ${pkgdir}/usr/lib32
