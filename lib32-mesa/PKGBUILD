@@ -1,32 +1,32 @@
-_pkgbasename=mesa
-pkgbase=lib32-$_pkgbasename
+pkgbase=lib32-mesa
 pkgname=('lib32-vulkan-intel' 'lib32-vulkan-radeon' 'lib32-mesa-vdpau' 'lib32-mesa')
-pkgver=17.0.2
-pkgrel=3
+pkgver=17.0.3
+pkgrel=1
 arch=('x86_64')
 makedepends=('python2-mako' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'dri3proto' 'presentproto'
-             'lib32-libxshmfence' 'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc' 'lib32-elfutils' 'lib32-llvm' 'lib32-systemd'
-             'lib32-libxvmc' 'lib32-libglvnd' 'lib32-libvdpau' 'lib32-wayland')
+             'lib32-libxshmfence' 'lib32-libxxf86vm' 'lib32-libxdamage' 'gcc-multilib' 'lib32-elfutils' 'lib32-llvm' 'lib32-libvdpau'
+             'lib32-wayland' 'lib32-libglvnd')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
-source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/mesa-${pkgver}.tar.xz{,.sig}
-	LICENSE
+source=(https://mesa.freedesktop.org/archive/mesa-${pkgver}.tar.xz{,.sig}
+        LICENSE
         remove-libpthread-stubs.patch
         0001-EGL-Implement-the-libglvnd-interface-for-EGL-v2.patch
         0001-Fix-linkage-against-shared-glapi.patch
         0001-glapi-Link-with-glapi-when-built-shared.patch
         0002-fixup-EGL-Implement-the-libglvnd-interface-for-EGL-v.patch
         glvnd-fix-gl-dot-pc.patch)
-sha256sums=('f8f191f909e01e65de38d5bdea5fb057f21649a3aed20948be02348e77a689d4'
+sha256sums=('ca646f5075a002d60ef9123c8a4331cede155c01712ef945a65c59a5e69fe7ed'
             'SKIP'
             '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2'
-            'fdbdeffd3a227c789de787a2a07f6cd0352b772dbdc16471aa3df1cb72f587a3'
+            '75ab53ad44b95204c788a2988e97a5cb963bdbf6072a5466949a2afb79821c8f'
             '1d3475dc2f4f3e450cf313130d3ce965f933f396058828fa843c0df8115feeb9'
             'c68d1522f9bce4ce31c92aa7a688da49f13043f5bb2254795b76dea8f47130b7'
             '064dcd5a3ab1b7c23383e2cafbd37859e4c353f8839671d9695c6f7c2ef3260b'
             '81d0ced62f61677ea0cf5f69a491093409fa1370f2ef045c41106ca8bf9c46f6'
             '64a77944a28026b066c1682c7258d02289d257b24b6f173a9f7580c48beed966')
-validpgpkeys=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D') # Emil Velikov
+validpgpkeys=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D') # Emil Velikov <emil.l.velikov@gmail.com>
+validpgpkeys+=('946D09B5E4C9845E63075FF1D961C596A7203456') # "Andres Gomez <tanty@igalia.com>"
 
 prepare() {
   cd ${srcdir}/mesa-${pkgver}
