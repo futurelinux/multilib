@@ -3,19 +3,21 @@
 _pkgbasename=pulseaudio
 pkgname=lib32-libpulse
 pkgdesc="A featureful, general-purpose sound server. (32-bit client libraries)"
-pkgver=8.0
+pkgver=10.0
 pkgrel=1
 arch=(x86_64)
-url="http://www.freedesktop.org/wiki/Software/PulseAudio"
+url="https://www.freedesktop.org/wiki/Software/PulseAudio/"
 license=(LGPL)
-depends=(lib32-libdbus lib32-json-c lib32-systemd
+depends=(lib32-libdbus lib32-systemd lib32-glib2
          lib32-libasyncns lib32-libcap lib32-libxtst lib32-libsm lib32-libsndfile
+         lib32-libltdl
          $_pkgbasename)
-makedepends=(gcc-multilib libtool-multilib intltool lib32-glib2 lib32-speexdsp git)
+makedepends=(gcc libtool intltool lib32-glib2 lib32-speexdsp git)
 optdepends=('lib32-alsa-plugins: ALSA support')
-options=(!emptydirs !libtool)
-source=("http://freedesktop.org/software/pulseaudio/releases/pulseaudio-$pkgver.tar.xz")
-sha256sums=('690eefe28633466cfd1ab9d85ebfa9376f6b622deec6bfee5091ac9737cd1989')
+options=(!emptydirs)
+_commit=84952e6a092b6a0c5b153bd7a4f6e490810681c8  # tags/v10.0^0
+source=("git+https://anongit.freedesktop.org/git/pulseaudio/pulseaudio#commit=$_commit")
+sha256sums=('SKIP')
 
 _pulsever=$pkgver
 [[ $_pulsever = *.*.* ]] && _pulsever=${_pulsever%.*}
@@ -23,20 +25,26 @@ _pulsever=$pkgver
 _libs="libpulse.la libpulse-simple.la libpulse-mainloop-glib.la"
 _pkglibs="libpulsecommon-${_pulsever}.la libpulsedsp.la"
 
+pkgver() {
+  cd pulseaudio
+  git describe --tags | sed 's/^v//;s/-/+/g'
+}
+
 prepare() {
-  cd pulseaudio-$pkgver
+  cd pulseaudio
+  NOCONFIGURE=1 ./bootstrap.sh
 }
 
 build() {
-  cd pulseaudio-$pkgver
+  cd pulseaudio
 
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   ./configure --prefix=/usr \
-    --sysconfdir=/etc \
     --libdir=/usr/lib32 \
+    --sysconfdir=/etc \
     --libexecdir=/usr/lib32 \
     --localstatedir=/var \
     --disable-hal \
@@ -54,7 +62,7 @@ build() {
 }
 
 package() {
-  cd pulseaudio-$pkgver
+  cd pulseaudio
   make -j1 -C src DESTDIR="$pkgdir" \
     lib_LTLIBRARIES="$_libs" install-libLTLIBRARIES
   make -j1 -C src DESTDIR="$pkgdir" \
