@@ -1,5 +1,4 @@
-# Maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
-# Contributor from AUR: 3V0LU710N <db_eee-at-hotmail-dot-com>
+# Contributions from ArchLinux: https://git.archlinux.org/svntogit/community.git/tree/trunk?h=packages/lib32-libusb
 
 _pkgbasename=libusb
 pkgname=lib32-$_pkgbasename
@@ -7,7 +6,7 @@ pkgver=1.0.21
 pkgrel=1
 pkgdesc="Library to enable user space application programs to communicate with USB devices. (32-bit). libusb fork."
 arch=('x86_64')
-url="http://libusbx.sourceforge.net/"
+url="http://libusb.info/"
 license=('LGPL')
 depends=('lib32-glibc' 'lib32-systemd' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
