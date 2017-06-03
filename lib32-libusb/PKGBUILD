@@ -3,7 +3,7 @@
 
 _pkgbasename=libusb
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.19
+pkgver=1.0.21
 pkgrel=1
 pkgdesc="Library to enable user space application programs to communicate with USB devices. (32-bit). libusb fork."
 arch=('x86_64')
@@ -14,21 +14,21 @@ makedepends=('gcc-multilib')
 provides=('lib32-libusbx')
 conflicts=('lib32-libusbx')
 replaces=('lib32-libusbx<=1.0.18')
-source=(http://downloads.sourceforge.net/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2)
+source=(https://github.com/libusb/libusb/releases/download/v$pkgver/libusb-$pkgver.tar.bz2)
 options=(!libtool)
-md5sums=('f9e2bb5879968467e5ca756cb4e1fa7e')
+md5sums=('1da9ea3c27b3858fa85c5f4466003e44')
 
 build() {
   export CC="gcc -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  cd "${_pkgbasename}-${pkgver}"
-  ./configure --prefix=/usr --libdir=/usr/lib32
-  make
+  cd "libusb-${pkgver}"
+  ./configure --prefix=/usr --libdir=/usr/lib32 --disable-static
+  make -j1
 }
 
 package () {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${srcdir}/libusb-${pkgver}"
   make DESTDIR="${pkgdir}" install
-  rm -rf ${pkgdir}/usr/include
+  rm -rf "${pkgdir}"/usr/include
 }
