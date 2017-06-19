@@ -2,7 +2,7 @@
 
 _pkgbasename=gnutls
 pkgname=lib32-$_pkgbasename
-pkgver=3.5.11
+pkgver=3.5.13
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer (32-bit)"
 arch=('x86_64')
@@ -12,7 +12,7 @@ depends=('lib32-zlib' 'lib32-nettle' 'lib32-p11-kit' 'lib32-libtasn1' 'lib32-lib
          "$_pkgbasename=${pkgver}")
 makedepends=('lib32-gcc-libs')
 source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/${_pkgbasename}-${pkgver}.tar.xz)
-md5sums=('a3ff8cf5ca7522e3ba14f487e6326e11')
+md5sums=('4fd41ad86572933c2379b4cc321a0959')
 
 build() {
   export CC="gcc -m32"
