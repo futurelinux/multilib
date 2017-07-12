@@ -1,5 +1,5 @@
 pkgname=lib32-flashplugin
-pkgver=26.0.0.126
+pkgver=26.0.0.137
 pkgrel=1
 license=('custom')
 pkgdesc='Adobe Flash Player for 32-bit Mozilla-based browsers'
@@ -9,7 +9,7 @@ depends=('mozilla-common' 'lib32-libxt' 'lib32-gtk2' 'lib32-nss' 'lib32-curl' 'l
 #optdepends=('lib32-libvdpau: video hardware decoding for supporting players')
 options=(!strip)
 source=("flash_player_npapi_linux_$pkgver.i386.tar.gz::https://fpdownload.adobe.com/get/flashplayer/pdc/$pkgver/flash_player_npapi_linux.i386.tar.gz")
-md5sums=('8795b0311ef8754f86ce98f529f60e2d')
+md5sums=('80bf9fb9ae115b78cd99f8e726ce0fde')
 
 package() {
   install -Dm644 "${srcdir}/libflashplayer.so" "${pkgdir}/usr/lib32/mozilla/plugins/libflashplayer.so"
