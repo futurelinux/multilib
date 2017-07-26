@@ -12,12 +12,14 @@ license=('custom')
 source=(https://mesa.freedesktop.org/archive/mesa-${pkgver}.tar.xz{,.sig}
         LICENSE
         0001-Fix-linkage-against-shared-glapi.patch
-        glvnd-fix-gl-dot-pc.patch)
+        glvnd-fix-gl-dot-pc.patch
+        remove-gbm_bo_create_with_modifiers.patch)
 sha256sums=('378516b171712687aace4c7ea8b37c85895231d7a6d61e1e27362cf6034fded9'
             'SKIP'
             '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2'
             'c68d1522f9bce4ce31c92aa7a688da49f13043f5bb2254795b76dea8f47130b7'
-            '64a77944a28026b066c1682c7258d02289d257b24b6f173a9f7580c48beed966')
+            '64a77944a28026b066c1682c7258d02289d257b24b6f173a9f7580c48beed966'
+            '0ee964bfd975b6b19e74be5f9a9fe6215ea171d0f895ffc7e9f73ee728d576ae')
 validpgpkeys=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D') # Emil Velikov <emil.l.velikov@gmail.com>
 validpgpkeys+=('946D09B5E4C9845E63075FF1D961C596A7203456') # "Andres Gomez <tanty@igalia.com>"
 validpgpkeys+=('E3E8F480C52ADD73B278EE78E1ECBE07D7D70895') # Juan Antonio Suárez Romero (Igalia, S.L.) <jasuarez@igalia.com>"
@@ -29,6 +31,7 @@ prepare() {
   # non-upstreamed ones
   patch -Np1 -i ../glvnd-fix-gl-dot-pc.patch
   patch -Np1 -i ../0001-Fix-linkage-against-shared-glapi.patch
+  patch -Np1 -i ../remove-gbm_bo_create_with_modifiers.patch
 
   autoreconf -fiv
 }
