@@ -2,8 +2,8 @@
 
 pkgbase=lib32-amdgpu-pro
 pkgname=(lib32-amdgpu-pro lib32-amdgpu-pro-libdrm lib32-amdgpu-pro-libgl lib32-amdgpu-pro-opencl lib32-amdgpu-pro-vdpau lib32-amdgpu-pro-vulkan)
-pkgver=17.10.401251
-_pkgver=17.10-401251
+pkgver=17.30.458935
+_pkgver=17.30-458935
 pkgrel=1
 arch=('x86_64')
 url='http://www.amd.com'
@@ -13,7 +13,7 @@ makedepends=('wget')
 DLAGENTS='https::/usr/bin/wget --referer https://support.amd.com/en-us/kb-articles/Pages/AMDGPU-PRO-Install.aspx -N %u'
 
 source=(https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${_pkgver}.tar.xz)
-sha256sums=(0a10cf39841bf77eacb393ca112ce5f82ca0c4ea728d2fce975732855c039600)
+sha256sums=(3652a5c9476a650a3e3cd89bcd7ac119ed7d16a570501eeeea6a902cbc6f9488)
 
 
 # extracts a debian package
