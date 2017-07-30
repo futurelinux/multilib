@@ -2,7 +2,7 @@
 
 _pkgbasename=icu
 pkgname=lib32-$_pkgbasename
-pkgver=56.1
+pkgver=59.1
 pkgrel=1
 pkgdesc="International Components for Unicode library (32 bit)"
 arch=('x86_64')
@@ -10,24 +10,15 @@ url="http://www.icu-project.org/"
 license=('custom:icu')
 depends=('lib32-gcc-libs' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
-source=(http://download.icu-project.org/files/icu4c/${pkgver}/icu4c-${pkgver//./_}-src.tgz
-        'icu.8198.revert.icu5431.patch')
-md5sums=('c4a2d71ff56aec5ebfab2a3f059be99d'
-         'ebd5470fc969c75e52baf4af94a9ee82')
-
-
-prepare() {
-  cd ${srcdir}/icu/source
-  # fix Malayalam encoding https://bugzilla.redhat.com/show_bug.cgi?id=654200
-  patch -Rp3 -i ${srcdir}/icu.8198.revert.icu5431.patch
-}
+source=(http://download.icu-project.org/files/icu4c/${pkgver}/icu4c-${pkgver//./_}-src.tgz)
+sha256sums=('7132fdaf9379429d004005217f10e00b7d2319d0fea22bdfddef8991c45b75fe')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32" 
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
   export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
 
-  cd $srcdir/icu/source
+  cd icu/source
 
   ./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --libdir=/usr/lib32
 
