@@ -1,6 +1,6 @@
 _pkgbasename=nspr
 pkgname=lib32-$_pkgbasename
-pkgver=4.16
+pkgver=4.17
 pkgrel=1
 pkgdesc="Netscape Portable Runtime (32-bit)"
 arch=('x86_64')
@@ -10,12 +10,12 @@ depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('zip' 'lib32-gcc-libs')
 options=('!emptydirs')
 source=(https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('b295ee2550b43edc0598c20663ceef9fa3fafe51')
+sha1sums=('5262abb243191d5fa3dcd72857d7d7f8ec47ad01')
 
 build() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${srcdir}/${_pkgbasename}-${pkgver}/${_pkgbasename}"
   
-  ./nspr/configure \
+  ./configure \
       --prefix=/usr \
       --libdir=/usr/lib32 \
       --includedir=/usr/include/nspr \
@@ -25,7 +25,7 @@ build() {
 }
 
 package() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${srcdir}/${_pkgbasename}-${pkgver}/${_pkgbasename}"
   make DESTDIR="${pkgdir}" install
   
   chmod 644 "$pkgdir"/usr/lib32/*.a
