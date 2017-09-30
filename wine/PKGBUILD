@@ -1,11 +1,11 @@
 pkgname=wine
-pkgver=2.17
+pkgver=2.18
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
 source=(https://dl.winehq.org/wine/source/2.x/$pkgname-$_pkgver.tar.xz
         30-win32-aliases.conf)
 
-md5sums=('c148a0a075ce622d60863a19d51929fb'
+md5sums=('130e6a9a6d644cda72532afe9eb2645a'
          '1ff4e467f59409272088d92173a0f801')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
@@ -81,10 +81,6 @@ optdepends=(
 prepare() {
   cd $srcdir
   
-  # remove once https://bugs.winehq.org/show_bug.cgi?id=38653 is resolved
-  export CFLAGS="${CFLAGS/-O2/} -O0"
-  export CXXFLAGS="${CXXFLAGS/-O2/} -O0"
-  
   # Get rid of old code dir
   rm -rf $pkgname
   
@@ -94,6 +90,10 @@ prepare() {
   # Allow ccache to work
   mv $pkgname-$_pkgver $pkgname
   
+  # https://bugs.winehq.org/show_bug.cgi?id=43530
+  export CFLAGS="${CFLAGS/-fno-plt/}"
+  export LDFLAGS="${LDFLAGS/,-z,now/}"
+
   sed 's|OpenCL/opencl.h|CL/opencl.h|g' -i $pkgname/configure*
 
   # ncurses fix
