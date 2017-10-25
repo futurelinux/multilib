@@ -1,13 +1,13 @@
 _pkgbasename=libxml2
 pkgname=lib32-$_pkgbasename
-pkgver=2.9.4+12+ge905f08
+pkgver=2.9.6+3+g5af594d8
 pkgrel=1
 pkgdesc="XML parsing library, version 2 (32-bit)"
 arch=(x86_64)
 license=('custom')
-depends=('lib32-zlib>=1.2.4' 'lib32-readline>=7.0' 'lib32-ncurses>=6.0' $_pkgbasename=$pkgver)
+depends=('lib32-zlib' 'lib32-readline' 'lib32-ncurses' $_pkgbasename=$pkgver)
 makedepends=('lib32-gcc-libs')
-_commit=e905f08123e4a6e7731549e6f09dadff4cab65bd  # master
+_commit=5af594d8bc55121ae454cba4d05793d1db7ff612  # master
 source=(git://git.gnome.org/libxml2#commit=$_commit
         http://www.w3.org/XML/Test/xmlts20080827.tar.gz)
 md5sums=('SKIP'

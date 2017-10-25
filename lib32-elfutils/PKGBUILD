@@ -2,7 +2,7 @@
 
 _pkgbasename=elfutils
 pkgname=lib32-elfutils
-pkgver=0.167
+pkgver=0.170
 pkgrel=1
 pkgdesc="Collection of libraries for working with ELF object files and DWARF debugging information (32-bit)"
 arch=('x86_64')
@@ -12,7 +12,7 @@ depends=('lib32-bzip2' 'lib32-zlib' $_pkgbasename=$pkgver)
 makedepends=('lib32-gcc-libs')
 source=(https://fedorahosted.org/releases/e/l/elfutils/${pkgver}/elfutils-${pkgver}.tar.bz2{,.sig})
 options=('staticlibs')
-sha1sums=('91cec7fec0031758cc0c842a87ee8c5faa4d8107'
+sha1sums=('aff6feac0ff69eb7b240babdf2918f640eadb032'
           'SKIP')
 validpgpkeys=('47CC0331081B8BC6D0FD4DA08370665B57816A6A') # Mark J. Wielaard <mark@klomp.org>
 

@@ -5,7 +5,7 @@
 
 _pkgbasename=dbus-glib
 pkgname=lib32-${_pkgbasename}
-pkgver=0.102
+pkgver=0.108
 pkgrel=1
 pkgdesc="GLib bindings for DBUS (32-bit)"
 arch=(x86_64)
@@ -15,7 +15,7 @@ depends=('lib32-dbus-core' 'lib32-glib2' "${_pkgbasename}=${pkgver}")
 makedepends=('gcc-multilib' 'lib32-libffi' 'pkgconfig')
 options=('!emptydirs')
 source=(http://dbus.freedesktop.org/releases/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-md5sums=('f76b8558fd575d0106c3a556eaa49184')
+md5sums=('a66a613705870752ca9786e0359aea97')
 
 build() {
   export CC="gcc -m32"
