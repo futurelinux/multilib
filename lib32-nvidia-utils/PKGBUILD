@@ -3,8 +3,8 @@
 _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
-pkgver=378.13
-pkgrel=1
+pkgver=387.22
+pkgrel=2
 arch=('x86_64')
 url="http://www.nvidia.com/"
 license=('custom')
@@ -13,7 +13,7 @@ options=('!strip')
 _pkg="NVIDIA-Linux-x86-${pkgver}"
 source=("ftp://download.nvidia.com/XFree86/Linux-x86/${pkgver}/NVIDIA-Linux-x86-${pkgver}.run")
 #source=("NVIDIA-Linux-x86-${pkgver}.run::https://developer.nvidia.com/linux32bit")
-md5sums=('dd1077750af9a067739ec291fb24175f')
+md5sums=('abdbb3c813e52148f7435308121e6a37')
 
 create_links() {
     # create soname links
@@ -65,8 +65,8 @@ package_lib32-nvidia-utils() {
     #ln -s "libGLX_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
 
     # Wayland stuff
-    install -D -m755 "libnvidia-egl-wayland.so.1.0.1" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.1.0.1"
-    ln -s "libnvidia-egl-wayland.so.1.0.1" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.1"
+    install -D -m755 "libnvidia-egl-wayland.so.1.0.2" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.1.0.2"
+    ln -s "libnvidia-egl-wayland.so.1.0.2" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.1"
 
     # OpenGL libraries
     install -D -m755 "libEGL_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libEGL_nvidia.so.${pkgver}"
