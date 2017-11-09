@@ -1,6 +1,6 @@
 _pkgbasename=libxslt
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.28
+pkgver=1.1.32
 pkgrel=1
 pkgdesc="XML stylesheet transformation library (32-bit)"
 arch=('x86_64')
@@ -10,7 +10,7 @@ depends=('lib32-libxml2' 'lib32-libgcrypt' $_pkgbasename=$pkgver)
 makedepends=('lib32-gcc-libs')
 checkdepends=('docbook-xml')
 source=(ftp://xmlsoft.org/libxslt/${_pkgbasename}-${pkgver}.tar.gz)
-md5sums=('9667bf6f9310b957254fdcf6596600b7')
+md5sums=('1fc72f98e98bf4443f1651165f3aa146')
 
 build() {
   export CC="gcc -m32"
