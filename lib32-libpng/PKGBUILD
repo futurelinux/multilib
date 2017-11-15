@@ -1,6 +1,6 @@
 _pkgbasename=libpng
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.27
+pkgver=1.6.34
 _apngver=${pkgver}
 _libversion=16
 pkgrel=1
@@ -13,8 +13,8 @@ makedepends=('lib32-gcc-libs')
 options=('!libtool')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.xz"
         "http://downloads.sourceforge.net/sourceforge/apng/libpng-${_apngver}-apng.patch.gz")
-md5sums=('90099cb7dfb36bf223f4791429d45c6a'
-         'c8c894fb92dd1e99ba0c653bb0b8d98b')
+md5sums=('c05b6ca7190a5e387b78657dbe5536b2'
+         '68b2811fed88359ab295ca906c4f4a96')
 
 build() {
   export CC="gcc -m32"
