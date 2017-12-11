@@ -1,6 +1,6 @@
 pkgname=steam
 pkgver=1.0.0.54
-pkgrel=3
+pkgrel=4
 pkgdesc="Digital distribution client bootstrap package"
 arch=('x86_64')
 url="http://steampowered.com/"
@@ -12,7 +12,6 @@ optdepends=('lib32-flashplugin: for flash video'
             'freshplayerplugin: alternative flash video support'
             'lib32-alsa-plugins: for pulseaudio on some games'
             'lib32-mesa: for open source driver users'
-            'lib32-catalyst-utils: for AMD Catalyst users'
             'lib32-nvidia-utils: for NVIDIA proprietary blob users'
             'lib32-primus: for NVIDIA + Bumblebee users')
 install=steam.install
@@ -25,7 +24,7 @@ sha256sums=('42531bf2615afed54c333ae9afeebe8cb68a31304ddfcf90e61b3532a5597386'
 
 
 prepare() {
-    cd ${pkgname}
+    cd $pkgname
     patch -Np1 < "${srcdir}/alsa_sdl_audiodriver.patch"
 
     # apply roundups for udev rules
