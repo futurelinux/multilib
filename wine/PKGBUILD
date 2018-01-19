@@ -1,11 +1,11 @@
 pkgname=wine
-pkgver=2.22
+pkgver=3.0
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
-source=(https://dl.winehq.org/wine/source/2.x/$pkgname-$_pkgver.tar.xz
+source=(https://dl.winehq.org/wine/source/$pkgver/$pkgname-$_pkgver.tar.xz
         30-win32-aliases.conf)
 
-md5sums=('5e9cd8389fe36fac8910e6a17e040fd7'
+md5sums=('52e49d9d7b677b7ab0892545cdacfe43'
          '1ff4e467f59409272088d92173a0f801')
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
@@ -79,7 +79,7 @@ optdepends=(
 )
 
 prepare() {
-  cd $srcdir
+#  cd $srcdir
   
   # Get rid of old code dir
   rm -rf $pkgname
@@ -105,7 +105,7 @@ prepare() {
 }
 
 build() {
-  cd $srcdir
+#  cd $srcdir
 
   msg2 "Building Wine-64..."
 
