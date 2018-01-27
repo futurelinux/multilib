@@ -3,7 +3,7 @@
 
 pkgname=('lib32-llvm' 'lib32-llvm-libs' 'lib32-clang')
 pkgver=5.0.1
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')

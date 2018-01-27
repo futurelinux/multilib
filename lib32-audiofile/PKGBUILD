@@ -1,7 +1,7 @@
 _pkgbasename=audiofile
 pkgname=lib32-$_pkgbasename
 pkgver=0.3.6
-pkgrel=2
+pkgrel=3
 pkgdesc="Silicon Graphics Audio File Library (32-bit)"
 arch=('x86_64')
 url="http://www.68k.org/~michael/audiofile/"
@@ -18,7 +18,7 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  ./configure --prefix=/usr --libdir=/usr/lib32
+  ./configure --prefix=/usr --libdir=/usr/lib32 --disable-docs --disable-examples
   make
 }
 

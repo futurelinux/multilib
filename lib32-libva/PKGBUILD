@@ -5,6 +5,7 @@
 # Contributor: Ionut Biru <ibiru at archlinux dot org>
 # Contributor: Bartłomiej Piotrowski <bpiotrowski at archlinux dot org>
 
+_pkgbasename=libva
 pkgname=lib32-libva
 pkgver=1.7.0
 pkgrel=1
@@ -12,7 +13,7 @@ pkgdesc='Video Acceleration (VA) API for Linux (32-bit)'
 arch=(x86_64)
 url='https://freedesktop.org/wiki/Software/vaapi'
 license=('MIT')
-depends=(lib32-libdrm lib32-libgl lib32-wayland lib32-libxext lib32-libxfixes libva)
+depends=(lib32-libdrm lib32-libgl lib32-wayland lib32-libxext lib32-libxfixes "$_pkgbasename=$pkgver" )
 makedepends=(mesa lib32-gcc-libs)
 optdepends=('lib32-libva-vdpau-driver: vdpau back-end for nvidia'
             'lib32-libva-intel-driver: back-end for intel cards')

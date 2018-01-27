@@ -1,6 +1,6 @@
 _pkgbasename=v4l-utils
 pkgname=lib32-$_pkgbasename
-pkgver=1.8.1
+pkgver=1.12.5
 pkgrel=1
 pkgdesc="Userspace tools and conversion library for Video 4 Linux (32-bit)"
 arch=('x86_64')
@@ -12,7 +12,7 @@ license=('LGPL')
 makedepends=('gcc-multilib')
 depends=('lib32-gcc-libs' $_pkgbasename=$pkgver 'lib32-libjpeg-turbo')
 source=(http://linuxtv.org/downloads/v4l-utils/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('f86d0938e46fde821dc10d4d2f6636e4')
+md5sums=('98ade56409bb1beb665c9cf2e4d99592')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"

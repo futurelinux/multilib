@@ -1,64 +1,34 @@
-# Contributions from Arch: https://www.archlinux.org/packages/multilib/x86_64/lib32-jack2/
-#
-## Legacy jack2-multilib package description (now replaced by lib32-jack2)
-#
-# This one is in response to a need for an equivalent to lib32-jack for
-# jack2. A lib32-jack2 would require much patching and invading the pure
-# jack2 package, and what's more, the buildsystem provides a flag just to
-# build a hybrid jack2 in full. As such, we have opted to provide multilib
-# users with a replacement package instead of the usual lib32 add-on.
-#
-# See http://mailman.archlinux.org/pipermail/arch-multilib/2011-December/000251.html
-
-## New lib32-jack2 package description (replaces jack2{-dbus,}-multilib
-#
-# The vanilla mixed mode build is broken since a long time, so we build
-# and provide just the 32 bit jack client library using some dynamic
-# patching that seems stable enough to last on future build system changes.
 
 _pkgname=jack2
 pkgname=lib32-$_pkgname
-pkgver=1.9.10
-pkgrel=2
+pkgver=1.9.12
+pkgrel=1
 pkgdesc="The next-generation JACK with SMP support (32 bit)"
 arch=('x86_64')
 url="http://jackaudio.org/"
 license=('GPL')
-depends=('lib32-gcc-libs' $_pkgname=$pkgver)
-makedepends=('python2' 'gcc' 'eigen3')
+depends=('lib32-celt' 'lib32-gcc-libs' 'lib32-opus' $_pkgname=$pkgver)
+makedepends=('celt' 'doxygen' 'lib32-celt' 'lib32-gcc-libs' 'lib32-opus' 'libffado' 'libsamplerate' 'opus' 'python3')
 provides=('lib32-jack')
 conflicts=('lib32-jack')
 source=("https://github.com/jackaudio/jack2/archive/v${pkgver}.tar.gz")
-md5sums=('2db990e7c09e4cc163f40add01f6867d')
-
-prepare() {
-  cd "$srcdir/$_pkgname-$pkgver"
-
-  # ugly dynamic patch to build just the 32 bit jack client lib
-  # (compatible with previous releases and hoping with the next)
-  sed -e '/serverlib/,/clientlib/{/clientlib/!d}' \
-      -e '/clientlib32bit/i\\tclientlib.posted = True' \
-      -e '1,/clientlib32bit/!d' \
-      -i common/wscript
-
-  # celt and opus are not required to build
-  sed -i 's/, "CELT", "OPUS"//' common/wscript
-}
+md5sums=('6cb5dfea0586bcf009c733c4e4b04a03')
 
 build() {
-  cd "$srcdir/$_pkgname-$pkgver"
-  python2 waf configure --prefix=/usr \
-                        --libdir=/usr/lib32 \
+  cd "${pkgname#lib32-}-${pkgver}"
+
+  python waf configure --prefix=/usr \
+                        --libdir=/usr/lib \
+                        --libdir32=/usr/lib32 \
                         --mixed
-  cd common
-  python2 ../waf build $MAKEFLAGS
+  python waf build
 }
 
 package() {
-  cd "$srcdir/$_pkgname-$pkgver/build/common"
+  cd "${pkgname#lib32-}-${pkgver}"
 
-  # jack client 32 bit lib
-  install -Dm755 libjack.so "$pkgdir/usr/lib32/libjack.so.0.1.0"
-  ln -s libjack.so.0.1.0 "$pkgdir/usr/lib32/libjack.so.0"
-  ln -s libjack.so.0.1.0 "$pkgdir/usr/lib32/libjack.so"
+  python waf install --destdir="${pkgdir}"
+  # remove all non-32bit and those provided by jack2{,-dbus}
+  rm -rf "${pkgdir}"/usr/{bin,lib,include,share}
 }
+
