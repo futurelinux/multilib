@@ -3,20 +3,20 @@
 
 _pkgbasename=alsa-plugins
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.0
+pkgver=1.1.5
 pkgrel=1
 pkgdesc="Extra alsa plugins (32-bit)"
 arch=('x86_64')
 url="http://www.alsa-project.org"
 license=(GPL)
 depends=(lib32-alsa-lib $_pkgbasename=$pkgver)
-makedepends=(lib32-libpulse lib32-jack lib32-speex lib32-libsamplerate gcc-multilib)
+makedepends=(lib32-libpulse lib32-jack lib32-speex lib32-libsamplerate lib32-gcc-libs)
 optdepends=('lib32-libpulse: PulseAudio plugin'
             'lib32-jack: Jack plugin'
             'lib32-libsamplerate: libsamplerate resampling plugin'
             'lib32-speex: libspeexdsp resampling plugin')
 source=("ftp://ftp.alsa-project.org/pub/plugins/$_pkgbasename-$pkgver.tar.bz2")
-md5sums=('b123e42ed881b9adbc99e4040f257c39')
+md5sums=('f898b0e6e8acf3f6f82bc2a0f0c84a97')
 
 build() {
   cd $_pkgbasename-$pkgver
