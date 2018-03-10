@@ -1,6 +1,6 @@
 _pkgbasename=nspr
 pkgname=lib32-$_pkgbasename
-pkgver=4.18
+pkgver=4.19
 pkgrel=1
 pkgdesc="Netscape Portable Runtime (32-bit)"
 arch=('x86_64')
@@ -10,7 +10,7 @@ depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('zip' 'lib32-gcc-libs')
 options=('!emptydirs')
 source=(https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('3d6af705576c53aa9b126925d984419869070120')
+sha1sums=('907221d51a1f8cca0c3a9e1af93c53e02f5e203b')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}/${_pkgbasename}"
