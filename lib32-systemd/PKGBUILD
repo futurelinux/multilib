@@ -5,7 +5,7 @@ _commit='c58ab03f64890e7db88745a843bd4520e307099b'
 # Bump this to latest major release for signed tag verification,
 # the commit count is handled by pkgver() function.
 pkgver=238.51
-pkgrel=1
+pkgrel=2
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="https://www.github.com/systemd/systemd"
@@ -138,7 +138,7 @@ package() {
   DESTDIR="$pkgdir" ninja -C build install
 
   rm -rf "${pkgdir}"/{etc,var}
-  rm -rf "${pkgdir}"/usr/{bin,include,lib,share}
+  rm -rf "${pkgdir}"/usr/{bin,sbin,include,lib,share}
 
   install -m755 -d "${pkgdir}/usr/share/licenses"
   ln -s systemd "$pkgdir/usr/share/licenses/lib32-systemd"
