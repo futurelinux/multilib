@@ -1,22 +1,25 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
 # latest commit on stable branch
-_commit='743b771c559c6101544f7358a42c8c519fe4b0db'
+_commit='c58ab03f64890e7db88745a843bd4520e307099b'
 # Bump this to latest major release for signed tag verification,
 # the commit count is handled by pkgver() function.
-pkgver=235.38
-pkgrel=2
+pkgver=238.51
+pkgrel=1
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="https://www.github.com/systemd/systemd"
 license=('GPL2' 'LGPL2.1')
-depends=('lib32-libgcrypt' 'lib32-xz' 'lib32-libcap' 'lib32-gcc-libs' "$_pkgbasename=$pkgver")
-makedepends=('lib32-gcc-libs' 'gcc-multilib' 'lib32-libidn' 'lib32-glib2' 'intltool' 'gperf'
-             'lib32-curl' 'lib32-bzip2' 'lib32-acl' 'lib32-gnutls' 'git' 'meson' 'libxslt')
+depends=('lib32-gcc-libs' 'lib32-libcap' 'lib32-libgcrypt' 'lib32-xz' "$_pkgbasename=$pkgver")
+makedepends=('gcc-multilib' 'git' 'gperf' 'intltool' 'lib32-acl' 'lib32-bzip2'
+             'lib32-curl' 'lib32-libdbus' 'lib32-gcc-libs' 'lib32-glib2'
+             'lib32-gnutls' 'lib32-libelf' 'lib32-libidn' 'lib32-pcre2'
+             'libxslt' 'meson')
 options=('strip')
-validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4')  # Lennart Poettering <lennart@poettering.net>
-source=('git://github.com/systemd/systemd-stable.git'
-        'git://github.com/systemd/systemd.git') # pull in for tags, backports & reverts
+validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4'  # Lennart Poettering <lennart@poettering.net>
+              '5C251B5FC54EB2F80F407AAAC54CA336CFEB557E') # Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl>
+source=('git+https://github.com/systemd/systemd-stable'
+        'git+https://github.com/systemd/systemd')
 sha256sums=('SKIP'
          'SKIP')
 
@@ -26,9 +29,10 @@ _backports=(
 _reverts=(
 )
 
-_validate_tag() {
+_validate_tag() (
   local success fingerprint trusted status tag=v${pkgver%.*}
 
+  cd "$srcdir/$_pkgbasename-stable"
   parse_gpg_statusfile /dev/stdin < <(git verify-tag --raw "$tag" 2>&1)
 
   if (( ! success )); then
@@ -51,6 +55,22 @@ _validate_tag() {
   esac
 
   return 0
+)
+
+prepare() {
+  cd "$_pkgbasename-stable"
+
+  git remote rm upstream || true
+  git remote add -f upstream ../systemd
+  git checkout "$_commit"
+
+  local c
+  for c in "${_backports[@]}"; do
+    git cherry-pick -n "$c"
+  done
+  for c in "${_reverts[@]}"; do
+    git revert -n "$c"
+  done
 }
 
 pkgver() {
@@ -58,33 +78,16 @@ pkgver() {
 
   cd "$_pkgbasename-stable"
 
-  git checkout "${_commit}"
+  git checkout "$_commit"
 
   version="$(git describe --abbrev=0 --tags)"
   count="$(git rev-list --count ${version}..)"
   printf '%s.%s' "${version#v}" "${count}"
 }
 
-prepare() {
-  cd "$_pkgbasename-stable"
-
-  git remote add upstream ../systemd/
-  git fetch --all
-
-  git checkout "${_commit}"
-
+build() {
   _validate_tag || return
 
-  local _commit
-  for _commit in "${_backports[@]}"; do
-    git cherry-pick -n "$_commit"
-  done
-  for _commit in "${_reverts[@]}"; do
-    git revert -n "$_commit"
-  done
-}
-
-build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
