@@ -10,7 +10,7 @@ license=('custom')
 url="http://www.sqlite.org/"
 depends=(lib32-glibc $_pkgbasename=$pkgver 'lib32-gcc-libs')
 makedepends=('tcl' 'gcc' 'lib32-readline')
-source=(https://www.sqlite.org/2017/sqlite-src-${_srcver}.zip)
+source=(https://www.sqlite.org/2018/sqlite-src-${_srcver}.zip)
 sha1sums=('90bea4e46a01e9c27356b19c3150a8bf146c09fc')
 options=('!makeflags')
 replaces=("lib32-sqlite3<$pkgver")
