@@ -1,12 +1,12 @@
 _pkgbasename=qt
 pkgname="lib32-${_pkgbasename}"
 pkgver=4.8.7
-pkgrel=8
+pkgrel=9
 pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
 url='http://www.qt.io'
 license=('GPL3' 'LGPL')
-depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gstreamer,gst-plugins-base}
+depends=(lib32-{fontconfig,sqlite,alsa-lib,glib2,dbus-core,openssl,gstreamer,gst-plugins-base}
          lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi,xml2}
          "${_pkgbasename}=${pkgver}")
 makedepends=('cups' lib32-{mesa,libcups,libxfixes,icu} )
