@@ -2,16 +2,16 @@
 
 _pkgbasename=wayland
 pkgname=lib32-$_pkgbasename
-pkgver=1.14.0
+pkgver=1.15.0
 pkgrel=1
 pkgdesc='A computer display server protocol'
 arch=('x86_64')
-url='http://wayland.freedesktop.org'
+url='https://wayland.freedesktop.org'
 license=('MIT')
 depends=('lib32-glibc' 'lib32-libffi' 'lib32-expat' 'lib32-libxml2' $_pkgbasename=$pkgver )
+source=("https://wayland.freedesktop.org/releases/wayland-${pkgver}.tar.xz"{,.sig})
 validpgpkeys=('C7223EBE4EF66513B892598911A30156E0E67611') # Bryce Harrington
-source=("http://wayland.freedesktop.org/releases/wayland-${pkgver}.tar.xz"{,.sig})
-sha256sums=('ed80cabc0961a759a42092e2c39aabfc1ec9a13c86c98bbe2b812f008da27ab8'
+sha256sums=('eb3fbebb8559d56a80ad3753ec3db800f587329067962dbf65e14488b4b7aeb0'
             'SKIP')
 
 build() {
@@ -38,3 +38,5 @@ package() {
   install -dm 755 "${pkgdir}"/usr/share/licenses
   ln -s ${_pkgbasename} "${pkgdir}"/usr/share/licenses/${pkgname}
 }
+
+# vim: ts=2 sw=2 et:
