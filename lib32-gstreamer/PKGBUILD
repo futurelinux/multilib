@@ -3,7 +3,7 @@
 # Contributor: Chris Kitching <chriskitching@linux.com>
 
 pkgname=lib32-gstreamer
-pkgver=1.12.3
+pkgver=1.14.1
 pkgrel=1
 pkgdesc="GStreamer Multimedia Framework (32-bit)"
 arch=('x86_64')
@@ -12,10 +12,8 @@ url="http://gstreamer.freedesktop.org/"
 depends=('lib32-libxml2' 'lib32-glib2' 'gstreamer' 'lib32-libunwind')
 optdepends=('sh: feedback script')
 makedepends=('intltool' 'pkgconfig' 'gtk-doc' 'gobject-introspection' 'python2')
-source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz{,.asc})
-sha256sums=('d388f492440897f02b01eebb033ca2d41078a3d85c0eddc030cdea5a337a216e'
-            'SKIP')
-validpgpkeys=('7F4BC7CC3CA06F97336BBFEB0668CC1486C2D7B5')
+source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
+sha256sums=('28d82b0d261544a9bf85b429399929e4986eb00efcf1ce16cc71d269a4c3186c')
 
 build() {
   cd "${srcdir}/gstreamer-${pkgver}"

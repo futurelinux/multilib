@@ -1,15 +1,15 @@
 _pkgbasename=orc
 pkgname=lib32-${_pkgbasename}
-pkgver=0.4.24
+pkgver=0.4.28
 pkgrel=1
 pkgdesc="The Oild Runtime Compiler. Multilib"
 arch=('x86_64')
 license=('custom')
 url='http://code.entropywave.com/projects/orc/'
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
-makedepends=('valgrind')
+makedepends=('valgrind' 'lib32-gcc-libs')
 source=("http://gstreamer.freedesktop.org/data/src/orc/orc-${pkgver}.tar.xz")
-md5sums=('9e793ec34c0e20339659dd4bbbf62135')
+md5sums=('6b582ec4b3275c5efd51e3ae6406d445')
 
 build() {
   cd orc-${pkgver}
