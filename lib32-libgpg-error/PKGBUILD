@@ -1,15 +1,15 @@
 _pkgbasename=libgpg-error
 pkgname=lib32-$_pkgbasename
-pkgver=1.25
+pkgver=1.31
 pkgrel=1
 pkgdesc="Support library for libgcrypt (32-bit)"
 arch=(x86_64)
-url="http://www.gnupg.org"
+url="https://www.gnupg.org"
 license=('LGPL')
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('gcc' 'lib32-gcc-libs')
-source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${_pkgbasename}-${pkgver}.tar.bz2{,.sig})
-sha1sums=('8ab7494e40f80f4138edc9516981bf4afe7d9dbf'
+source=(https://www.gnupg.org/ftp/gcrypt/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2{,.sig})
+sha1sums=('2bafad316d4e3e12bae4822b14ed9020090e6acf'
           'SKIP')
 validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6')
 
