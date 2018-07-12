@@ -1,21 +1,21 @@
 _pkgbasename=fontconfig
 pkgname=lib32-$_pkgbasename
-pkgver=2.11.1
-pkgrel=2
-_ubuntu_diff_version=${pkgver}-0ubuntu6
+pkgver=2.12.6
+pkgrel=1
+_ubuntu_diff_version=${pkgver}-0ubuntu2
 pkgdesc="A library for configuring and customizing font access (32-bit)"
 arch=('x86_64')
 url="http://www.fontconfig.org/release/"
 license=('custom')
 depends=('lib32-expat' 'lib32-freetype2' 'lib32-bzip2' $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib)
+makedepends=(lib32-gcc-libs)
 provides=("${pkgname}-ubuntu")
 conflicts=("${pkgname}-ubuntu")
 replaces=("${pkgname}-ubuntu")
 source=("http://www.fontconfig.org/release/$_pkgbasename-$pkgver.tar.bz2"
         "http://archive.ubuntu.com/ubuntu/pool/main/f/fontconfig/fontconfig_${_ubuntu_diff_version}.debian.tar.xz")
-md5sums=('824d000eb737af6e16c826dd3b2d6c90'
-         '5d8e082f4d36d6c82853f6b6a5f6997a')
+md5sums=('733f5e2371ca77b69707bd7b30cc2163'
+         'e49b6389d0f44c4145b2b9c8e5e7e0d9')
 
 build() {
   export CC="gcc -m32"
