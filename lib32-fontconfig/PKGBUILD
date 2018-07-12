@@ -8,7 +8,7 @@ arch=('x86_64')
 url="http://www.fontconfig.org/release/"
 license=('custom')
 depends=('lib32-expat' 'lib32-freetype2' 'lib32-bzip2' $_pkgbasename=$pkgver)
-makedepends=(lib32-gcc-libs)
+makedepends=(lib32-gcc-libs gperf)
 provides=("${pkgname}-ubuntu")
 conflicts=("${pkgname}-ubuntu")
 replaces=("${pkgname}-ubuntu")
