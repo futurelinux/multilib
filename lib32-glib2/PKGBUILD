@@ -3,7 +3,7 @@
 
 _pkgbasename=glib2
 pkgname=lib32-$_pkgbasename
-pkgver=2.54.1
+pkgver=2.54.2
 pkgrel=1
 pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
 url="http://www.gtk.org/"
@@ -13,7 +13,7 @@ depends=('lib32-libdbus' 'lib32-libffi' 'lib32-pcre' 'lib32-elfutils' 'lib32-uti
 makedepends=('gcc-multilib' 'python3')
 options=('!docs')
 source=("http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-${pkgver}.tar.xz")
-sha256sums=('50c01b1419324f10fbf9b9709ec2164b18586968bdce7540583bf32302cf47a3')
+sha256sums=('bb89e5c5aad33169a8c7f28b45671c7899c12f74caf707737f784d7102758e6c')
 
 prepare() {
   cd "${srcdir}/glib-${pkgver}"
