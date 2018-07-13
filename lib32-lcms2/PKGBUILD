@@ -1,11 +1,7 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# Maintainer:  AlmAck <almack@chakra-project.org>
-# Contributor: Eric Bélanger <eric@archlinux.org>
 
 _pkgbasename=lcms2
 pkgname=lib32-$_pkgbasename
-pkgver=2.6
+pkgver=2.9
 pkgrel=1
 pkgdesc="Small-footprint color management engine, version 2 (32-bit)"
 arch=('x86_64')
@@ -14,7 +10,7 @@ depends=('lib32-libtiff' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
 url="http://www.littlecms.com"
 source=(http://downloads.sourceforge.net/sourceforge/lcms/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('b0ecee5cb8391338e6c281d1c11dcae2bc22a5d2')
+sha1sums=('60bea9875e017dd1c466e988c2ad98f8766e4e55')
 
 build() {
   export CC="gcc -m32"
