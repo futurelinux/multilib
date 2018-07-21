@@ -1,14 +1,14 @@
 pkgname=wine_mono
-pkgver=4.7.1
+pkgver=4.7.3
 pkgrel=1
 pkgdesc="Mono's built-in replacement for Microsoft's .NET Framework"
 arch=('any')
-url="http://wiki.winehq.org/Mono"
+url="https://wiki.winehq.org/Mono"
 license=(MPL)
 depends=('wine')
 categories=('system')
 source=(https://dl.winehq.org/wine/wine-mono/$pkgver/${pkgname/_/-}-$pkgver.msi)
-md5sums=('844ae4134e6df71f23dbb222076c37a6')
+md5sums=('29dcd975e74b9c6c170e646a28dee57a')
 
 package() {
   cd "$srcdir"
