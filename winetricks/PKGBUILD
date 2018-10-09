@@ -1,5 +1,5 @@
 pkgname=winetricks
-pkgver=20180217
+pkgver=20180815
 pkgrel=1
 pkgdesc='Script to install various redistributable runtime libraries in Wine.'
 url='http://wiki.winehq.org/winetricks'
@@ -8,7 +8,7 @@ arch=('any')
 depends=('wine' 'cabextract' 'unzip' 'xorg-apps')
 optdepends=('kdialog: GUI for KDE desktop')
 source=(https://github.com/Winetricks/winetricks/archive/$pkgver.tar.gz)
-md5sums=('dcac1bb7a367faf74939ee907c3efccd')
+md5sums=('b07083298720b56ace1bef30715810a8')
 
 package() {
   cd $pkgname-$pkgver
