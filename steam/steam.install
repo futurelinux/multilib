@@ -6,7 +6,6 @@ post_install() {
 }
 
 post_upgrade() {
-  update-desktop-database -q
   cat <<EOF
 By using this package you accept the Steam license,
 which has been installed in /usr/share/licenses/steam/LICENSE
