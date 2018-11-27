@@ -1,16 +1,19 @@
 _pkgbasename=glib2
 pkgname=lib32-$_pkgbasename
-pkgver=2.54.2
-pkgrel=2
+pkgver=2.58.1
+pkgrel=1
 pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
 url="http://www.gtk.org/"
 arch=('x86_64')
 license=('LGPL')
 depends=('lib32-libdbus' 'lib32-libffi' 'lib32-pcre' 'lib32-libelf' 'lib32-util-linux' "${_pkgbasename}=${pkgver}")
 makedepends=('gcc-multilib' 'python3')
+checkdepends=(desktop-file-utils lib32-glib2)
 options=('!docs')
-source=("http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-${pkgver}.tar.xz")
-sha256sums=('bb89e5c5aad33169a8c7f28b45671c7899c12f74caf707737f784d7102758e6c')
+source=("http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-${pkgver}.tar.xz"
+            gio-querymodules-32.hook)
+sha256sums=('97d6a9d926b6aa3dfaadad3077cfb43eec74432ab455dff14250c769d526d7d6'
+            '73b6791b58180e2a02fe908938e6c547ee1b263f8c387262f9a8c4105ffa999a')
 
 prepare() {
   cd "${srcdir}/glib-${pkgver}"
@@ -22,20 +25,22 @@ build() {
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  cd "${srcdir}/glib-${pkgver}"
-  PYTHON=/usr/bin/python3 ./configure --prefix=/usr --sysconfdir=/etc \
-      --libdir=/usr/lib32 --with-pcre=system --disable-fam --disable-gtk-doc
-  make
+  chakra-meson glib-$pkgver build \
+    -D selinux=false \
+    --libdir=/usr/lib32
+  ninja -C build
+}
+
+check() {
+  meson test -C build -t 2
 }
 
 package() {
-  cd "${srcdir}/glib-${pkgver}"
-  make DESTDIR="${pkgdir}" install
-  rm -rf "${pkgdir}"/{etc,usr/{share,include}}
+  DESTDIR="$pkgdir" meson install -C build
 
-  cd "${pkgdir}"/usr/bin
-  mv gio-querymodules gio-querymodules-32
-  rm -f gdbus glib* gobject-query gsettings gtester*
-  rm -rf "$pkgdir"/usr/lib32/gdbus-2.0
-  find "$pkgdir/usr/bin" -type f -not -name gio-querymodules-32 -delete
+  rm -r "$pkgdir"/usr/{share,include}
+  find "$pkgdir/usr/bin" -type f -not -name gio-querymodules -printf 'Removing %P\n' -delete
+  mv "$pkgdir"/usr/bin/gio-querymodules{,-32}
+
+  install -Dt "$pkgdir/usr/share/libalpm/hooks" -m644 *.hook
 }
