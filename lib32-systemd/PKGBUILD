@@ -1,17 +1,17 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
 # latest commit on stable branch
-_commit='de7436b02badc82200dc127ff190b8155769b8e7'
+_commit='63f95c0297aea62ce47d1389e5221c54992f580e'
 # Bump this to latest major release for signed tag verification,
 # the commit count is handled by pkgver() function.
-pkgver=239.0
+pkgver=239.303
 pkgrel=1
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="https://www.github.com/systemd/systemd"
 license=('GPL2' 'LGPL2.1')
 depends=('lib32-gcc-libs' 'lib32-libcap' 'lib32-libgcrypt' 'lib32-xz' "$_pkgbasename=$pkgver")
-makedepends=('gcc-multilib' 'git' 'gperf' 'intltool' 'lib32-acl' 'lib32-bzip2'
+makedepends=('git' 'gperf' 'intltool' 'lib32-acl' 'lib32-bzip2'
              'lib32-curl' 'lib32-libdbus' 'lib32-gcc-libs' 'lib32-glib2'
              'lib32-gnutls' 'lib32-libelf' 'lib32-libidn' 'lib32-pcre2'
              'libxslt' 'meson')
@@ -58,12 +58,26 @@ pkgver() {
   count="$(git rev-list --count ${version}..)"
   printf '%s.%s' "${version#v}" "${count}"
 }
+
 build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   local _timeservers=({0..3}.chakra.pool.ntp.org)
+  local _nameservers=(
+    # We use these public name services, ordered by their
+    # privacy policy (hopefully):
+    #  * Cloudflare (https://1.1.1.1/)
+    #  * Quad9 without filtering (https://www.quad9.net/)
+    #  * Google (https://developers.google.com/speed/public-dns/)
+    1.1.1.1
+    9.9.9.10
+    8.8.8.8
+    2606:4700:4700::1111
+    2620:fe::10
+    2001:4860:4860::8888
+  )
 
   local meson_options=(
     --libexecdir	/usr/lib32
@@ -93,8 +107,9 @@ build() {
     # TODO(dreisner): consider changing this to unified
     -Ddefault-hierarchy=hybrid
     -Ddefault-kill-user-processes=false
-    -Dfallback-hostname='archlinux'
+    -Dfallback-hostname='chakralinux'
     -Dntp-servers="${_timeservers[*]}"
+    -Ddns-servers="${_nameservers[*]}"
     -Drpmmacrosdir=no
     -Dsysvinit-path=
     -Dsysvrcnd-path=
@@ -105,8 +120,12 @@ build() {
   ninja -C build
 }
 
+check() {
+  meson test -C build
+}
+
 package() {
-  DESTDIR="$pkgdir" ninja -C build install
+  DESTDIR="$pkgdir" meson install -C build
 
   rm -rf "${pkgdir}"/{etc,var}
   rm -rf "${pkgdir}"/usr/{bin,sbin,include,lib,share}
