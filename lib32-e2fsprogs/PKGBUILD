@@ -1,10 +1,8 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=e2fsprogs
 pkgname=lib32-e2fsprogs
-pkgver=1.42.13
+pkgver=1.44.5
 pkgrel=1
 pkgdesc="Ext2 filesystem libraries (32-bit)"
 arch=(x86_64)
@@ -13,22 +11,24 @@ url="http://e2fsprogs.sourceforge.net"
 depends=('lib32-util-linux>=2.22.1' $_pkgbasename=$pkgver)
 makedepends=('bc' 'lib32-gcc-libs')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz")
-md5sums=('bc759fc62666786f5436e2075beb3265')
+md5sums=('8d78b11d04d26c0b2dd149529441fa80')
 
 build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-
-  ./configure --prefix=/usr --libdir=/usr/lib32 --with-root-prefix="" --enable-elf-shlibs \
-      --disable-{debugfs,imager,resizer,fsck,uuidd,libuuid,libblkid}
+  cd "${_pkgbasename}-${pkgver}"
+  ./configure --prefix=/usr \
+    --libdir=/usr/lib32 \
+    --with-root-prefix="" \
+    --enable-elf-shlibs \
+    --disable-{debugfs,imager,resizer,fsck,uuidd,libuuid,libblkid}
   make
 }
 
 package() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${_pkgbasename}-${pkgver}"
   make DESTDIR="${pkgdir}" install-libs
 
   rm -rf "${pkgdir}"/usr/{bin,include,share}
