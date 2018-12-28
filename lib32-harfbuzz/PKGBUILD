@@ -2,14 +2,14 @@
 
 _pkgbasename=harfbuzz
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.0
+pkgver=2.2.0
 pkgrel=1
 pkgdesc="OpenType text shaping engine (32-bit)"
 url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
 arch=(x86_64)
 license=(MIT)
 makedepends=(lib32-glib2 lib32-freetype2 lib32-icu $_pkgbasename gcc-multilib ragel git)
-_commit=25846cc39fb8a9516b8de4333f909851d471156f  # tags/1.6.0^0
+_commit=dc41ecef85b094b30c612113606597b91c55351c  # tags/2.2.0^0
 source=("git+https://anongit.freedesktop.org/git/harfbuzz#commit=$_commit")
 sha256sums=('SKIP')
 
