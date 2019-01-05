@@ -5,16 +5,16 @@
 
 _pkgbasename=at-spi2-core
 pkgname=lib32-$_pkgbasename
-pkgver=2.11.5
-pkgrel=2
+pkgver=2.26.0
+pkgrel=1
 pkgdesc="Protocol definitions and daemon for D-Bus at-spi (32-bit)"
 arch=(x86_64)
 url="http://www.gnome.org"
 license=(GPL2)
-depends=('lib32-dbus-core' 'lib32-glib2' 'lib32-libxtst'  $_pkgbasename=$pkgver)
-makedepends=('gcc-multilib' 'intltool' 'libtool') # 'gobject-introspection'
+depends=('lib32-dbus' 'lib32-glib2' 'lib32-libxtst'  $_pkgbasename=$pkgver)
+makedepends=('gcc-multilib' 'intltool' 'libtool' 'gobject-introspection')
 source=(http://ftp.gnome.org/pub/GNOME/sources/$_pkgbasename/${pkgver%.*}/$_pkgbasename-$pkgver.tar.xz)
-md5sums=('d61793f50af00cd5d9262c2d12d40ac6')
+md5sums=('ef3de25da46da8f650915205eb7e1a33')
 
 build() {
   export CC='gcc -m32'
@@ -23,12 +23,13 @@ build() {
 
   cd $_pkgbasename-$pkgver
 
-  sed -i -e '/AC_PATH_XTRA/d' configure.ac
   autoreconf --force --install
 
-  ./configure --prefix=/usr --sysconfdir=/etc \
-    --libdir=/usr/lib32 --libexecdir=/usr/lib32/at-spi2-core \
-    --enable-introspection=no \
+  ./configure \
+    --prefix='/usr' \
+    --libdir='/usr/lib32' \
+    --libexecdir='/usr/lib32/at-spi2-core' \
+    --sysconfdir='/etc' \
     --disable-xevie
   make
 }

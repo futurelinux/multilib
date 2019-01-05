@@ -3,7 +3,7 @@
 _basename=gst-plugins-base
 pkgbase=lib32-$_basename
 pkgname=('lib32-gst-plugins-base-libs' 'lib32-gst-plugins-base')
-pkgver=1.10.3
+pkgver=1.14.1
 pkgrel=1
 pkgdesc="GStreamer Multimedia Framework Base Plugins"
 arch=('x86_64')
@@ -12,10 +12,8 @@ makedepends=('lib32-gstreamer' 'lib32-orc' 'lib32-libxv' 'lib32-alsa-lib' 'lib32
              'lib32-libvorbis' 'lib32-libvisual' 'lib32-libtheora' 'lib32-pango' 'lib32-opus' 'gobject-introspection')
 options=(!emptydirs)
 url="http://gstreamer.freedesktop.org/"
-source=(${url}/src/$_basename/$_basename-${pkgver}.tar.xz{,.asc})
-sha256sums=('e6299617d705a0cbfb535107c1d3a8fc0f0967f14193a8c5c7583f46a88b1710'
-            'SKIP')
-validpgpkeys=('7F4BC7CC3CA06F97336BBFEB0668CC1486C2D7B5')
+source=(${url}/src/$_basename/$_basename-${pkgver}.tar.xz)
+sha256sums=('1026c7c3082d825d9b5d034c1a6dd8a4ebab60eb3738b0a0afde4ad2dc0b0db5')
 
 build() {
   cd $_basename-$pkgver
@@ -37,7 +35,7 @@ build() {
     --disable-maintainer-mode \
     --enable-experimental \
     --with-package-name="GStreamer Base Plugins (Chakra GNU/Linux)" \
-    --with-package-origin="https://chakralinux.org"
+    --with-package-origin="https://www.chakralinux.org"
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
