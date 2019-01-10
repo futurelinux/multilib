@@ -1,5 +1,5 @@
 pkgname=steam
-pkgver=1.0.0.56
+pkgver=1.0.0.59
 pkgrel=1
 pkgdesc="Valve's digital software delivery system"
 arch=('x86_64')
@@ -16,7 +16,7 @@ install=steam.install
 source=("http://repo.steampowered.com/${pkgname}/pool/${pkgname}/s/${pkgname}/${pkgname}_${pkgver}.tar.gz"
         'alsa_sdl_audiodriver.patch'
         'steam-runtime.sh')
-sha256sums=('da15bb347bd286c3a8818c3c910dc5bdbc43a744604d5372260ec79540ba4f06'
+sha256sums=('a5080db949793fc4eb543293a95a24131441a96ccc8f5deebdecd7257cfcd99f'
             '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
             'fbaeb962f68a5cec26f09864a6b86776f54b5ce18dc000dcab7169443e09c3a6')
 
