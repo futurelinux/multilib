@@ -3,12 +3,12 @@
 _pkgbasename=elfutils
 pkgname=lib32-libelf
 pkgver=0.175
-pkgrel=1
+pkgrel=2
 pkgdesc="Libraries to handle ELF object files and DWARF debugging information (32-bit)"
 arch=('x86_64')
 url="https://sourceware.org/elfutils/"
 license=('LGPL3' 'GPL' 'GPL3')
-depends=('lib32-bzip2' 'lib32-zlib' 'libelf')
+depends=('lib32-bzip2' 'lib32-zlib' "libelf=$pkgver")
 makedepends=('gcc-multilib')
 provides=('lib32-elfutils')
 conflicts=('lib32-elfutils')
