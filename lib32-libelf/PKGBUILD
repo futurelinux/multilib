@@ -2,7 +2,7 @@
 
 _pkgbasename=elfutils
 pkgname=lib32-libelf
-pkgver=0.170
+pkgver=0.175
 pkgrel=1
 pkgdesc="Libraries to handle ELF object files and DWARF debugging information (32-bit)"
 arch=('x86_64')
@@ -15,7 +15,7 @@ conflicts=('lib32-elfutils')
 replaces=('lib32-elfutils')
 source=(https://sourceware.org/elfutils/ftp/${pkgver}/elfutils-${pkgver}.tar.bz2{,.sig})
 options=('staticlibs')
-sha256sums=('1f844775576b79bdc9f9c717a50058d08620323c1e935458223a12f249c9e066'
+sha256sums=('f7ef925541ee32c6d15ae5cb27da5f119e01a5ccdbe9fe57bf836730d7b7a65b'
             'SKIP')
 validpgpkeys=('47CC0331081B8BC6D0FD4DA08370665B57816A6A') # Mark J. Wielaard <mark@klomp.org>
 
