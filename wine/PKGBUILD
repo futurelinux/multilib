@@ -1,16 +1,15 @@
 pkgname=wine
-pkgver=3.21
+pkgver=4.0
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
-source=(https://dl.winehq.org/wine/source/3.x/$pkgname-$_pkgver.tar.xz
+source=(https://dl.winehq.org/wine/source/4.0/$pkgname-$_pkgver.tar.xz
         30-win32-aliases.conf)
 
-md5sums=('b64fa9dce7fa50367b6f4c356b475f3e'
+md5sums=('411cbb15606e2f7eb5d5eca3bca10ce2'
          '1ff4e467f59409272088d92173a0f801')
 pkgdesc="A compatibility layer for running Windows programs"
 url="https://www.winehq.org/"
 categories=('system')
-screenshot=('http://wstaw.org/m/2012/04/28/wine.png')
 arch=('x86_64')
 license=('LGPL')
 install=wine.install
