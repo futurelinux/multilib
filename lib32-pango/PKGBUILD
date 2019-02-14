@@ -2,24 +2,24 @@
 
 _pkgbasename=pango
 pkgname=lib32-$_pkgbasename
-pkgver=1.40.14
+pkgver=1.42.4
 pkgrel=1
 pkgdesc="A library for layout and rendering of text (32-bit)"
 arch=('x86_64')
 license=('LGPL')
-depends=('lib32-libthai' 'lib32-libgl' 'lib32-cairo' 'lib32-libxft'
-         "$_pkgbasename=$pkgver")
-makedepends=('gcc-multilib' 'lib32-mesa-libgl')
-options=('!emptydirs')
-install=pango.install
-source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver:0:4}/${_pkgbasename}-${pkgver}.tar.xz)
-url="http://www.pango.org/"
-sha256sums=('90af1beaa7bf9e4c52db29ec251ec4fd0a8f2cc185d521ad1f88d01b3a6a17e3')
+depends=(lib32-libthai lib32-cairo lib32-libxft lib32-harfbuzz lib32-fribidi "$_pkgbasename=$pkgver")
+makedepends=(gcc-multilib gobject-introspection git meson)
+_commit=a6a89818246b0b14c0fe3d00d6120929fc0a11d9  # tags/1.42.4^0
+source=("git+https://gitlab.gnome.org/GNOME/pango.git#commit=$_commit")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd pango
+  git describe --tags | sed 's/-/+/g'
+}
 
 prepare() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-
-  sed -i 's#"pango.modules"#"pango.modules-32"#' pango/modules.c
+  cd pango
 }
 
 build() {
@@ -27,22 +27,12 @@ build() {
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  cd ${_pkgbasename}-${pkgver}
-
-  ./configure --prefix=/usr \
-              --libdir=/usr/lib32 \
-              --sysconfdir=/etc \
-              --localstatedir=/var \
-              --with-included-modules=basic-fc \
-              --with-dynamic-modules=arabic-fc,arabic-lang,basic-fc,basic-win32,basic-x,basic-atsui,hangul-fc,hebrew-fc,indic-fc,indic-lang,khmer-fc,syriac-fc,tibetan-fc \
-              --disable-introspection
-  make
+  chakra-meson pango build --libdir=/usr/lib32
+  ninja -C build
 }
+
 
 package() {
-  cd ${_pkgbasename}-${pkgver}
-  make DESTDIR="${pkgdir}" install
-  rm -rf "${pkgdir}"/etc
-  rm -rf "${pkgdir}"/usr/{bin/pango-view,share,include}
+  DESTDIR="$pkgdir" meson install -C build
+  rm -r "$pkgdir"/usr/{bin,lib,share,include}
 }
-
