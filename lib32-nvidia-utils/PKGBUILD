@@ -3,7 +3,7 @@
 _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
-pkgver=410.78
+pkgver=418.43
 pkgrel=1
 arch=('x86_64')
 url="http://www.nvidia.com/"
@@ -11,7 +11,7 @@ license=('custom')
 options=('!strip')
 _pkg="NVIDIA-Linux-x86_64-${pkgver}"
 source=("https://us.download.nvidia.com/XFree86/Linux-x86_64/${pkgver}/${_pkg}.run")
-sha512sums=('0bd7ed61dcfd4d7634ba450b106d7648fc274c256e7e4c4e51e544bd7779d68ffa08cba709ace5333679eeea1dbe4afa0c267361887eaa784d6f1369b717677d')
+sha512sums=('bfd43bec59de7523e879354224f2a678b6bcce53136f10d139882d9ea5d100c034fce2a15100607cb4622a3d158dbbfb41aacc528b04307c989c915b78298045')
 
 create_links() {
     # create soname links
@@ -79,7 +79,6 @@ package_lib32-nvidia-utils() {
 
     # nvidia-tls library
     install -D -m755 "libnvidia-tls.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-tls.so.${pkgver}"
-    install -D -m755 "tls/libnvidia-tls.so.${pkgver}" "${pkgdir}/usr/lib32/tls/libnvidia-tls.so.${pkgver}"
 
     # CUDA
     install -D -m755 "libcuda.so.${pkgver}" "${pkgdir}/usr/lib32/libcuda.so.${pkgver}"
