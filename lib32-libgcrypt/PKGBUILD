@@ -1,6 +1,6 @@
 _pkgbasename=libgcrypt
 pkgname=lib32-$_pkgbasename
-pkgver=1.8.3
+pkgver=1.8.4
 pkgrel=1
 pkgdesc="A general purpose crypto library based on the code used (32-bit)"
 arch=(x86_64)
@@ -9,7 +9,7 @@ license=('LGPL')
 depends=('lib32-libgpg-error>=1.10' $_pkgbasename=$pkgver)
 makedepends=('lib32-gcc-libs' 'libtool')
 source=("https://www.gnupg.org/ftp/gcrypt/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2")
-sha1sums=('13bd2ce69e59ab538e959911dfae80ea309636e3')
+sha1sums=('4a8ef9db6922f3a31992aca5640b4198a69b58fc')
 
 build() {
   export CC="gcc -m32"
