@@ -1,6 +1,6 @@
 _pkgbasename=libssh2
 pkgname=lib32-$_pkgbasename
-pkgver=1.8.1
+pkgver=1.8.2
 pkgrel=1
 pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts (32-bit)"
 arch=('x86_64')
@@ -9,7 +9,7 @@ license=('BSD')
 depends=('lib32-openssl' $_pkgbasename=$pkgver)
 makedepends=('lib32-gcc-libs')
 source=("https://www.libssh2.org/download/$_pkgbasename-$pkgver.tar.gz")
-md5sums=('338f36a8bb7f5ef55715ac1864cc788c')
+md5sums=('616efd99af3d9ef731a26bed6cee9593')
 
 build() {
   export CC="gcc -m32"
