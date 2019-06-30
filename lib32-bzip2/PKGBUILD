@@ -1,18 +1,20 @@
 _pkgbasename=bzip2
 pkgname=lib32-bzip2
-pkgver=1.0.6
-pkgrel=2
+pkgver=1.0.7
+pkgrel=1
 pkgdesc="A high-quality data compression program (32-bit)"
 arch=('x86_64')
 license=('custom')
-url="http://sources.redhat.com/bzip2"
+url="https://sourceware.org/bzip2/"
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
-source=(http://www.bzip.org/$pkgver/bzip2-$pkgver.tar.gz)
-md5sums=('00b516f4704d4a7cb50a1d97e6e8e15b')
+source=(https://sourceware.org/pub/bzip2/${_pkgbasename}-$pkgver.tar.gz{,.sig})
+sha256sums=('e768a87c5b1a79511499beb41500bcc4caf203726fff46a6f5f9ad27fe08ab2b'
+            'SKIP')
+validpgpkeys=('EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A') # Mark Wielaard <mark@klomp.org>
 
 build() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd ${_pkgbasename}-${pkgver}
 
   sed -i "s|CC=gcc|CC=gcc -m32|" Makefile
   sed -i "s|CC=gcc|CC=gcc -m32|" Makefile-libbz2_so
@@ -29,11 +31,11 @@ build() {
 }
 
 package(){
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  install -Dm755 libbz2.so.1.0.6 "${pkgdir}"/usr/lib32/libbz2.so.1.0.6
-  ln -s libbz2.so.1.0.6 "${pkgdir}"/usr/lib32/libbz2.so
-  ln -s libbz2.so.1.0.6 "${pkgdir}"/usr/lib32/libbz2.so.1
-  ln -s libbz2.so.1.0.6 "${pkgdir}"/usr/lib32/libbz2.so.1.0
+  cd ${_pkgbasename}-${pkgver}
+  install -Dm755 libbz2.so.1.0.7 "${pkgdir}"/usr/lib32/libbz2.so.1.0.7
+  ln -s libbz2.so.1.0.7 "${pkgdir}"/usr/lib32/libbz2.so
+  ln -s libbz2.so.1.0.7 "${pkgdir}"/usr/lib32/libbz2.so.1
+  ln -s libbz2.so.1.0.7 "${pkgdir}"/usr/lib32/libbz2.so.1.0
 
   install -Dm644 libbz2.a ${pkgdir}/usr/lib32/libbz2.a
 }
