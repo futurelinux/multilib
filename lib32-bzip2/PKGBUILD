@@ -7,7 +7,7 @@ arch=('x86_64')
 license=('custom')
 url="https://sourceware.org/bzip2/"
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
-makedepends=('gcc-multilib')
+makedepends=('lib32-gcc-libs')
 source=(https://sourceware.org/pub/bzip2/${_pkgbasename}-$pkgver.tar.gz{,.sig})
 sha256sums=('e768a87c5b1a79511499beb41500bcc4caf203726fff46a6f5f9ad27fe08ab2b'
             'SKIP')
@@ -15,27 +15,19 @@ validpgpkeys=('EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A') # Mark Wielaard <mark@
 
 build() {
   cd ${_pkgbasename}-${pkgver}
-
-  sed -i "s|CC=gcc|CC=gcc -m32|" Makefile
-  sed -i "s|CC=gcc|CC=gcc -m32|" Makefile-libbz2_so
-
-  # add large-file support
-  sed -e 's/^CFLAGS=\(.*\)$/CFLAGS=\1 \$(BIGFILES)/' -i ./Makefile-libbz2_so
-
-  # use our optimization
-  sed -i "s|-O2|${CFLAGS}|g" Makefile
-  sed -i "s|-O2|${CFLAGS}|g" Makefile-libbz2_so
-
-  make -f Makefile-libbz2_so
-  make libbz2.a
+ 
+  make -f Makefile-libbz2_so CC="gcc -m32 $CFLAGS $LDFLAGS"
+  make libbz2.a CC="gcc -m32 $CFLAGS $LDFLAGS"
 }
 
 package(){
   cd ${_pkgbasename}-${pkgver}
-  install -Dm755 libbz2.so.1.0.7 "${pkgdir}"/usr/lib32/libbz2.so.1.0.7
-  ln -s libbz2.so.1.0.7 "${pkgdir}"/usr/lib32/libbz2.so
-  ln -s libbz2.so.1.0.7 "${pkgdir}"/usr/lib32/libbz2.so.1
-  ln -s libbz2.so.1.0.7 "${pkgdir}"/usr/lib32/libbz2.so.1.0
 
-  install -Dm644 libbz2.a ${pkgdir}/usr/lib32/libbz2.a
+  install -dm755 "$pkgdir"/usr/lib32
+  cp -a libbz2.so* "$pkgdir"/usr/lib32
+  ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib32/libbz2.so
+
+  install -Dm644 libbz2.a "$pkgdir"/usr/lib32/libbz2.a
+
+  install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/${pkgname}/LICENSE
 }
