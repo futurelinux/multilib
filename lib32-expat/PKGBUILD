@@ -1,6 +1,6 @@
 _pkgbasename=expat
 pkgname=lib32-$_pkgbasename
-pkgver=2.2.1
+pkgver=2.2.7
 pkgrel=1
 pkgdesc="An XML Parser library written in C (32 bit)"
 arch=('x86_64')
@@ -9,7 +9,7 @@ license=('custom')
 depends=('lib32-glibc' "${_pkgbasename}"="${pkgver}")
 makedepends=('lib32-gcc-libs')
 source=("http://downloads.sourceforge.net/sourceforge/expat/${_pkgbasename}-${pkgver}.tar.bz2")
-md5sums=('d9c3baeab58774cefc2f04faf29f2cf8')
+md5sums=('72f36b87cdb478aba1e78473393766aa')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
