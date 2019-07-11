@@ -1,7 +1,7 @@
 _pkgbasename=expat
 pkgname=lib32-$_pkgbasename
 pkgver=2.2.7
-pkgrel=1
+pkgrel=2
 pkgdesc="An XML Parser library written in C (32 bit)"
 arch=('x86_64')
 url="http://expat.sourceforge.net/"
@@ -22,10 +22,9 @@ build() {
 
 package() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  
   make DESTDIR="${pkgdir}" install
-  install -d -m755 "${pkgdir}/usr/share/licenses/"
-  ln -s ${_pkgbasename} "${pkgdir}/usr/share/licenses/${pkgname}"
-
-  # Clean up lib32 package
-  rm -rf "${pkgdir}"/usr/{bin,include,share/man}
+  rm -rf "${pkgdir}"/usr/{bin,include,share/man,share/doc}
+  install -dm 755 "${pkgdir}"/usr/share/licenses
+  ln -s expat "${pkgdir}"/usr/share/licenses/lib32-expat
 }
