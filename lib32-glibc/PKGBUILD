@@ -3,9 +3,9 @@
 
 _pkgbasename=glibc
 pkgname=lib32-$_pkgbasename
-pkgver=2.26
+pkgver=2.29
 pkgrel=1
-_commit=633e2f7f3d88df6427aa3a7a984d3a6b796d9611  # release/2.26/master
+_commit=34fb5f61d3c3f4b8fc616ea259fa19168b58ecd4
 pkgdesc="GNU C Library (32-bit)"
 arch=('x86_64')
 url="http://www.gnu.org/software/libc"
@@ -16,23 +16,15 @@ options=('!strip' 'staticlibs' '!emptydirs')
 
 source=(git+https://sourceware.org/git/glibc.git#commit=${_commit}
         lib32-glibc.conf
-        0001-manual-Update-to-mention-ENODEV-for-ttyname-and-ttyn.patch
-        0002-linux-ttyname-Update-a-reference-to-kernel-docs-for-.patch
-        0003-linux-ttyname-Change-return-type-of-is_pty-from-int-.patch
-        0004-linux-ttyname-_r-Make-tty-checks-consistent.patch
-        0005-linux-ttyname-_r-Don-t-bail-prematurely-BZ-22145.patch
-        0006-linux-ttyname-_r-Add-tests.patch
-        bz20338.patch)
+        bz20338.patch
+        0001-Revert-elf-Correct-absolute-SHN_ABS-symbol-run-time-.patch
+        file-truncated-while-reading-soname-after-patchelf.patch)
 
 md5sums=('SKIP'
          '6e052f1cb693d5d3203f50f9d4e8c33b'
-         '2bb2dfa660fbb4b349f844459f79d5a1'
-         '299316b1a35426eadf3301a3fad170be'
-         '41d212e3f8d838bff341102679b2af09'
-         '8a886e84f950caf2ad1c37cc3a456339'
-         'fc5af427803b139d9753230849053458'
-         'eb4e1836f4f3721f1215450a2cca3523'
-         'dc0d3ad59aeaaf591b085a77de6e03e9')
+         'dc0d3ad59aeaaf591b085a77de6e03e9'
+         'af5d3c5227ac639effe39667a43879a1'
+         '0820504d2e83ee15f74a656771361872')
 
 prepare() {
   mkdir -p glibc-build
@@ -72,12 +64,12 @@ build() {
       --with-bugurl=https://code.chakralinux.org/ \
       --enable-add-ons \
       --enable-bind-now \
+      --enable-cet \
       --enable-lock-elision \
       --enable-multi-arch \
-      --enable-obsolete-nsl \
-      --enable-obsolete-rpc \
       --enable-stack-protector=strong \
       --enable-stackguard-randomization \
+      --enable-static-pie \
       --disable-profile \
       --disable-werror \
       i686-pc-linux-gnu
@@ -132,13 +124,14 @@ package() {
   #   libthread_db-1.0.so
 
   cd $pkgdir
-  strip $STRIP_BINARIES usr/lib32/getconf/*
-  strip $STRIP_STATIC usr/lib32/lib{anl,BrokenLocale,c{,_nonshared},crypt}.a \
-                        usr/lib32/lib{dl,g,ieee,mcheck,nsl,pthread{,_nonshared}}.a \
-                        usr/lib32/lib{resolv,rpcsvc,rt,util,m}.a
-  strip $STRIP_SHARED usr/lib32/lib{anl,BrokenLocale,cidn,crypt}-${pkgver}.so \
-                        usr/lib32/libnss_{compat,db,dns,files,hesiod,nis,nisplus}-*.so \
-                        usr/lib32/lib{dl,m,nsl,resolv,rt,util}-${pkgver}.so \
-                        usr/lib32/lib{memusage,pcprofile,SegFault}.so \
-                        usr/lib32/{audit,gconv}/*.so || true
+  find "$pkgdir"/usr/bin -type f -executable -exec strip $STRIP_BINARIES {} + 2> /dev/null || true
+  find "$pkgdir"/usr/lib -name '*.a' -type f -exec strip $STRIP_STATIC {} + 2> /dev/null || true
+
+  # Do not strip these for gdb and valgrind functionality, but strip the rest
+  find "$pkgdir"/usr/lib \
+    -not -name 'ld-*.so' \
+    -not -name 'libc-*.so' \
+    -not -name 'libpthread-*.so' \
+    -not -name 'libthread_db-*.so' \
+    -name '*-*.so' -type f -exec strip $STRIP_SHARED {} + 2> /dev/null || true
 }
