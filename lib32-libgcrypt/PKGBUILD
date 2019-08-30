@@ -1,15 +1,15 @@
 _pkgbasename=libgcrypt
 pkgname=lib32-$_pkgbasename
-pkgver=1.8.4
+pkgver=1.8.5
 pkgrel=1
 pkgdesc="A general purpose crypto library based on the code used (32-bit)"
 arch=(x86_64)
 url="http://www.gnupg.org"
 license=('LGPL')
-depends=('lib32-libgpg-error>=1.10' $_pkgbasename=$pkgver)
+depends=('lib32-libgpg-error' $_pkgbasename=$pkgver)
 makedepends=('lib32-gcc-libs' 'libtool')
 source=("https://www.gnupg.org/ftp/gcrypt/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2")
-sha1sums=('4a8ef9db6922f3a31992aca5640b4198a69b58fc')
+sha1sums=('2d8781e92f88706707a1e76fb628b499ad538a30')
 
 build() {
   export CC="gcc -m32"
@@ -23,6 +23,7 @@ build() {
 
   # keep static library for , needed for cryptsetup
   ./configure --prefix=/usr \
+              --disable-static \
               --disable-padlock-support \
               --libdir=/usr/lib32 \
               --enable-shared
