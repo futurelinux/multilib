@@ -11,7 +11,7 @@ depends=(lib32-{fontconfig,sqlite,alsa-lib,glib2,dbus,openssl,gstreamer,gst-plug
          "${_pkgbasename}=${pkgver}")
 makedepends=('cups' lib32-{mesa,libcups,libxfixes,icu} )
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
-source=("http://download.qt.io/official_releases/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
+source=("http://download.qt.io/archive/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
         'improve-cups-support.patch'
         'moc-boost-workaround.patch'
         'kubuntu_14_systemtrayicon.diff'
