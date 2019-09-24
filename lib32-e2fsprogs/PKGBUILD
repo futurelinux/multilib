@@ -1,6 +1,6 @@
 _pkgbasename=e2fsprogs
 pkgname=lib32-e2fsprogs
-pkgver=1.45.3
+pkgver=1.45.4
 pkgrel=1
 pkgdesc="Ext2 filesystem libraries (32-bit)"
 arch=(x86_64)
@@ -9,7 +9,7 @@ url="http://e2fsprogs.sourceforge.net"
 depends=('lib32-util-linux' $_pkgbasename=$pkgver)
 makedepends=('bc' 'lib32-gcc-libs')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz")
-md5sums=('447a225c05f0a81121f6ddffbf55b06c')
+md5sums=('2c2f9d4bcd0be54b3b3b8d5feec7b0ff')
 
 build() {
   export CC="gcc -m32"
