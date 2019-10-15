@@ -1,15 +1,15 @@
 pkgname=steam
 pkgver=1.0.0.61
-pkgrel=1
+pkgrel=2
 pkgdesc="Valve's digital software delivery system"
 arch=('x86_64')
 url="https://www.steampowered.com/"
 license=('custom')
 depends=('bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl' 'dbus'
          'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'python3' 'zenity'
-         'lib32-libgl' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss' 'lib32-alsa-plugins')
-optdepends=('lib32-alsa-plugins: for pulseaudio on some games'
-            'lib32-mesa: for open source driver users'
+         'lib32-libgl' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss'
+         'lib32-alsa-plugins' 'lib32-libgpg-error' 'lib32-nss')
+optdepends=('lib32-mesa: for open source driver users'
             'lib32-nvidia-utils: for NVIDIA proprietary blob users'
             'lib32-primus: for NVIDIA + Bumblebee users')
 install=steam.install
@@ -18,8 +18,7 @@ source=("http://repo.steampowered.com/${pkgname}/pool/${pkgname}/s/${pkgname}/${
         'steam-runtime.sh')
 sha256sums=('d66413cce9c9ad441f95c4377103b0c71bda4ac4570ecfc7dd2464fe4ef1bd30'
             '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
-            'fbaeb962f68a5cec26f09864a6b86776f54b5ce18dc000dcab7169443e09c3a6')
-
+            'cd8a12c639ae0bbc3cfb5be057395ae48f99c4e18261198bcf8c547bdb748340')
 
 prepare() {
   cd $pkgname
@@ -41,6 +40,7 @@ package() {
   ln -sf steam-runtime "$pkgdir"/usr/bin/steam
 
   install -Dm 644 COPYING steam_subscriber_agreement.txt -t "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm 644 debian/changelog -t "${pkgdir}/usr/share/doc/${pkgname}"
 
   # blank steamdeps because apt-get
   ln -sf /bin/true "$pkgdir/usr/bin/steamdeps"
