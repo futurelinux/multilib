@@ -1,20 +1,15 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libcups
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.1
-pkgrel=1
+pkgver=2.2.8
+pkgrel=2
 pkgdesc="The CUPS Printing System - client libraries (32-bit)"
 arch=('x86_64')
 license=('GPL')
 url="http://www.cups.org/"
-depends=(lib32-glibc $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib cups lib32-libusb)
-source=(http://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2)
-md5sums=('87ade07e3d1efd03c9c3add949cf9c00')
+depends=('lib32-krb5' 'lib32-libtiff' 'lib32-libpng' 'lib32-gnutls' $_pkgbasename=$pkgver)
+makedepends=('lib32-gcc-libs')
+source=(https://github.com/apple/cups/releases/download/v${pkgver}/cups-${pkgver}-source.tar.gz)
+md5sums=('33150d08993a04c8e22176e93805a051')
 
 build() {
   export CC="gcc -m32"
@@ -26,24 +21,16 @@ build() {
   aclocal -I config-scripts
   autoconf -I config-scripts
 
-  ./configure --prefix=/usr \
-              --sysconfdir=/etc \
-              --localstatedir=/var \
-              --disable-ldap \
-              --enable-raw-printing \
-              --disable-gssapi \
-              --disable-dbus \
-              --enable-ssl=no \
-              --disable-gnutls \
-              --enable-threads \
-              --with-optim="$CFLAGS" \
-              --disable-avahi \
-              --libdir=/usr/lib32
-  make
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+     --disable-ldap --enable-raw-printing --disable-gssapi --disable-dbus \
+     --enable-ssl=yes --enable-threads --enable-libusb=no \
+     --disable-avahi --disable-dnssd \
+     --with-optim="$CFLAGS" --libdir=/usr/lib32
+  make libs
 }
 
 package() {
   cd ${srcdir}/cups-${pkgver}
   make BUILDROOT=${pkgdir} install-libs
+  rm -rf "$pkgdir/usr/lib"
 }
-

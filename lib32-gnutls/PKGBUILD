@@ -1,22 +1,18 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# Contributions from Arch: https://projects.archlinux.org/svntogit/community.git/tree/trunk?h=packages/lib32-gnutls
 
 _pkgbasename=gnutls
 pkgname=lib32-$_pkgbasename
-pkgver=2.12.7
+pkgver=3.5.19
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer (32-bit)"
 arch=('x86_64')
-license=('GPL3' 'LGPL')
-url="http://www.gnu.org/software/gnutls/"
-options=('!libtool')
-# uses built-in libtasn1 for the moment
-depends=(lib32-{gcc-libs,readline,libgcrypt,zlib})
-makedepends=('gcc-multilib')
-source=(ftp://ftp.gnu.org/gnu/gnutls/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('4b48aa3119f549d30d550bf4162c721b')
+license=('GPL3' 'LGPL2.1')
+url="http://gnutls.org/"
+depends=('lib32-zlib' 'lib32-nettle' 'lib32-p11-kit' 'lib32-libtasn1' 'lib32-libidn' 'lib32-libunistring'
+         "$_pkgbasename=${pkgver}")
+makedepends=('lib32-gcc-libs')
+source=(https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/${_pkgbasename}-${pkgver}.tar.xz)
+md5sums=('1002f4099ce11d785e9811099aaa59a6')
 
 build() {
   export CC="gcc -m32"
@@ -24,18 +20,25 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd ${srcdir}/${_pkgbasename}-${pkgver}
-  ./configure --prefix=/usr \
-              --libdir=/usr/lib32 \
-              --with-zlib \
-              --with-libgcrypt \
-              --disable-static\
-              --disable-guile
+
+  # build fails without --disable-hardware-acceleration because of assembler errors
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+    --with-zlib \
+    --disable-static \
+    --disable-guile \
+    --disable-valgrind-tests --disable-hardware-acceleration
   make
+}
+
+check() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+  #make -k check
 }
 
 package() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
   make DESTDIR="${pkgdir}" install
+  find $pkgdir
 
   rm -rf "${pkgdir}"/usr/{bin,include,share}
 }

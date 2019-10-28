@@ -1,77 +1,60 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# Contributions from Arch:
+# Maintainer: Daniel Wallace <danielwallace at gtmanfred dot com>
+# Contributor: kfgz <kfgz at interia pl>
+# Contributor: Ionut Biru <ibiru at archlinux dot org>
 
-_pkgbasename=nss
-pkgname=lib32-$_pkgbasename
-pkgver=3.14
+pkgname=lib32-nss
+pkgver=3.47
 pkgrel=1
-pkgdesc="Mozilla's Netscape Security Services Library that implements PKI support (32-bit)"
-arch=('x86_64')
-url="http://www.mozilla.org/projects/security/pki/nss/"
-license=('MPL' 'GPL')
-_nsprver=4.9.4
-depends=("lib32-nspr>=${_nsprver}" 'lib32-sqlite3>=3.7.11' "$_pkgbasename=$pkgver" 'lib32-zlib')
-makedepends=('gcc-multilib' 'perl')
-source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${_pkgbasename}-${pkgver}.tar.gz
-        nss.pc.in
-        add_spi+cacert_ca_certs.patch
-        ssl-renegotiate-transitional.patch)
-options=('!strip')
-md5sums=('3918d5f9eb2996271cf62d52f084fd45'
-         'c547b030c57fe1ed8b77c73bf52b3ded'
-         '7f39c19b1dfd62d7db7d8bf19f156fed'
-         'd83c7b61abb7e9f8f7bcd157183d1ade')
+pkgdesc="Network Security Services (32-bit)"
+url="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS"
+arch=(x86_64)
+license=(MPL GPL)
+_nsprver=4.23
+depends=("lib32-nspr>=${_nsprver}" lib32-sqlite lib32-zlib lib32-p11-kit nss)
+makedepends=(perl python2 gyp)
+source=("https://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/nss-${pkgver}.tar.gz"
+        no-plt.diff)
+sha256sums=('6cd0c4438b616bdacc0b5f25ff1506b0d07ee97ea6c95d514c5487200a155fa7'
+            'ea8e1b871c0f1dd29cdea1b1a2e7f47bf4713e2ae7b947ec832dba7dfcc67daa')
+
+prepare() {
+  mkdir path
+
+  ln -s /usr/bin/python2 path/python
+
+  cd nss-$pkgver
+
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1382942
+  patch -Np2 -i ../no-plt.diff
+}
 
 build() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  # Adds the SPI Inc. and CAcert.org CA certificates - patch from Debian
-  patch -Np1 -i "${srcdir}/add_spi+cacert_ca_certs.patch"
-  # Adds transitional SSL renegotiate support - patch from Debian
-  patch -Np1 -i "${srcdir}/ssl-renegotiate-transitional.patch"
-
-  make -C mozilla/security/nss/lib/ckfw/builtins generate
-
-  unset CFLAGS
-  unset CXXFLAGS
   export PKG_CONFIG_PATH=/usr/lib32/pkgconfig
-  export BUILD_OPT=1
-  export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
-  export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-  export NSS_USE_SYSTEM_SQLITE=1
-  export NSPR_INCLUDE_DIR=`pkg-config --cflags-only-I nspr | sed 's/-I//'`
-  export NSPR_LIB_DIR=`pkg-config --libs-only-L nspr | sed 's/-L.//'`
 
-  make -j 1 -C mozilla/security/coreconf
-  make -j 1 -C mozilla/security/dbm
-  make -j 1 -C mozilla/security/nss
-
-  NSS_VMAJOR=`grep "#define.*NSS_VMAJOR" mozilla/security/nss/lib/nss/nss.h | awk '{print $3}'`
-  NSS_VMINOR=`grep "#define.*NSS_VMINOR" mozilla/security/nss/lib/nss/nss.h | awk '{print $3}'`
-  NSS_VPATCH=`grep "#define.*NSS_VPATCH" mozilla/security/nss/lib/nss/nss.h | awk '{print $3}'`
-
-  sed "${srcdir}/nss.pc.in" -e "s,%libdir%,/usr/lib32,g" \
-  				-e "s,%prefix%,/usr,g" \
-				-e "s,%exec_prefix%,/usr/bin,g" \
-				-e "s,%includedir%,/usr/include/nss,g" \
-				-e "s,%NSPR_VERSION%,${_nsprver},g" \
-				-e "s,%NSS_VERSION%,${pkgver},g" > \
-			"${srcdir}/nss.pc"
+  cd nss-$pkgver/nss
+  PATH="$srcdir/path:$PATH" bash -x ./build.sh -v \
+    --m32 --opt --system-sqlite --system-nspr --enable-libpkix --disable-tests
 }
 
 package() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  install -m755 -d "${pkgdir}/usr/lib32/pkgconfig"
-  install -m644 "${srcdir}"/nss.pc "${pkgdir}/usr/lib32/pkgconfig/nss.pc"
-  ln -sf nss.pc "${pkgdir}/usr/lib32/pkgconfig/mozilla-nss.pc"
-  chmod 644 ${pkgdir}/usr/lib32/pkgconfig/*.pc
+  cd nss-$pkgver
 
-  for file in libsoftokn3.so libfreebl3.so libnss3.so libnssutil3.so \
-              libssl3.so libsmime3.so libnssckbi.so libnssdbm3.so
-  do
-    install -m755 mozilla/dist/*.OBJ/lib/${file} "${pkgdir}/usr/lib32/"
-  done
+  sed nss/pkg/pkg-config/nss.pc.in \
+    -e "s,%libdir%,/usr/lib32,g" \
+    -e "s,%prefix%,/usr,g" \
+    -e "s,%exec_prefix%,/usr/bin,g" \
+    -e "s,%includedir%,/usr/include/nss,g" \
+    -e "s,%NSPR_VERSION%,$_nsprver,g" \
+    -e "s,%NSS_VERSION%,$pkgver,g" |
+    install -Dm644 /dev/stdin "$pkgdir/usr/lib32/pkgconfig/nss.pc"
 
-  install -m644 mozilla/dist/*.OBJ/lib/libcrmf.a "${pkgdir}/usr/lib32/"
-  install -m644 mozilla/dist/*.OBJ/lib/*.chk "${pkgdir}/usr/lib32/"
+  ln -s nss.pc "$pkgdir/usr/lib32/pkgconfig/mozilla-nss.pc"
+
+  cd dist/Release/lib
+  install -Dt "$pkgdir/usr/lib32" *.so
+  install -Dt "$pkgdir/usr/lib32" -m644 *.chk
+
+  # Replace built-in trust with p11-kit connection
+  ln -sf libnssckbi-p11-kit.so "$pkgdir/usr/lib32/libnssckbi.so"
 }

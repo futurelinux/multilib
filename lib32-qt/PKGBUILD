@@ -1,46 +1,103 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=qt
 pkgname="lib32-${_pkgbasename}"
-pkgver=4.8.4
-pkgrel=1
+pkgver=4.8.7
+pkgrel=10
 pkgdesc='A cross-platform application and UI framework. (ELF32)'
 arch=('x86_64')
-url='http://qt-project.org/'
+url='http://www.qt.io'
 license=('GPL3' 'LGPL')
-depends=(lib32-{fontconfig,sqlite3,alsa-lib,glib2,dbus-core,openssl,gstreamer0.10,gstreamer0.10-base}
+depends=(lib32-{fontconfig,sqlite,alsa-lib,glib2,dbus,openssl,gstreamer,gst-plugins-base}
          lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi,xinerama,xcursor,xfixes,ffi,xml2}
          "${_pkgbasename}=${pkgver}")
-makedepends=('cups' 'gcc-multilib' lib32-{mesa,libcups,libxfixes})
-options=('!libtool')
+makedepends=('cups' lib32-{mesa,libcups,libxfixes,icu} )
 _pkgfqn="${_pkgbasename}-everywhere-opensource-src-${pkgver}"
-source=("http://releases.qt-project.org/qt4/source/${_pkgfqn}.tar.gz")
-md5sums=('89c5ecba180cae74c66260ac732dc5cb')
+source=("http://download.qt.io/archive/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
+        'improve-cups-support.patch'
+        'moc-boost-workaround.patch'
+        'kubuntu_14_systemtrayicon.diff'
+        'kde4-settings.patch'
+        'glib-honor-ExcludeSocketNotifiers-flag.diff'
+        'disable-sslv3.patch'
+        'l-qclipboard_fix_recursive.patch'
+        'l-qclipboard_delay.patch'
+        'qt4-gcc6.patch'
+        'qt4-glibc-2.25.patch'
+        'qt4-icu59.patch'
+        'qt4-openssl-1.1.patch')
+md5sums=('d990ee66bf7ab0c785589776f35ba6ad'
+         'c439c7731c25387352d8453ca7574971'
+         'da387bde22ae1c446f12525d2a31f070'
+         'a523644faa8f98a73f55c4aa23c114a6'
+         '66dfea63916c8dbf47b23cb012ffdccc'
+         '85679531c8a7310317adfb7002d9f99a'
+         '1803ab6313df762d807678e58fc85f53'
+         '009de09b4e589a7770fba74405656c99'
+         'addc5e88d538ee55e17bd49ba337ca67'
+         '98e00c5c7e5fee12e11ecbedd03f01ff'
+         '296a06554222ff5839cccc41c5d3987e'
+         'dbd1bec8c33c27ec0ae640b25801d25b'
+         '543b8d1f220bfe6116c3d08584c260e6')
+ 
+
+prepare() {
+  cd "${srcdir}/${_pkgfqn}"
+
+  # (FS#28381) (KDEBUG#180051)
+  patch -p1 -i "${srcdir}"/improve-cups-support.patch
+
+  # QTBUG#22829
+  patch -p1 -i "${srcdir}"/moc-boost-workaround.patch
+
+  # http://blog.martin-graesslin.com/blog/2014/06/where-are-my-systray-icons/
+  patch -p1 -i "${srcdir}"/kubuntu_14_systemtrayicon.diff
+
+  # FS#45106
+  patch -p0 -i "${srcdir}"/kde4-settings.patch
+
+  # React to OpenSSL's OPENSSL_NO_SSL3 define
+  patch -p1 -i "${srcdir}"/disable-sslv3.patch
+
+  sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/{g++,gcc}-base.conf
+  sed -i "/^QMAKE_LFLAGS_RPATH/s| -Wl,-rpath,||g" mkspecs/common/gcc-base-unix.conf
+  sed -i "/^QMAKE_LFLAGS\s/s|+=|+= ${LDFLAGS} -m32|g" mkspecs/common/gcc-base.conf
+
+  sed -i "/^QMAKE_LINK\s/s|g++|g++ -m32|g" mkspecs/common/g++-base.conf
+  sed -i "s|-Wl,-O1|-m32 -Wl,-O1|" mkspecs/common/g++-unix.conf
+  sed -e "s|-O2|${CXXFLAGS} -m32|" \
+      -e "/^QMAKE_RPATH/s| -Wl,-rpath,||g" \
+      -e "/^QMAKE_LINK\s/s|g++|g++ -m32|g" \
+      -e "/^QMAKE_LFLAGS\s/s|+=|+= ${LDFLAGS} -m32|g" \
+      -i mkspecs/common/g++.conf
+
+  cp mkspecs/common/linux{,32}.conf
+  sed -i "/^QMAKE_LIBDIR\s/s|=|= /usr/lib32|g" mkspecs/common/linux32.conf
+  sed -i "s|common/linux.conf|common/linux32.conf|" mkspecs/linux-g++-32/qmake.conf
+
+  # Fix build with GCC6 (Fedora)
+  patch -p1 -i "$srcdir"/qt4-gcc6.patch
+
+  # Fix build of Qt4 applications with glibc 2.25 (Fedora)
+  patch -p1 -i "$srcdir"/qt4-glibc-2.25.patch
+
+  # Fix build with ICU 59 (pld-linux)
+  patch -p1 -i "$srcdir"/qt4-icu59.patch
+
+  # Fix build with OpenSSL 1.1 (Debian + OpenMandriva)
+  #patch -p1 -i "$srcdir"/qt4-openssl-1.1.patch
+
+  echo "QMAKE_CXXFLAGS += -std=gnu++98" >> src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pri
+  echo "QMAKE_CXXFLAGS += -std=gnu++98" >> src/plugins/accessible/qaccessiblebase.pri
+}
 
 build() {
   cd "${srcdir}/${_pkgfqn}"
 
-  export CC='gcc -m32'
-  export CXX='g++ -m32'
+  #export CC='clang'
+  #export CXX='clang++'
+  #export CXXFLAGS+=" -std=gnu++98"
+  export QT4DIR=$srcdir/$_pkgfqn
+  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-
-  export QT4DIR="${srcdir}/${_pkgfqn}"
-  export LD_LIBRARY_PATH="${QT4DIR}/lib:${LD_LIBRARY_PATH}"
-
-  # some of those are likely unnecessary, but I'm too lazy to find and remove them
-  sed -i "/^QMAKE_LINK\s/s|g++|g++ -m32|g" mkspecs/common/g++-base.conf
-  sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/g++-base.conf
-  sed -i "s|-O2|${CXXFLAGS} -m32|" mkspecs/common/gcc-base.conf
-  sed -i "/^QMAKE_LFLAGS_RPATH/s| -Wl,-rpath,||g" mkspecs/common/gcc-base-unix.conf
-  sed -i "/^QMAKE_LFLAGS\s/s|+=|+= ${LDFLAGS} -m32|g" mkspecs/common/gcc-base.conf
-  sed -i "s|-Wl,-O1|-m32 -Wl,-O1|" mkspecs/common/g++-unix.conf
-  sed -e "s|-O2|$CXXFLAGS -m32|" \
-      -e "/^QMAKE_RPATH/s| -Wl,-rpath,||g" \
-      -e "/^QMAKE_LINK\s/s|g++|g++ -m32|g" \
-      -e "/^QMAKE_LFLAGS\s/s|+=|+= $LDFLAGS|g" \
-      -i mkspecs/common/g++.conf
 
   ./configure -confirm-license -opensource -v -platform linux-g++-32 \
               -prefix /usr \
@@ -53,8 +110,8 @@ build() {
               -system-sqlite \
               -no-phonon \
               -no-phonon-backend \
-              -webkit \
-              -no-javascript-jit \
+              -no-webkit \
+    	      -graphicssystem raster \
               -openssl-linked \
               -nomake demos \
               -nomake examples \
@@ -66,12 +123,6 @@ build() {
               -reduce-relocations \
               -no-openvg \
               -xcursor 
-
-  # disable "warnings are errors" for some source directories
-  sed -e 's,-Werror,,' \
-      -i src/3rdparty/webkit/Source/WebCore/Makefile* \
-      -i src/3rdparty/webkit/Source/JavaScriptCore/Makefile* \
-      -i src/3rdparty/webkit/Source/WebKit/qt/Makefile* \
 
   make
 }
@@ -91,4 +142,3 @@ package() {
   mkdir -p "${pkgdir}/usr/share/licenses"
   ln -s "${_pkgbasename}" "${pkgdir}/usr/share/licenses/${pkgname}"
 }
-

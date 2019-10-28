@@ -1,44 +1,61 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# Lib32 Packages for Chakra, part of chakraos.org
 
 _pkgbasename=nvidia-utils
-pkgname=lib32-$_pkgbasename
-pkgver=387.22
+pkgbase=lib32-$_pkgbasename
+pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
+pkgver=430.40
 pkgrel=1
-pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
 url="http://www.nvidia.com/"
-depends=('lib32-libxvmc' 'lib32-zlib' 'lib32-gcc-libs' $_pkgbasename=$pkgver)
-conflicts=('lib32-libgl')
-provides=('lib32-libgl')
 license=('custom')
 options=('!strip')
+_pkg="NVIDIA-Linux-x86_64-${pkgver}"
+source=("https://us.download.nvidia.com/XFree86/Linux-x86_64/${pkgver}/${_pkg}.run")
+sha512sums=('68e6187fe74b43e92de6159589463db5f74eba09652b0f55d5fcc790c315405df6cd27129185f4dbe18790abdbb61e79b52977d47c6407e74d3372b5511a4e1b')
 
-_filearch='x86'
-_pkg="NVIDIA-Linux-${_filearch}-${pkgver}"
-source=("http://us.download.nvidia.com/XFree86/Linux-${_filearch}/${pkgver}/${_pkg}.run")
-md5sums=('abdbb3c813e52148f7435308121e6a37')
+create_links() {
+    # create soname links
+    for _lib in $(find "${pkgdir}" -name '*.so*' | grep -v 'xorg/'); do
+        _soname=$(dirname "${_lib}")/$(readelf -d "${_lib}" | grep -Po 'SONAME.*: \[\K[^]]*' || true)
+        _base=$(echo ${_soname} | sed -r 's/(.*).so.*/\1.so/')
+        [[ -e "${_soname}" ]] || ln -s $(basename "${_lib}") "${_soname}"
+        [[ -e "${_base}" ]] || ln -s $(basename "${_soname}") "${_base}"
+    done
+}
 
 build() {
-    cd $srcdir
     sh ${_pkg}.run --extract-only
 }
 
-package() {
-    cd $srcdir/${_pkg}
+package_lib32-opencl-nvidia() {
+    pkgdesc="OpenCL implemention for NVIDIA (32-bit)"
+    depends=('lib32-zlib' 'lib32-gcc-libs')
+    optdepends=('opencl-headers: headers necessary for OpenCL development')
+    provides=('lib32-opencl-driver')
 
-    # GLX extension module for X - useless ?
-    install -D -m755 "libglx.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/xorg/modules/extensions/libglx.so.${pkgver}"
-    ln -s "libglx.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/xorg/modules/extensions/libglx.so"	# X doesn't find glx otherwise
+    cd "${_pkg}"/32
+
+    # OpenCL
+    install -D -m755 "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so.${pkgver}"
+    install -D -m755 "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so.${pkgver}"
+
+    create_links
+
+    mkdir -p "${pkgdir}/usr/share/licenses"
+    ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/lib32-opencl-nvidia"
+}
+
+package_lib32-nvidia-utils() {
+    pkgdesc="NVIDIA drivers utilities (32-bit)"
+    depends=('lib32-zlib' 'lib32-gcc-libs' 'lib32-libglvnd' $_pkgbasename=$pkgver)
+    optdepends=('lib32-opencl-nvidia')
+    conflicts=('lib32-nvidia-libgl')
+    provides=('lib32-vulkan-driver' 'lib32-opengl-driver' 'lib32-nvidia-libgl')
+    replaces=('lib32-nvidia-libgl')
+
+    cd "${_pkg}"/32
+
     install -D -m755 "libGLX_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_nvidia.so.${pkgver}"
-    # now in lib32-mesa driver
-    #ln -s "libGLX_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
-
-    # Wayland stuff
-    install -D -m755 "libnvidia-egl-wayland.so.1.0.2" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.1.0.2"
-    ln -s "libnvidia-egl-wayland.so.1.0.2" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.1"
 
     # OpenGL libraries
     install -D -m755 "libEGL_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libEGL_nvidia.so.${pkgver}"
@@ -54,16 +71,14 @@ package() {
     install -D -m755 "libnvidia-ifr.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-ifr.so.${pkgver}"
     install -D -m755 "libnvidia-fbc.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-fbc.so.${pkgver}"
     install -D -m755 "libnvidia-encode.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-encode.so.${pkgver}"
-    install -D -m755 "libnvidia-cfg.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-cfg.so.${pkgver}"
     install -D -m755 "libnvidia-ml.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-ml.so.${pkgver}"
-    install -D -m755 "libnvidia-wfb.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-wfb.so.${pkgver}"
+    install -D -m755 "libnvidia-glvkspirv.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-glvkspirv.so.${pkgver}"
 
     # VDPAU
     install -D -m755 "libvdpau_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/vdpau/libvdpau_nvidia.so.${pkgver}"
 
     # nvidia-tls library
     install -D -m755 "libnvidia-tls.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-tls.so.${pkgver}"
-    install -D -m755 "tls/libnvidia-tls.so.${pkgver}" "${pkgdir}/usr/lib32/tls/libnvidia-tls.so.${pkgver}"
 
     # CUDA
     install -D -m755 "libcuda.so.${pkgver}" "${pkgdir}/usr/lib32/libcuda.so.${pkgver}"
@@ -75,20 +90,12 @@ package() {
     # Fat (multiarchitecture) binary loader
     install -D -m755 "libnvidia-fatbinaryloader.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-fatbinaryloader.so.${pkgver}"
 
-    # OpenCL
-    install -D -m755 "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so.${pkgver}"
-    install -D -m755 "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so.${pkgver}" 
-    
-    # create soname links
-    for _lib in $(find $pkgdir -name '*.so*'); do
-        _soname="$(dirname ${_lib})/$(readelf -d "$_lib" | sed -nr 's/.*Library soname: \[(.*)\].*/\1/p')"
-        if [ ! -e "${_soname}" ]; then
-            ln -s "$(basename ${_lib})" "${_soname}"
-            ln -s "$(basename ${_soname})" "${_soname/.[0-9]*/}"
-        fi
-    done
+    # Optical flow
+    install -D -m755 "libnvidia-opticalflow.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opticalflow.so.${pkgver}"
+
+    create_links
 
     rm -rf "${pkgdir}"/usr/{include,share,bin}
-    mkdir -p "$pkgdir/usr/share/licenses"
-    ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+    mkdir -p "${pkgdir}/usr/share/licenses"
+    ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"
 }

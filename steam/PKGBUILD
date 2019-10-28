@@ -1,0 +1,52 @@
+pkgname=steam
+pkgver=1.0.0.61
+pkgrel=2
+pkgdesc="Valve's digital software delivery system"
+arch=('x86_64')
+url="https://www.steampowered.com/"
+license=('custom')
+depends=('bash' 'desktop-file-utils' 'hicolor-icon-theme' 'curl' 'dbus'
+         'freetype2'  'gdk-pixbuf2' 'ttf-liberation' 'python3' 'zenity'
+         'lib32-libgl' 'lib32-gcc-libs' 'lib32-libx11' 'lib32-libxss'
+         'lib32-alsa-plugins' 'lib32-libgpg-error' 'lib32-nss')
+optdepends=('lib32-mesa: for open source driver users'
+            'lib32-nvidia-utils: for NVIDIA proprietary blob users'
+            'lib32-primus: for NVIDIA + Bumblebee users')
+install=steam.install
+source=("http://repo.steampowered.com/${pkgname}/pool/${pkgname}/s/${pkgname}/${pkgname}_${pkgver}.tar.gz"
+        'alsa_sdl_audiodriver.patch'
+        'steam-runtime.sh')
+sha256sums=('d66413cce9c9ad441f95c4377103b0c71bda4ac4570ecfc7dd2464fe4ef1bd30'
+            '174a110eda1c9d5b1c92a4490b266b31918559bbf8292a94905221c92da4bc0e'
+            'cd8a12c639ae0bbc3cfb5be057395ae48f99c4e18261198bcf8c547bdb748340')
+
+prepare() {
+  cd $pkgname
+  patch -Np1 < "${srcdir}/alsa_sdl_audiodriver.patch"
+
+  # apply roundups for udev rules
+  sed -r 's|("0666")|"0660", TAG+="uaccess"|g' -i lib/udev/rules.d/60-steam-input.rules
+  sed -r 's|("misc")|\1, OPTIONS+="static_node=uinput"|g' -i lib/udev/rules.d/60-steam-input.rules
+  sed -r 's|(, TAG\+="uaccess")|, MODE="0660"\1|g' -i lib/udev/rules.d/60-steam-vr.rules
+}
+
+package() {
+  cd ${pkgname}
+  make DESTDIR="${pkgdir}" install
+
+  install -Dm 755 "${srcdir}/steam-runtime.sh" "${pkgdir}/usr/bin/steam-runtime"
+  install -d "$pkgdir"/usr/lib/steam
+  mv "$pkgdir"/usr/bin/steam "$pkgdir"/usr/lib/steam/steam
+  ln -sf steam-runtime "$pkgdir"/usr/bin/steam
+
+  install -Dm 644 COPYING steam_subscriber_agreement.txt -t "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm 644 debian/changelog -t "${pkgdir}/usr/share/doc/${pkgname}"
+
+  # blank steamdeps because apt-get
+  ln -sf /bin/true "$pkgdir/usr/bin/steamdeps"
+
+  install -Dm 644 lib/udev/rules.d/60-steam-input.rules \
+    "${pkgdir}/usr/lib/udev/rules.d/70-steam-input.rules"
+  install -Dm 644 lib/udev/rules.d/60-steam-vr.rules \
+    "${pkgdir}/usr/lib/udev/rules.d/70-steam-vr.rules"
+}

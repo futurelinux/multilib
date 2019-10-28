@@ -1,35 +1,32 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# Contributions from Arch:
+# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
+# Contributor: 3V0LU710N <db_eee-at-hotmail-dot-com>
 
 pkgname=lib32-libusb
-pkgver=1.0.8
-pkgrel=2
-pkgdesc="Library to enable user space application programs to communicate with USB devices. (32-bit)"
+pkgver=1.0.23
+pkgrel=1
+pkgdesc="A cross-platform user library to access USB devices (32-bit)"
 arch=('x86_64')
-url="http://libusb.sourceforge.net/"
+url="https://libusb.info/"
 license=('LGPL')
-depends=('lib32-glibc' 'libusb')
-makedepends=('gcc-multilib')
-source=(http://downloads.sourceforge.net/libusb/libusb-${pkgver}.tar.bz2)
-options=(!libtool)
-md5sums=('37d34e6eaa69a4b645a19ff4ca63ceef')
+depends=('lib32-glibc' 'libusb' 'lib32-systemd')
+replaces=('lib32-libusb1' 'lib32-libusbx')
+provides=("lib32-libusbx=$pkgver")
+makedepends=('lib32-gcc-libs')
+source=(https://github.com/libusb/libusb/releases/download/v$pkgver/libusb-$pkgver.tar.bz2)
+sha256sums=('db11c06e958a82dac52cf3c65cb4dd2c3f339c8a988665110e0d24d19312ad8d')
 
 build() {
-  cd "${srcdir}/libusb-${pkgver}"
-
   export CC="gcc -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  ./configure --prefix=/usr --libdir=/usr/lib32
-
-  make
+  cd "libusb-${pkgver}"
+  ./configure --prefix=/usr --libdir=/usr/lib32 --disable-static
+  make -j1
 }
 
 package () {
   cd "${srcdir}/libusb-${pkgver}"
-
   make DESTDIR="${pkgdir}" install
-  rm -rf ${pkgdir}/usr/include
+  rm -rf "${pkgdir}"/usr/include
 }

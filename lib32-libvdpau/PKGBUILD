@@ -1,0 +1,33 @@
+_pkgbasename=libvdpau
+pkgname=lib32-$_pkgbasename
+pkgver=1.1.1
+pkgrel=2
+pkgdesc='Nvidia VDPAU library'
+arch=('x86_64')
+url='http://cgit.freedesktop.org/~aplattner/libvdpau'
+license=('custom')
+depends=('lib32-gcc-libs' 'lib32-libxext' $_pkgbasename=$pkgver)
+makedepends=('dri2proto')
+source=("http://people.freedesktop.org/~aplattner/vdpau/${_pkgbasename}-${pkgver}.tar.bz2")
+sha256sums=('857a01932609225b9a3a5bf222b85e39b55c08787d0ad427dbd9ec033d58d736')
+
+build() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  ./configure --prefix='/usr' --libdir='/usr/lib32' --sysconfdir='/etc'
+  make
+}
+
+package() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/{etc,usr/include}
+
+  install -dm 755 "${pkgdir}"/usr/share/licenses
+  ln -s ${pkgname#*-} "${pkgdir}"/usr/share/licenses/${pkgname}
+}

@@ -1,22 +1,22 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# Contributions from Arch:
+# Maintainer: Florian Pritz <bluewind@xinu.at>
+# Contributor: Joakim Hernberg <jhernberg at alchemy dot lu>
 
 _pkgbasename=gettext
 pkgname=lib32-$_pkgbasename
-pkgver=0.18.1.1
+pkgver=0.20.1
 pkgrel=1
 pkgdesc="GNU internationalization library (32-bit)"
 arch=('x86_64')
-url="http://www.gnu.org/software/gettext/"
+url="https://www.gnu.org/software/gettext/"
 license=('GPL')
-depends=('lib32-acl' $_pkgbasename)
-makedepends=(gcc-multilib)
-optdepends=('cvs: for autopoint tool')
-options=(!libtool !docs)
-source=(ftp://ftp.gnu.org/pub/gnu/gettext/${_pkgbasename}-${pkgver}.tar.gz)
-md5sums=('3dd55b952826d2b32f51308f2f91aa89')
+depends=(lib32-acl lib32-gcc-libs $_pkgbasename)
+options=(!docs)
+source=(https://ftp.gnu.org/pub/gnu/gettext/${_pkgbasename}-${pkgver}.tar.gz{,.sig})
+sha256sums=('66415634c6e8c3fa8b71362879ec7575e27da43da562c798a8a2f223e6e47f5c'
+            'SKIP')
+validpgpkeys=(462225C3B46F34879FC8496CD605848ED7E69871
+              68D94D8AAEEAD48AE7DC5B904F494A942E4616C2)
 
 build() {
   export CC="gcc -m32"
@@ -24,8 +24,7 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  sed -i -e 's/libexpat.so.0/libexpat.so.1/' gettext-tools/src/x-glade.c
-  ./configure --prefix=/usr --enable-csharp --libdir=/usr/lib32
+  ./configure --prefix=/usr --libdir=/usr/lib32
   make
 }
 

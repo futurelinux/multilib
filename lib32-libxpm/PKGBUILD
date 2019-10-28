@@ -5,8 +5,13 @@
 
 _pkgbasename=libxpm
 pkgname=lib32-$_pkgbasename
+<<<<<<< HEAD
 pkgver=3.5.9
 pkgrel=2
+=======
+pkgver=3.5.11
+pkgrel=1
+>>>>>>> 600514ebcaaf80d91da28d7572f7905dbeed7b0a
 pkgdesc="X11 pixmap library (32-bit)"
 arch=(x86_64)
 license=('custom')
@@ -15,7 +20,7 @@ depends=('lib32-libxt' 'lib32-libxext' $_pkgbasename=$pkgver)
 makedepends=('xorg-util-macros' gcc-multilib)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXpm-${pkgver}.tar.bz2)
-sha1sums=('38258a1d589d3f157e0338d0fd13eec11bc4a39b')
+sha1sums=('77b95dd1c8cd9bc00b3b834b53d824409202acbb')
 
 build() {
   export CC="gcc -m32"

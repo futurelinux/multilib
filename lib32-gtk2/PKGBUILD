@@ -1,23 +1,27 @@
-# maintainer (x86_64): AlmAck <almack[at]chakraos[dot]org>
-
 _pkgbasename=gtk2
 pkgname=lib32-$_pkgbasename
-pkgver=2.24.26
+pkgver=2.24.32
 pkgrel=1
-pkgdesc="The GTK+ Toolkit (v2) (32-bit)"
+pkgdesc="GObject-based multi-platform GUI toolkit (legacy) (32-bit)"
 arch=('x86_64')
 url="http://www.gtk.org/"
 install=gtk2.install
-depends=(lib32-{'atk>=1.30.0','pango>=1.28.0','cairo>=1.10.0','krb5','gnutls>=2.8.6','gdk-pixbuf2>=2.22.0'}
-         lib32-lib{'cups>=1.4.4',xcursor,'xrandr>=1.3','xi>=1.3',xinerama,xcomposite,xdamage}
+depends=(lib32-{atk,pango,cairo,gdk-pixbuf2}
+         lib32-lib{cups,xcursor,xrandr,xi,xinerama,xcomposite,xdamage}
          ${_pkgbasename}=${pkgver})
-makedepends=('pkgconfig' 'gcc-multilib')
+makedepends=('pkgconfig' 'lib32-gcc-libs')
 options=('!docs')
 license=('LGPL')
 source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-${pkgver}.tar.xz
         xid-collision-debug.patch)
-md5sums=('4610cc60ff96073b83dc7de254bdaf38'
-         '22355df723f6ca358e30e6b8f0baace5')
+sha256sums=('b6c8a93ddda5eabe3bfee1eb39636c9a03d2a56c7b62828b359bf197943c582e'
+            'd758bb93e59df15a4ea7732cf984d1c3c19dff67c94b957575efea132b8fe558')
+
+prepare() {
+  cd "${srcdir}/gtk+-${pkgver}"
+
+  patch -Np1 -i "${srcdir}/xid-collision-debug.patch"
+}
 
 build() {
   export CC="gcc -m32"
@@ -25,7 +29,6 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/gtk+-${pkgver}"
-  patch -Np1 -i "${srcdir}/xid-collision-debug.patch"
 
   CXX=/bin/false ./configure --prefix=/usr \
       --sysconfdir=/etc \
@@ -33,8 +36,8 @@ build() {
       --libdir=/usr/lib32 \
       --with-xinput=yes
 
-    #https://bugzilla.gnome.org/show_bug.cgi?id=655517
-    sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+  #https://bugzilla.gnome.org/show_bug.cgi?id=655517
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
   make
 }

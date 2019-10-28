@@ -1,35 +1,32 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=e2fsprogs
 pkgname=lib32-e2fsprogs
-pkgver=1.42.5
+pkgver=1.45.4
 pkgrel=1
 pkgdesc="Ext2 filesystem libraries (32-bit)"
 arch=(x86_64)
 license=('GPL' 'LGPL' 'MIT')
 url="http://e2fsprogs.sourceforge.net"
-depends=('lib32-util-linux>=2.22.1' $_pkgbasename=$pkgver)
-makedepends=('bc' 'gcc-multilib')
+depends=('lib32-util-linux' $_pkgbasename=$pkgver)
+makedepends=('bc' 'lib32-gcc-libs')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz")
-md5sums=('aca828bb4bcca20991a442deb950b670')
+md5sums=('2c2f9d4bcd0be54b3b3b8d5feec7b0ff')
 
 build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-
-  ./configure --prefix=/usr --libdir=/usr/lib32 --with-root-prefix="" --enable-elf-shlibs \
-      --disable-{debugfs,imager,resizer,fsck,uuidd,libuuid,libblkid}
+  cd "${_pkgbasename}-${pkgver}"
+  ./configure --prefix=/usr \
+    --libdir=/usr/lib32 \
+    --with-root-prefix="" \
+    --enable-elf-shlibs \
+    --disable-{debugfs,imager,resizer,fsck,uuidd,libuuid,libblkid}
   make
 }
 
 package() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${_pkgbasename}-${pkgver}"
   make DESTDIR="${pkgdir}" install-libs
 
   rm -rf "${pkgdir}"/usr/{bin,include,share}

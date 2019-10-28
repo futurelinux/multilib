@@ -1,31 +1,36 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-
 _pkgbasename=portaudio
-pkgname=lib32-$_pkgbasename
-pkgver=19_20110326
+pkgname=lib32-${_pkgbasename}
+pkgver=190600_20161030
 pkgrel=1
-pkgdesc="A free, cross-platform, open source, audio I/O library (32 bit)"
+pkgdesc="A free, cross platform, open-source, audio I/O library. (32 bit)"
 arch=('x86_64')
-url="http://www.portaudio.com/"
-license=('custom')
-depends=('lib32-jack' $_pkgbasename)
-makedepends=('gcc-multilib')
+url="http://www.portaudio.com"
+license="custom"
+depends=('lib32-alsa-lib' 'lib32-jack' $_pkgbasename=$pkgver)
+makedepends=('subversion' 'gcc-multilib')
+conflicts=('lib32-portaudio-svn')
+provides=('lib32-portaudio-svn')
+replaces=('lib32-portaudio-svn')
 options=('!libtool')
-source=(http://www.portaudio.com/archives/pa_stable_v$pkgver.tgz)
-md5sums=('8f266ce03638419ef46e4efcb0fabde6')
+
+source=("http://www.portaudio.com/archives/pa_stable_v$pkgver.tgz")
+md5sums=('4df8224e047529ca9ad42f0521bf81a8')
 
 build() {
   cd "$srcdir/$_pkgbasename"
-  ./configure --prefix=/usr --libdir=/usr/lib32 CC="gcc -m32"
+
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  ./configure --prefix=/usr --with-alsa --with-jack --libdir=/usr/lib32
   make
 }
 
-package () {
+package() {
   cd "$srcdir/$_pkgbasename"
-  make DESTDIR="$pkgdir" install
-  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE.txt"
-  rm -rf "$pkgdir/usr/include"
+
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}/usr/include"
+  install -D -m644 LICENSE.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE.txt"
 }

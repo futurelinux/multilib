@@ -1,0 +1,64 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# Maintainer:  AlmAck <almack@chakra-project.org>
+
+_pkgbasename=flex
+pkgname=lib32-$_pkgbasename
+pkgver=2.6.1
+pkgrel=1
+pkgdesc="A tool for generating text-scanning programs"
+arch=('x86_64')
+url="http://flex.sourceforge.net"
+license=('custom')
+groups=('base-devel')
+depends=('lib32-glibc' 'm4' 'sh' $_pkgbasename=$pkgver)
+options=('libtool' 'staticlibs')
+source=(https://github.com/westes/flex/releases/download/v$pkgver/flex-$pkgver.tar.xz)
+sha256sums=('2c7a412c1640e094cb058d9b2fe39d450186e09574bebb7aa28f783e3799103f')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export LD="ld -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd $srcdir/$_pkgbasename-$pkgver
+
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+    --mandir=/usr/share/man --infodir=/usr/share/info
+  make
+}
+
+check() {
+  cd $srcdir/$_pkgbasename-$pkgver
+  make check
+}
+
+package() {
+  cd $srcdir/$_pkgbasename-$pkgver/src
+
+  # ** DIRTY HACK
+  # This package is missing shared libraries, but still
+  # expect to install them. We create some empty files
+  # to make the install phase succeed and then delete
+  # them as they are all invalid anyway.
+  touch .libs/libfl.so.2.0.0
+  touch .libs/libfl_pic.so.2.0.0
+
+  make prefix=$pkgdir/usr \
+    mandir=$pkgdir/usr/share/man \
+    infodir=$pkgdir/usr/share/info \
+    libdir=$pkgdir/usr/lib32 \
+    install
+
+  rm "${pkgdir}/usr/lib32/libfl.so"
+  rm "${pkgdir}/usr/lib32/libfl.so.2"
+  rm "${pkgdir}/usr/lib32/libfl.so.2.0.0"
+  rm "${pkgdir}/usr/lib32/libfl_pic.so"
+  rm "${pkgdir}/usr/lib32/libfl_pic.so.2"
+  rm "${pkgdir}/usr/lib32/libfl_pic.so.2.0.0"
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+
+  mkdir -p $pkgdir/usr/share/licenses
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

@@ -1,0 +1,42 @@
+# Lib32 Packages for Chakra, part of chakra-project.org
+#
+# Maintainer:  AlmAck <almack@chakra-project.org>
+# Contributor: Ionut Biru <ibiru@archlinux.org>
+
+_pkgbasename=at-spi2-atk
+pkgname=lib32-$_pkgbasename
+pkgver=2.11.5
+pkgrel=2
+pkgdesc="A GTK+ module that bridges ATK to D-Bus at-spi (32-bit)"
+arch=(x86_64)
+url="http://www.gnome.org"
+license=(GPL2)
+depends=('lib32-at-spi2-core' 'lib32-libx11' 'lib32-atk' $_pkgbasename=$pkgver)
+makedepends=('gcc-multilib' 'intltool' 'libtool')
+source=(http://ftp.gnome.org/pub/GNOME/sources/$_pkgbasename/${pkgver%.*}/$_pkgbasename-$pkgver.tar.xz)
+md5sums=('090a03e90fbfb5c6c49a87b983eb41ac')
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  cd $_pkgbasename-$pkgver
+
+  sed -i -e '/AC_PATH_XTRA/d' configure.ac
+  autoreconf --force --install
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --libdir=/usr/lib32 \
+    --disable-schemas-compile
+  make
+}
+
+package() {
+  cd $_pkgbasename-$pkgver
+  make DESTDIR="$pkgdir" install
+
+  # cleanup for lib32 package
+  rm -rf "${pkgdir}"/usr/{include,share,lib32/gnome-settings-daemon-3.0}
+}
+ 

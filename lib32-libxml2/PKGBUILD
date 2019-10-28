@@ -1,42 +1,52 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libxml2
 pkgname=lib32-$_pkgbasename
-pkgver=2.7.8
+pkgver=2.9.9
 pkgrel=2
-pkgdesc="XML parsing library, version 2 (32-bit)"
-arch=(x86_64)
-license=('custom')
-depends=('lib32-zlib>=1.2.4' 'lib32-readline>=6.1' 'lib32-ncurses>=5.7' $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib)
-options=('!libtool')
+pkgdesc='XML parsing library, version 2 (32-bit)'
 url="http://www.xmlsoft.org/"
-source=(ftp://ftp.xmlsoft.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz
-        shared_library_versionning.patch)
-md5sums=('8127a65e8c3b08856093099b52599c86'
-         '84aeb7c6db023eae044e95d9211dba53')
+arch=(x86_64)
+license=(MIT)
+depends=(lib32-zlib lib32-readline lib32-ncurses lib32-xz lib32-icu libxml2=$pkgver)
+makedepends=(git)
+_commit=f8a8c1f59db355b46962577e7b74f1a1e8149dc6  # tags/v2.9.9^0
+source=("git+https://git.gnome.org/browse/libxml2#commit=$_commit")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd ${_pkgbasename}
+  git describe --always --tags | sed 's/-rc/rc/;s/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+  cd ${_pkgbasename}
+  NOCONFIGURE=1 ./autogen.sh
+}
 
 build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  patch -Np1 -i "${srcdir}/shared_library_versionning.patch"
+  cd ${_pkgbasename}
 
-  autoreconf -fi
-  ./configure --prefix=/usr --with-threads --with-history --libdir=/usr/lib32
+  ./configure \
+    --prefix=/usr \
+    --with-threads \
+    --with-history \
+    --with-icu \
+    --without-python \
+    --libdir=/usr/lib32
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' libtool
   make
 }
 
 package() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd ${_pkgbasename}
   make DESTDIR="${pkgdir}" install
 
   rm -rf "${pkgdir}"/usr/{include,share,bin} "$pkgdir/usr/lib32/xml2Conf.sh"
   mkdir -p "$pkgdir/usr/share/licenses"
   ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }
+
+# vim: ts=2 sw=2 et:

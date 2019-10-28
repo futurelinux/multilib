@@ -1,0 +1,34 @@
+
+_pkgname=jack2
+pkgname=lib32-$_pkgname
+pkgver=1.9.12
+pkgrel=1
+pkgdesc="The next-generation JACK with SMP support (32 bit)"
+arch=('x86_64')
+url="http://jackaudio.org/"
+license=('GPL')
+depends=('lib32-celt' 'lib32-gcc-libs' 'lib32-opus' $_pkgname=$pkgver)
+makedepends=('celt' 'doxygen' 'lib32-celt' 'lib32-gcc-libs' 'lib32-opus' 'libffado' 'libsamplerate' 'opus' 'python3')
+provides=('lib32-jack')
+conflicts=('lib32-jack')
+source=("https://github.com/jackaudio/jack2/archive/v${pkgver}.tar.gz")
+md5sums=('6cb5dfea0586bcf009c733c4e4b04a03')
+
+build() {
+  cd "${pkgname#lib32-}-${pkgver}"
+
+  python waf configure --prefix=/usr \
+                        --libdir=/usr/lib \
+                        --libdir32=/usr/lib32 \
+                        --mixed
+  python waf build
+}
+
+package() {
+  cd "${pkgname#lib32-}-${pkgver}"
+
+  python waf install --destdir="${pkgdir}"
+  # remove all non-32bit and those provided by jack2{,-dbus}
+  rm -rf "${pkgdir}"/usr/{bin,lib,include,share}
+}
+

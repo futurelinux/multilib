@@ -1,102 +1,100 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
+# resynced with Arch's version from https://projects.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/lib32-llvm
+# adjusted for Chakra
 
-pkgname=('lib32-llvm')
-pkgver=3.2
+pkgname=('lib32-llvm' 'lib32-llvm-libs')
+pkgver=8.0.1
 pkgrel=1
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
-makedepends=('lib32-libffi' 'python2' 'gcc-multilib' 'groff')
-source=("http://llvm.org/releases/${pkgver}/llvm-${pkgver}.src.tar.gz")
-md5sums=('71610289bbc819e3e15fdd562809a2d7')
+makedepends=('cmake' 'ninja' 'lib32-libffi' 'lib32-zlib' 'python3' 'gcc-multilib'
+             'lib32-libxml2')
+options=('staticlibs')
+source=(http://releases.llvm.org/$pkgver/llvm-$pkgver.src.tar.xz{,.sig})
+sha256sums=('44787a6d02f7140f145e2250d56c9f849334e11f9ae379827510ed72f12b75e7'
+            'SKIP')
+validpgpkeys+=('B6C8F98282B944E3B0D5C2530FC3042E345AD05D') # Hans Wennborg <hans@chromium.org>
+validpgpkeys+=('474E22316ABF4785A88C6E8EA2C794A986419D8A') # Tom Stellard <tstellar@redhat.com>
+
+prepare() {
+  cd "$srcdir/llvm-$pkgver.src"
+  mkdir build
+}
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  cd "$srcdir/llvm-$pkgver.src/build"
+
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  cd "${srcdir}/llvm-${pkgver}.src"
+  cmake .. -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DLLVM_LIBDIR_SUFFIX=32 \
+    -DCMAKE_C_FLAGS:STRING=-m32 \
+    -DCMAKE_CXX_FLAGS:STRING=-m32 \
+    -DLLVM_TARGET_ARCH:STRING=i686 \
+    -DLLVM_HOST_TRIPLE=$CHOST \
+    -DLLVM_DEFAULT_TARGET_TRIPLE="i686-pc-linux-gnu" \
+    -DLLVM_BUILD_LLVM_DYLIB=ON \
+    -DLLVM_LINK_LLVM_DYLIB=ON \
+    -DLLVM_ENABLE_RTTI=ON \
+    -DLLVM_ENABLE_FFI=ON \
+    -DLLVM_BUILD_DOCS=OFF \
+    -DLLVM_ENABLE_SPHINX=OFF \
+    -DLLVM_ENABLE_DOXYGEN=OFF \
+    -DFFI_INCLUDE_DIR=$(pkg-config --variable=includedir libffi) \
+    -DLLVM_BINUTILS_INCDIR=/usr/include
 
-  # Fix installation directories, ./configure doesn't seem to set them right
-  sed -e 's:\$(PROJ_prefix)/etc/llvm:/etc/llvm:' \
-      -e 's:\$(PROJ_prefix)/lib:$(PROJ_prefix)/lib32/llvm:' \
-      -e 's:\$(PROJ_prefix)/docs/llvm:$(PROJ_prefix)/share/doc/llvm:' \
-      -i Makefile.config.in
-
-  sed -e '/ActiveLibDir = ActivePrefix/s:lib:lib32/llvm:' \
-      -i tools/llvm-config/llvm-config.cpp
-
-  sed -e 's:LLVM_LIBDIR="${prefix}/lib":LLVM_LIBDIR="${prefix}/lib32/llvm":' \
-      -i autoconf/configure.ac \
-      -i configure
-
-  # Fix insecure rpath (http://bugs.archlinux.org/task/14017)
-  sed -e 's:$(RPATH) -Wl,$(\(ToolDir\|LibDir\|ExmplDir\))::g' \
-      -i Makefile.rules
-
-  # Apply strip option to configure
-  _optimized_switch="enable"
-  [[ $(check_option strip) == n ]] && _optimized_switch="disable"
-
-  # Include location of libffi headers in CPPFLAGS
-  export CPPFLAGS="${CPPFLAGS} $(pkg-config --cflags libffi)"
-
-  ./configure \
-    --prefix=/usr \
-    --libdir=/usr/lib32/llvm \
-    --sysconfdir=/etc \
-    --enable-shared \
-    --enable-libffi \
-    --enable-targets=all \
-    --disable-expensive-checks \
-    --disable-debug-runtime \
-    --disable-assertions \
-    --with-binutils-include=/usr/include \
-    --with-cxx-include-arch="${CHOST}" \
-    "--${_optimized_switch}-optimized"
-
-  make REQUIRES_RTTI=1
+  ninja all
 }
 
-package() {
-pkgdesc="Low Level Virtual Machine (32 bits version)"
-depends=('perl' 'lib32-libffi' 'llvm')
+package_lib32-llvm() {
+  pkgdesc="Collection of modular and reusable compiler and toolchain technologies (32-bit)"
+  depends=('lib32-llvm-libs' 'llvm')
 
-  cd "${srcdir}/llvm-${pkgver}.src"
+  cd "$srcdir/llvm-$pkgver.src/build"
 
-  # We move the clang directory out of the tree so it won't get installed and
-  # then we bring it back in for the clang package
-  # mv tools/clang "$srcdir"
-  # -j1 is due to race conditions during the installation of the OCaml bindings
-  make -j1 DESTDIR="${pkgdir}" install
+  DESTDIR="$pkgdir" ninja install
+
+  # The runtime library goes into lib32-llvm-libs
+  mv "$pkgdir"/usr/lib32/lib{LLVM,LTO}*.so* "$srcdir"
+  mv -f "$pkgdir"/usr/lib32/LLVMgold.so "$srcdir"
 
   # Fix permissions of static libs
-  chmod -x "${pkgdir}"/usr/lib32/llvm/*.a
+  chmod -x "$pkgdir"/usr/lib32/*.a
 
-  # Fix libdir in llvm-config (http://bugs.archlinux.org/task/14487)
-  sed -e 's:ABS_RUN_DIR/lib:ABS_RUN_DIR/lib32/llvm:' \
-      -i "${pkgdir}/usr/bin/llvm-config"
-  mv "${pkgdir}/usr/bin/llvm-config" "${pkgdir}/usr/lib32/llvm-config"
+  mv "$pkgdir/usr/bin/llvm-config" "$pkgdir/usr/lib32/llvm-config"
+  mv "$pkgdir/usr/include/llvm/Config/llvm-config.h" \
+    "$pkgdir/usr/lib32/llvm-config-32.h"
 
-  # Get rid of example Hello transformation
-  rm "${pkgdir}"/usr/lib32/llvm/*LLVMHello.*
+  rm -rf "$pkgdir"/usr/{bin,include,share/{doc,man,llvm,opt-viewer}}
 
-  # Symlink the gold plugin where clang expects it
-  ln -s llvm/LLVMgold.so "${pkgdir}/usr/lib32/LLVMgold.so"
+  # Needed for multilib (https://bugs.archlinux.org/task/29951)
+  # Header stub is taken from Fedora
+  install -d "$pkgdir/usr/include/llvm/Config"
+  mv "$pkgdir/usr/lib32/llvm-config-32.h" "$pkgdir/usr/include/llvm/Config/"
 
-  # Add ld.so.conf.d entry
-  install -d "${pkgdir}/etc/ld.so.conf.d"
-  echo /usr/lib32/llvm >"${pkgdir}/etc/ld.so.conf.d/llvm32.conf"
+  mkdir "$pkgdir"/usr/bin
+  mv "$pkgdir/usr/lib32/llvm-config" "$pkgdir/usr/bin/llvm-config32"
 
-  install -D -m644 LICENSE.TXT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-
-  rm -rf "${pkgdir}/usr"/{bin,lib,include,share/{doc,man}}
-
-  mkdir "${pkgdir}/usr/bin"
-  mv "${pkgdir}/usr/lib32/llvm-config" "${pkgdir}/usr/bin/llvm-config32"
+  install -Dm644 ../LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
-# vim:set ts=2 sw=2 et:
+package_lib32-llvm-libs() {
+  pkgdesc="Low Level Virtual Machine (runtime library)(32-bit) "
+  depends=('lib32-libffi' 'lib32-zlib' 'lib32-ncurses' 'lib32-libxml2' 'lib32-gcc-libs')
+
+  install -d "$pkgdir/usr/lib32"
+
+  cp -P \
+    "$srcdir"/lib{LLVM,LTO}*.so* \
+    "$srcdir"/LLVMgold.so \
+    "$pkgdir/usr/lib32/"
+
+  # Symlink LLVMgold.so from /usr/lib/bfd-plugins
+  # https://bugs.archlinux.org/task/28479
+  install -d "$pkgdir/usr/lib32/bfd-plugins"
+  ln -s ../LLVMgold.so "$pkgdir/usr/lib32/bfd-plugins/LLVMgold.so"
+
+  install -Dm644 llvm-$pkgver.src/LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

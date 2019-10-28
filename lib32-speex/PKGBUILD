@@ -1,35 +1,37 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=speex
 pkgname=lib32-$_pkgbasename
-pkgver=1.2rc1
-pkgrel=2
+pkgver=1.2.0
+pkgrel=1
 pkgdesc="A free codec for free speech (32-bit)"
 arch=(x86_64)
+url="https://www.speex.org/"
 license=('BSD')
-depends=('lib32-libogg' $_pkgbasename=$pkgver)
-makedepends=(gcc-multilib)
-options=('!libtool')
-source=(http://downloads.us.xiph.org/releases/$_pkgbasename/$_pkgbasename-$pkgver.tar.gz)
-md5sums=('c4438b22c08e5811ff10e2b06ee9b9ae')
-url="http://www.speex.org/"
+depends=('lib32-libogg' 'lib32-speexdsp' $_pkgbasename=$pkgver)
+makedepends=('lib32-gcc-libs')
+source=(https://downloads.us.xiph.org/releases/$_pkgbasename/$_pkgbasename-$pkgver.tar.gz)
+md5sums=('8ab7bb2589110dfaf0ed7fa7757dc49c')
 
 build() {
-  cd $srcdir/speex-$pkgver
+  cd $_pkgbasename-$pkgver
 
   export CC="gcc -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-    --libdir=/usr/lib32
+    --libdir=/usr/lib32 \
+    --enable-binaries # Must be given or configure won't use pkg-config correctly
   make
 }
 
+check() {
+  cd $_pkgbasename-$pkgver
+  make -k check
+}
+
 package() {
-  cd $srcdir/speex-$pkgver
-  make DESTDIR=$pkgdir install
+  cd $_pkgbasename-$pkgver
+  make DESTDIR="$pkgdir" install
   rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }

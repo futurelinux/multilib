@@ -1,21 +1,15 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libxv
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.6
-pkgrel=2
+pkgver=1.0.11
+pkgrel=1
 pkgdesc="X11 Video extension library (32-bit)"
 arch=(x86_64)
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('lib32-libxext' 'videoproto' $_pkgbasename=$pkgver)
-makedepends=('pkgconfig' gcc-multilib)
-options=('!libtool')
+makedepends=('pkgconfig' 'lib32-gcc-libs')
 source=(${url}/releases/individual/lib/libXv-${pkgver}.tar.bz2)
-sha1sums=('9ebb6d7936a7b247b9b0f6dc81def39a18e4214c')
+sha1sums=('d79f9c56faedd682f420fa68bb9d7ff755b84579')
 
 build() {
   export CC="gcc -m32"

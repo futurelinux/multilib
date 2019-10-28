@@ -1,0 +1,47 @@
+# maintainer: Neophytos Kolokotronis <tetris4@gmail.com>
+# contributions from Arch:https://www.archlinux.org/packages/multilib/x86_64/lib32-gmp/
+
+_pkgbasename=gmp
+pkgname=lib32-$_pkgbasename
+pkgver=6.1.2
+pkgrel=2
+pkgdesc="A free library for arbitrary precision arithmetic (32-bit)"
+arch=('x86_64')
+url="http://gmplib.org/"
+depends=('lib32-gcc-libs' $_pkgbasename=$pkgver)
+makedepends=(gcc-multilib)
+license=('LGPL3')
+options=(!libtool)
+source=(https://gmplib.org/download/gmp/gmp-${pkgver}.tar.xz) #{,.sig}
+md5sums=('f58fa8001d60c4c77595fbbb62b63c1d')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  export ABI=32
+  ./configure \
+    --prefix=/usr --infodir=/usr/share/info \
+    --enable-cxx --libdir=/usr/lib32 \
+    --includedir=/usr/lib32/gmp
+
+  #Put gmp.h in the same folder as gmpxx.h
+  sed -i 's/$(exec_prefix)\/include/$\(includedir\)/' Makefile
+
+  make
+}
+
+check() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  make check
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+}

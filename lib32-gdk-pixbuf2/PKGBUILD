@@ -1,19 +1,20 @@
 _pkgbasename=gdk-pixbuf2
 pkgname=lib32-$_pkgbasename
-pkgver=2.36.3
-pkgrel=1
-pkgdesc="An image loading library for gtk2 (32-bit)"
+pkgver=2.36.11
+pkgrel=2
+pkgdesc="An image loading library (32-bit)"
 arch=('x86_64')
 url="http://www.gtk.org/"
-license=('GPL2')
-depends=('lib32-glib2'
-          lib32-lib{'png','tiff','jpeg','ffi','x11'}
-          $_pkgbasename)
-makedepends=('gcc' 'lib32-gcc-libs')
+license=('LGPL2.1')
+depends=(lib32-glib2 lib32-libpng lib32-libtiff lib32-libjpeg lib32-libx11
+         "$_pkgbasename=$pkgver")
+makedepends=(gcc lib32-gcc-libs)
 options=('!docs')
 install=gdk-pixbuf2.install
-source=(https://download.gnome.org/sources/gdk-pixbuf/${pkgver:0:4}/gdk-pixbuf-${pkgver}.tar.xz)
-sha256sums=('5223138f7d31afc6b356a049930304ec0abd6ac1113a5d3d1dba5cd4a4d639ec')
+source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-${pkgver}.tar.xz
+        gdk-pixbuf-query-loaders-32.hook)
+sha256sums=('ae62ab87250413156ed72ef756347b10208c00e76b222d82d9ed361ed9dde2f3'
+            '3fed95ad7075698313caba78c84b4f7eb9935cc5c8cc99412fc56d8d34ef700f')
 
 build() {
   export CC="gcc -m32"
@@ -35,10 +36,14 @@ package() {
   make DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}"/etc
   rm -rf "${pkgdir}"/usr/{include,share}
+  
+  cd "${srcdir}"
+  install -Dt "$pkgdir/usr/share/libalpm/hooks" -m644 *.hook
 
   cd "${pkgdir}"/usr/bin
-  mv gdk-pixbuf-query-loaders gdk-pixbuf-query-loaders-32
-  rm gdk-pixbuf-csource
-  rm gdk-pixbuf-pixdata
+  mv -v gdk-pixbuf-query-loaders{,-32}
+  mv -v gdk-pixbuf-thumbnailer{,-32}
+  rm -v gdk-pixbuf-pixdata gdk-pixbuf-csource
 }
 
+# vim:set ts=2 sw=2 et:

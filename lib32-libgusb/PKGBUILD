@@ -1,0 +1,27 @@
+_pkgbasename=libgusb
+pkgname=lib32-$_pkgbasename
+pkgver=0.2.11
+pkgrel=1
+pkgdesc="GLib wrapper around libusb1 (32 bit)"
+arch=(x86_64)
+url="https://gitorious.org/gusb/"
+license=(LGPL2.1)
+depends=('lib32-glib2' 'lib32-systemd' 'lib32-libusb' $_pkgbasename=$pkgver)
+makedepends=('gcc-multilib' 'gobject-introspection' 'vala')
+source=(http://people.freedesktop.org/~hughsient/releases/$_pkgbasename-$pkgver.tar.xz)
+sha256sums=('9cb143493fab1dc3d0d0fdba2114b1d8ec8c5b6fad05bfd0f7700e4e4ff8f7de')
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+  
+  cd $_pkgbasename-$pkgver
+  ./configure --prefix=/usr --disable-static --libdir=/usr/lib32
+  make
+}
+
+package() {
+  make -C $_pkgbasename-$pkgver DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{include,share}
+}

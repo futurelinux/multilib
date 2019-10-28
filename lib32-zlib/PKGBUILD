@@ -5,7 +5,7 @@
 
 _pkgbasename=zlib
 pkgname=lib32-$_pkgbasename
-pkgver=1.2.7
+pkgver=1.2.11
 pkgrel=2
 pkgdesc='Compression library implementing the deflate compression method found in gzip and PKZIP (32-bit)'
 arch=('x86_64')
@@ -15,7 +15,7 @@ depends=('lib32-glibc' $_pkgbasename=$pkgver)
 makedepends=(gcc-multilib)
 options=('!makeflags')
 source=("http://zlib.net/${_pkgbasename}-${pkgver}.tar.gz")
-md5sums=('60df6a37c56e7c1366cca812414f7b85')
+md5sums=('1c9f62f0778697a09d36121ead88e08e')
 
 build() {
 	export CC="gcc -m32"

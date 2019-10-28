@@ -2,39 +2,42 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
 # maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=dbus-glib
-
 pkgname=lib32-${_pkgbasename}
-pkgver=0.100
+pkgver=0.110
 pkgrel=1
 pkgdesc="GLib bindings for DBUS (32-bit)"
 arch=(x86_64)
 license=('GPL')
 url="http://www.freedesktop.org/wiki/Software/DBusBindings"
-depends=('lib32-dbus-core' 'lib32-glib2' ${_pkgbasename})
-makedepends=('gcc-multilib' 'lib32-libffi' 'pkgconfig')
-options=(!libtool !emptydirs)
+depends=('lib32-dbus' 'lib32-glib2' 'lib32-glibc' "${_pkgbasename}=${pkgver}")
+makedepends=('gcc-multilib' 'lib32-libffi' 'lib32-expat' 'python3')
+options=('!emptydirs')
 source=(http://dbus.freedesktop.org/releases/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-md5sums=('d33959a9c0c6a158f5ac6d640316e89e')
+md5sums=('d7cebf1d69445cbd28b4983392145192')
 
 build() {
+  cd dbus-glib-${pkgver}
+
   export CC="gcc -m32"
   export CXX="g++ -m32"
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
 
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-  ./configure --prefix=/usr \
-              --sysconfdir=/etc \
-              --localstatedir=/var \
-              --libdir=/usr/lib32 \
-              --enable-static=no \
-              --enable-bash-completion=no
+  ./configure \
+    --prefix='/usr' \
+    --libdir='/usr/lib32' \
+    --localstatedir='/var' \
+    --sysconfdir='/etc' \
+    --disable-bash-completion \
+    --disable-checks \
+    --disable-gtk-doc-html \
+    --disable-static
   make
 }
 
 package() {
-    cd "${srcdir}/${_pkgbasename}-${pkgver}"
+    cd dbus-glib-${pkgver}
     make DESTDIR=${pkgdir} install
 
     rm -rf "${pkgdir}"/usr/{bin,include,share}

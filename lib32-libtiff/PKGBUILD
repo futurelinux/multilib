@@ -1,21 +1,15 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libtiff
 pkgname=lib32-$_pkgbasename
-pkgver=4.0.3
+pkgver=4.0.10
 pkgrel=1
 pkgdesc="Library for manipulation of TIFF images (32-bit)"
 arch=('x86_64')
-url="http://www.remotesensing.org/libtiff/"
+url="http://www.simplesystems.org/libtiff/"
 license=('custom')
-depends=('lib32-libjpeg-turbo' 'lib32-zlib' $_pkgbasename=$pkgver)
-makedepends=('lib32-libgl' 'lib32-libxmu' 'lib32-libxi' gcc-multilib)
-options=('!libtool')
-source=(ftp://ftp.remotesensing.org/pub/libtiff/tiff-${pkgver}.tar.gz)
-md5sums=('051c1068e6a0627f461948c365290410')
+depends=('lib32-libjpeg-turbo' 'lib32-zlib' 'lib32-xz' $_pkgbasename=$pkgver)
+makedepends=('lib32-libgl' 'lib32-libxmu' 'lib32-libxi' 'lib32-gcc-libs')
+source=(https://download.osgeo.org/libtiff/tiff-${pkgver}.tar.gz)
+sha1sums=('c783b80f05cdacf282aa022dc5f5b0ede5e021ae')
 
 build() {
   export CC="gcc -m32"
@@ -23,7 +17,12 @@ build() {
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/tiff-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --libdir=/usr/lib32
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc \
+              --mandir=/usr/share/man \
+              --with-docdir=/usr/share/doc/${pkgname} \
+              --libdir=/usr/lib32 \
+              --includedir=/usr/include/libtiff32
   make
 }
 
@@ -31,7 +30,7 @@ package() {
   cd "${srcdir}/tiff-${pkgver}"
   make DESTDIR="${pkgdir}" install
   
-  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  rm -rf "${pkgdir}"/usr/{share,bin}
   mkdir -p "$pkgdir/usr/share/licenses"
   ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }

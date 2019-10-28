@@ -1,0 +1,38 @@
+# Contributions from Arch
+# Maintainer: Felix Yan <felixonmars@archlinux.org>
+# Contributor: Llewelyn Trahaearn <WoefulDerelict at GMail dot com>
+# Contributor: kokoko3k <kokoko3k at gmail dot com>
+# Contributor: Ionut Biru <ibiru at archlinux dot org>
+# Contributor: Bartłomiej Piotrowski <bpiotrowski at archlinux dot org>
+
+_pkgbasename=libva
+pkgname=lib32-libva
+pkgver=2.1.0
+pkgrel=1
+pkgdesc='Video Acceleration (VA) API for Linux (32-bit)'
+arch=(x86_64)
+url='https://freedesktop.org/wiki/Software/vaapi'
+license=('MIT')
+depends=(lib32-libdrm lib32-libgl lib32-wayland lib32-libxext lib32-libxfixes "$_pkgbasename=$pkgver" )
+makedepends=(mesa lib32-gcc-libs)
+optdepends=('lib32-libva-vdpau-driver: vdpau back-end for nvidia'
+            'lib32-libva-intel-driver: back-end for intel cards')
+source=("https://github.com/01org/libva/releases/download/${pkgver}/libva-${pkgver}.tar.bz2")
+sha512sums=('973b32117375f81ad0ebb8b9f8d5516fd115a9eb9ac95cf9a0e10ee7d340d8d9e41f3e7aa79a2c85f2736f2bc206abbb57a59998cf69019616788e6a571bf24b')
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  cd "${pkgname#*-}-${pkgver}"
+  ./configure --prefix=/usr --libdir='/usr/lib32' 
+  make
+}
+
+package() {
+  cd "${pkgname#*-}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rfv "${pkgdir}/usr/"{include,bin}
+  install -m644 -D COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

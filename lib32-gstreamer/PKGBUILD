@@ -1,0 +1,60 @@
+# Contribution from Arch:
+# Maintainer: Felix Yan <felixonmars@archlinux.org>
+# Contributor: Chris Kitching <chriskitching@linux.com>
+
+pkgname=lib32-gstreamer
+pkgver=1.14.1
+pkgrel=1
+pkgdesc="GStreamer Multimedia Framework (32-bit)"
+arch=('x86_64')
+license=('LGPL')
+url="http://gstreamer.freedesktop.org/"
+depends=('lib32-libxml2' 'lib32-glib2' 'gstreamer' 'lib32-libunwind')
+optdepends=('sh: feedback script')
+makedepends=('intltool' 'pkgconfig' 'gtk-doc' 'gobject-introspection' 'python2')
+source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
+sha256sums=('28d82b0d261544a9bf85b429399929e4986eb00efcf1ce16cc71d269a4c3186c')
+
+build() {
+  cd "${srcdir}/gstreamer-${pkgver}"
+
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  ./configure\
+    --build=i686-pc-linux-gnu\
+    --prefix=/usr\
+    --sysconfdir=/etc\
+    --localstatedir=/var\
+    --libexecdir=/usr/lib32\
+    --libdir=/usr/lib32\
+    --disable-maintainer-mode\
+    --disable-debug\
+    --disable-examples\
+    --with-package-name="GStreamer (Chakra GNU/Linux)" \
+    --with-package-origin="https://chakralinux.org" \
+    --disable-static\
+    --disable-docbook\
+    --disable-gtk-doc-html\
+    --disable-gtk-doc-pdf\
+    --disable-gtk-doc\
+    --disable-benchmarks
+
+  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  make
+}
+
+check() {
+  cd "${srcdir}/gstreamer-${pkgver}"
+  make check
+}
+
+package() {
+  cd "${srcdir}/gstreamer-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  rm -R "${pkgdir}"/usr/{share,include,bin}
+}

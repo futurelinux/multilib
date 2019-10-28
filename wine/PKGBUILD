@@ -1,27 +1,23 @@
-# maintainer: Giuseppe Cala' <jiveaxe@gmail.com>
-
 pkgname=wine
-pkgver=1.7.37
-pkgrel=1
-_pkgbasever=${pkgver/rc/-rc}
-source=(http://ibiblio.org/pub/linux/system/emulators/$pkgname/$pkgname-$_pkgbasever.tar.bz2
-        30-win32-aliases.conf
-        https://github.com/wine-compholio/wine-staging/archive/v${pkgver}.tar.gz)
+pkgver=4.18
+pkgrel=2
+_pkgver=${pkgver/rc/-rc}
+source=(https://dl.winehq.org/wine/source/4.x/$pkgname-$_pkgver.tar.xz
+        30-win32-aliases.conf)
 
-md5sums=('99741c9efece0bf062b39992b63cf5ca'
-         '1ff4e467f59409272088d92173a0f801'
-         '40feaf4d51cae9c575f638fbf6634f2b')
-
+md5sums=('952ea787f594cf159d3c09e99e170b1a'
+         '1ff4e467f59409272088d92173a0f801')
 pkgdesc="A compatibility layer for running Windows programs"
-url="http://www.winehq.com"
+url="https://www.winehq.org/"
 categories=('system')
-screenshot=('http://wstaw.org/m/2012/04/28/wine.png')
 arch=('x86_64')
 license=('LGPL')
 install=wine.install
 
 depends=(
   fontconfig            lib32-fontconfig
+  lcms2			lib32-lcms2
+  libxml2		lib32-libxml2
   libxcursor            lib32-libxcursor
   libxrandr             lib32-libxrandr
   libxdamage            lib32-libxdamage
@@ -31,11 +27,10 @@ depends=(
   glu                   lib32-glu
   libsm                 lib32-libsm
   gcc-libs              lib32-gcc-libs
-  desktop-file-utils
+  desktop-file-utils    
 )
 
-makedepends=(autoconf ncurses bison perl fontforge flex prelink
-  'gcc>=4.5.0-2' 'gcc-multilib>=4.5.0-2'
+makedepends=(autoconf ncurses bison perl fontforge flex
   giflib         lib32-giflib
   libpng         lib32-libpng
   gnutls         lib32-gnutls
@@ -43,9 +38,7 @@ makedepends=(autoconf ncurses bison perl fontforge flex prelink
   libxcomposite  lib32-libxcomposite
   libxmu         lib32-libxmu
   libxxf86vm     lib32-libxxf86vm
-  libxml2        lib32-libxml2
   libldap        lib32-libldap
-  lcms2          lib32-lcms2
   mpg123         lib32-mpg123
   openal         lib32-openal
   v4l-utils      lib32-v4l-utils
@@ -57,7 +50,9 @@ makedepends=(autoconf ncurses bison perl fontforge flex prelink
   libxslt        lib32-libxslt
   jack           lib32-jack
   samba
+  gst-plugins-base-libs lib32-gst-plugins-base-libs
   opencl-headers
+  lib32-vulkan-icd-loader
 )
 
 optdepends=(
@@ -65,8 +60,6 @@ optdepends=(
   libpng          lib32-libpng
   libldap         lib32-libldap
   gnutls          lib32-gnutls
-  lcms2           lib32-lcms2
-  libxml2         lib32-libxml2
   mpg123          lib32-mpg123
   openal          lib32-openal
   v4l-utils       lib32-v4l-utils
@@ -81,10 +74,12 @@ optdepends=(
   libxslt         lib32-libxslt
   cups
   samba           dosbox
+  gst-plugins-base-libs lib32-gst-plugins-base-libs
+  opencl-headers
 )
 
 prepare() {
-  cd $srcdir
+#  cd $srcdir
   
   # Get rid of old code dir
   rm -rf $pkgname
@@ -93,36 +88,36 @@ prepare() {
   rm -rf $pkgname-{32,64}-build
 
   # Allow ccache to work
-  mv $pkgname-$_pkgbasever $pkgname
+  mv $pkgname-$_pkgver $pkgname
+  
+  # https://bugs.winehq.org/show_bug.cgi?id=43530
+  export CFLAGS="${CFLAGS/-fno-plt/}"
+  export LDFLAGS="${LDFLAGS/,-z,now/}"
+
+  sed 's|OpenCL/opencl.h|CL/opencl.h|g' -i $pkgname/configure*
 
   # ncurses fix
   sed -i 's|libncurses|libncursesw|g' "$srcdir/$pkgname/configure"
   sed -i 's|lncurses|lncursesw|g' "$srcdir/$pkgname/configure"
-
-  cd $pkgname
-  for _patch in $(ls $srcdir/wine-staging-$pkgver/patches/winepulse-PulseAudio_Support/*.patch) ; do
-    patch -p1 < $_patch
-  done
-  
-  autoreconf
   
   # These additional CPPFLAGS solve FS#27662 and FS#34195
   export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
 }
 
 build() {
-  cd $srcdir
+#  cd $srcdir
 
   msg2 "Building Wine-64..."
+
   mkdir -p $pkgname-64-build
+
   cd "$srcdir/$pkgname-64-build"
   ../$pkgname/configure \
     --prefix=/usr \
     --libdir=/usr/lib \
     --with-x \
-    --without-gstreamer \
+    --with-gstreamer \
     --enable-win64
-    # Gstreamer was disabled for FS#33655
 
   make
 
@@ -139,12 +134,8 @@ build() {
   ../$pkgname/configure \
     --prefix=/usr \
     --with-x \
-    --without-gstreamer \
+    --with-gstreamer \
     "${_wine32opts[@]}"
-
-
-  # These additional flags solve FS#23277
-  make CFLAGS+="-mstackrealign -mincoming-stack-boundary=2" CXXFLAGS+="-mstackrealign -mincoming-stack-boundary=2"
 }
 
 package() {

@@ -1,21 +1,15 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
-
 _pkgbasename=libssh2
 pkgname=lib32-$_pkgbasename
-pkgver=1.4.3
+pkgver=1.8.2
 pkgrel=1
 pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts (32-bit)"
 arch=('x86_64')
-url="http://www.libssh2.org/"
+url="https://www.libssh2.org/"
 license=('BSD')
-depends=('lib32-zlib' 'lib32-libgcrypt' 'lib32-openssl' $_pkgbasename)
-makedepends=(gcc-multilib)
-options=('!libtool')
-source=("http://www.libssh2.org/download/$_pkgbasename-$pkgver.tar.gz")
-md5sums=('071004c60c5d6f90354ad1b701013a0b')
+depends=('lib32-openssl' $_pkgbasename=$pkgver)
+makedepends=('lib32-gcc-libs')
+source=("https://www.libssh2.org/download/$_pkgbasename-$pkgver.tar.gz")
+md5sums=('616efd99af3d9ef731a26bed6cee9593')
 
 build() {
   export CC="gcc -m32"
@@ -25,9 +19,7 @@ build() {
   cd ${srcdir}/${_pkgbasename}-${pkgver}
 
   ./configure \
-      --with-libgcrypt \
       --prefix=/usr \
-      --mandir=/usr/share/man \
       --libdir=/usr/lib32
   make
 }
@@ -37,5 +29,7 @@ package() {
 
   make DESTDIR=${pkgdir} install
 
-  rm -rf "${pkgdir}"/usr/{share,bin,include}
+  rm -rf "${pkgdir}"/usr/{share,bin,sbin,include}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }

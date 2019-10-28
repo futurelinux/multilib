@@ -1,0 +1,56 @@
+# resynced with Arch's version from https://projects.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/lib32-clang
+# adjusted for Chakra
+
+pkgname=lib32-clang
+pkgver=6.0.0
+pkgrel=1
+pkgdesc="C language family frontend for LLVM"
+arch=('x86_64')
+url="https://clang.llvm.org/"
+license=('custom:University of Illinois/NCSA Open Source License')
+depends=('lib32-llvm-libs' 'gcc')
+makedepends=('lib32-llvm' 'cmake' 'ninja' 'python3')
+source=(https://releases.llvm.org/$pkgver/cfe-$pkgver.src.tar.xz{,.sig}
+        https://releases.llvm.org/$pkgver/llvm-$pkgver.src.tar.xz{,.sig})
+sha256sums=('e07d6dd8d9ef196cfc8e8bb131cbd6a2ed0b1caf1715f9d05b0f0eeaddb6df32'
+            'SKIP'
+            '1ff53c915b4e761ef400b803f07261ade637b0c269d99569f18040f3dcee4408'
+            'SKIP')
+validpgpkeys+=('B6C8F98282B944E3B0D5C2530FC3042E345AD05D') # Hans Wennborg <hans@chromium.org>
+validpgpkeys+=('474E22316ABF4785A88C6E8EA2C794A986419D8A') # Tom Stellard <tstellar@redhat.com>
+
+prepare() {
+  cd cfe-$pkgver.src
+  mkdir build
+}
+
+build() {
+  cd cfe-$pkgver.src/build
+
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  
+  cmake .. -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+    -DLLVM_LIBDIR_SUFFIX=32 \
+    -DCMAKE_C_FLAGS:STRING=-m32 \
+    -DCMAKE_CXX_FLAGS:STRING=-m32 \
+    -DLLVM_CONFIG="/usr/bin/llvm-config32" \
+    -DBUILD_SHARED_LIBS=ON \
+    -DLLVM_LINK_LLVM_DYLIB=ON \
+    -DLLVM_ENABLE_RTTI=ON \
+    -DLLVM_BUILD_TESTS=ON \
+    -DLLVM_INCLUDE_DOCS=OFF \
+    -DLLVM_MAIN_SRC_DIR="$srcdir/llvm-$pkgver.src"    
+  ninja
+}
+
+package() {
+  cd cfe-$pkgver.src/build
+
+  DESTDIR="$pkgdir" ninja install
+  rm -rf "$pkgdir"/usr/{bin,include,libexec,share}
+
+  install -Dm644 ../LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

@@ -1,0 +1,58 @@
+# Maintainer: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor: jtts <jussaar@mbnet.fi>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+
+_pkgbasename=librsvg
+pkgname=lib32-$_pkgbasename
+pkgver=2.44.12
+pkgrel=1
+pkgdesc="SVG rendering library (32-bit)"
+url="https://wiki.gnome.org/Projects/LibRsvg"
+arch=(x86_64)
+license=(LGPL)
+depends=(lib32-gdk-pixbuf2 lib32-pango lib32-libcroco "$_pkgbasename=$pkgver") #lib32-libcroco
+makedepends=(intltool gobject-introspection vala python2 gtk-doc git lib32-rust)
+_commit=6a0f7835bdd10e3106cd81fb6426e29ddde60eee  # tags/2.44.12^0
+source=("git+https://gitlab.gnome.org/GNOME/librsvg.git#commit=$_commit"
+        multilib.diff)
+sha256sums=('SKIP'
+            'f562f9fda0c8bcad8de3f6eea9eee16014a5634261a6646724da99d9ca497bbf')
+
+pkgver() {
+  cd librsvg
+  git describe --tags | sed 's/-/+/g'
+}
+
+prepare() {
+  cd librsvg
+
+  # Hack to cross-compile rust only
+  patch -Np1 -i ../multilib.diff
+
+  NOCONFIGURE=1 ./autogen.sh
+}
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH=/usr/lib32/pkgconfig
+  export RUST_TARGET=i686-unknown-linux-gnu
+
+  cd librsvg
+  ./configure --prefix=/usr --disable-static --enable-vala --disable-gtk-doc --libdir=/usr/lib32
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' libtool
+  make
+}
+
+check() {
+  cd librsvg
+  make check
+}
+
+package() {
+  cd librsvg
+  make DESTDIR="$pkgdir" install
+  rm -r "$pkgdir"/usr/{bin,include,share}
+}
+
+# vim: ts=2 sw=2 et:

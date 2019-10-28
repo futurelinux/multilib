@@ -1,21 +1,18 @@
 # Lib32 Packages for Chakra, part of chakra-project.org
 #
-# maintainer (x86_64): Giuseppe Calà <jiveaxe@gmail.com>
-# maintainer (x86_64): Anke Boersma <abveritas[at]chakra-project[dot]org>
 
 _pkgbasename=atk
 pkgname=lib32-$_pkgbasename
-pkgver=2.2.0
-pkgrel=2
+pkgver=2.26.0
+pkgrel=1
 pkgdesc="A library providing a set of interfaces for accessibility (32-bit)"
 arch=('x86_64')
 license=('LGPL')
 depends=('lib32-glib2' $_pkgbasename=$pkgver)
 makedepends=('gcc-multilib')
-options=('!libtool')
-source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver%.*}/${_pkgbasename}-${pkgver}.tar.bz2)
+source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver%.*}/${_pkgbasename}-${pkgver}.tar.xz)
 url='http://www.gtk.org/'
-sha256sums=('d201e3f5808aef0b1aec2277bfa61074f68863e405428adb57a73aab5c838450')
+sha256sums=('eafe49d5c4546cb723ec98053290d7e0b8d85b3fdb123938213acb7bb4178827')
 
 build() {
   export CC="gcc -m32"

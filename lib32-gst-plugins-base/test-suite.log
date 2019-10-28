@@ -1,0 +1,25 @@
+================================================================
+   GStreamer Base Plug-ins 1.10.3: tests/check/test-suite.log
+================================================================
+
+# TOTAL: 75
+# PASS:  74
+# SKIP:  0
+# XFAIL: 0
+# FAIL:  1
+# XPASS: 0
+# ERROR: 0
+
+.. contents:: :depth: 2
+
+FAIL: elements/multifdsink
+==========================
+
+Running suite(s): multifdsink
+
+
+Unexpected critical/warning: g_object_set_valist: object class 'GstMultiFdSink' has no property named 'test_client_kick'
+90%: Checks: 10, Failures: 1, Errors: 0
+gstcheck.c:79:F:general:test_client_kick:0: Unexpected critical/warning: g_object_set_valist: object class 'GstMultiFdSink' has no property named 'test_client_kick'
+FAIL elements/multifdsink (exit status: 1)
+

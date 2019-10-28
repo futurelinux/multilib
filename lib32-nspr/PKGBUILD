@@ -1,36 +1,31 @@
-#
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-
 _pkgbasename=nspr
 pkgname=lib32-$_pkgbasename
-pkgver=4.10.8
+pkgver=4.23
 pkgrel=1
 pkgdesc="Netscape Portable Runtime (32-bit)"
 arch=('x86_64')
-url="http://www.mozilla.org/projects/nspr/"
+url="https://www.mozilla.org/projects/nspr/"
 license=('MPL' 'GPL')
 depends=('lib32-glibc' $_pkgbasename=$pkgver)
-makedepends=('zip' 'gcc-multilib')
+makedepends=('zip' 'lib32-gcc-libs')
 options=('!emptydirs')
-source=(ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('c87c6a10e0e36866006b45c194d70cd8c67d0934')
+source=(https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${_pkgbasename}-${pkgver}.tar.gz)
+sha1sums=('f3fb61231901cdbb9e1b74e3930ff081ed764358')
 
 build() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${srcdir}/${_pkgbasename}-${pkgver}/${_pkgbasename}"
   
-  ./nspr/configure \
+  ./configure \
       --prefix=/usr \
       --libdir=/usr/lib32 \
       --includedir=/usr/include/nspr \
       --enable-optimize \
-      --disable-debug \
-      --enable-32bit
+      --disable-debug
   make
 }
 
 package() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${srcdir}/${_pkgbasename}-${pkgver}/${_pkgbasename}"
   make DESTDIR="${pkgdir}" install
   
   chmod 644 "$pkgdir"/usr/lib32/*.a
