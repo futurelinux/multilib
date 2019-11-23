@@ -1,6 +1,6 @@
 _pkgbasename=openssl
 pkgname=lib32-$_pkgbasename
-_ver=1.1.1d
+_ver=1.0.2t
 # use a pacman compatible version scheme
 pkgver=${_ver/[a-z]/.${_ver//[0-9.]/}}
 pkgrel=1
@@ -8,21 +8,25 @@ pkgdesc='The Open Source toolkit for Secure Sockets Layer and Transport Layer Se
 arch=('x86_64')
 url='https://www.openssl.org'
 license=('custom:BSD')
-depends=("$_pkgbasename=$pkgver")
+depends=('lib32-zlib' "$_pkgbasename=$pkgver")
 optdepends=('ca-certificates')
 makedepends=('lib32-gcc-libs')
 options=('!makeflags')
 source=("https://www.openssl.org/source/${_pkgbasename}-${_ver}.tar.gz"
         "https://www.openssl.org/source/${_pkgbasename}-${_ver}.tar.gz.asc"
+        'no-rpath.patch'
         'ca-dir.patch')
 validpgpkeys=(8657ABB260F056B1E5190839D9C4D26D0E604491)
-md5sums=('3be209000dbc7e1b95bcdf47980a3baa'
+md5sums=('ef66581b80f06eae42f5268bc0b50c6d'
          'SKIP'
-         '182ad163458781ed9bd4b342c5724ece')
+         'dc78d3d06baffc16217519242ce92478'
+         '3bf51be3a1bbd262be46dc619f92aa90')
 
 prepare() {
 	cd $srcdir/$_pkgbasename-$_ver
 
+	# remove rpath: http://bugs.archlinux.org/task/14367
+	patch -p0 -i $srcdir/no-rpath.patch
 	# set ca dir to /etc/ssl by default
 	patch -p0 -i $srcdir/ca-dir.patch
 }
@@ -45,17 +49,17 @@ build() {
 }
 
 check() {
-	cd "$srcdir"/$_pkgbasename-$_ver
+	cd $srcdir/$_pkgbasename-$_ver
 	# the test fails due to missing write permissions in /etc/ssl
 	# revert this patch for make test
-	patch -p0 -R -i "$srcdir"/ca-dir.patch
+	patch -p0 -R -i $srcdir/ca-dir.patch
 	make test
-	patch -p0 -i "$srcdir"/ca-dir.patch
+	patch -p0 -i $srcdir/ca-dir.patch
 }
 
 package() {
 	cd $srcdir/$_pkgbasename-$_ver
-	make DESTDIR=$pkgdir install_sw
+	make INSTALL_PREFIX=$pkgdir install_sw
 
 	rm -rf ${pkgdir}/{usr/{include,bin},etc}
 	mkdir -p $pkgdir/usr/share/licenses
