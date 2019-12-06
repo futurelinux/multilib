@@ -4,7 +4,7 @@
 # Contributor: Ionut Biru <ibiru at archlinux dot org>
 
 pkgname=lib32-nss
-pkgver=3.47
+pkgver=3.48
 pkgrel=1
 pkgdesc="Network Security Services (32-bit)"
 url="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS"
@@ -14,9 +14,11 @@ _nsprver=4.23
 depends=("lib32-nspr>=${_nsprver}" lib32-sqlite lib32-zlib lib32-p11-kit nss)
 makedepends=(perl python2 gyp)
 source=("https://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/nss-${pkgver}.tar.gz"
-        no-plt.diff)
-sha256sums=('6cd0c4438b616bdacc0b5f25ff1506b0d07ee97ea6c95d514c5487200a155fa7'
-            'ea8e1b871c0f1dd29cdea1b1a2e7f47bf4713e2ae7b947ec832dba7dfcc67daa')
+        no-plt.diff
+        nss-3.47-certdb-temp-cert.patch)
+sha256sums=('3f9c822a86a4e3e1bfe63e2ed0f922d8b7c2e0b7cafe36774b1c627970d0f8ac'
+            'ea8e1b871c0f1dd29cdea1b1a2e7f47bf4713e2ae7b947ec832dba7dfcc67daa'
+            'e4d7c7d6ac8c8cccd5bb23c217402922aafc1c104e46ae17a39f3c13b0e96002')
 
 prepare() {
   mkdir path
@@ -27,6 +29,9 @@ prepare() {
 
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1382942
   patch -Np2 -i ../no-plt.diff
+
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1593167
+  patch -d nss -Np1 < ../nss-3.47-certdb-temp-cert.patch
 }
 
 build() {
