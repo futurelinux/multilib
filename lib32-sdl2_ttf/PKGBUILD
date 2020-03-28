@@ -1,20 +1,17 @@
-# Lib32 Packages for Chakra, part of chakra-project.org
-#
-# maintainer: Giuseppe Calà <jiveaxe@gmail.com>
 
 _pkgbasename=sdl2_ttf
 pkgname=lib32-$_pkgbasename
-pkgver=2.0.14
+pkgver=2.0.15
 pkgrel=1
 pkgdesc="A library that allows you to use TrueType fonts in your SDL applications (Version 2, 32-bit)"
 arch=('x86_64')
 url="http://www.libsdl.org"
 license=('MIT')
 depends=('lib32-sdl2' 'lib32-freetype2' $_pkgbasename=$pkgver)
-makedepends=('cmake' 'gcc-multilib')
+makedepends=('cmake' 'gcc')
 options=(!libtool)
 source=("http://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-${pkgver}.tar.gz")
-sha256sums=('34db5e20bcf64e7071fe9ae25acaa7d72bdc4f11ab3ce59acc768ab62fe39276')
+sha256sums=('a9eceb1ad88c1f1545cd7bd28e7cbc0b2c14191d40238f531a15b01b1b22cd33')
 
 build() {
   cd "${srcdir}/SDL2_ttf-${pkgver}/"
