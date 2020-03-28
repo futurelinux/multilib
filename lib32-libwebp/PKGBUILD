@@ -1,29 +1,46 @@
 _pkgbasename=libwebp
 pkgname=lib32-$_pkgbasename
-pkgver=0.5.0
+pkgver=1.0.3
 pkgrel=1
 pkgdesc="WebP library and conversion tools (32-bit)."
 arch=('x86_64')
 url="http://code.google.com/intl/en/speed/webp/"
 license=('BSD')
-depends=('lib32-libpng' 'lib32-libjpeg' $_pkgbasename=$pkgver)
-makedepends=('gcc-multilib')
-source=("http://downloads.webmproject.org/releases/webp/$_pkgbasename-$pkgver.tar.gz")
-md5sums=('ba81eb9bf23e3c69a2f5cc8dcdb5938f')
+depends=('lib32-glibc' 'lib32-libpng' 'lib32-libjpeg' $_pkgbasename=$pkgver)
+makedepends=('gcc' 'lib32-gcc-libs')
+_commit=ae0394af8350c55742e6a4cb849c40ca89d67a22  # tags/v1.0.3
+source=("git+https://chromium.googlesource.com/webm/libwebp#commit=$_commit")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $_pkgbasename
+  git describe --tags | sed 's/^v//;s/-/+/g'
+}
+
+prepare() {
+  cd $_pkgbasename
+  NOCONFIGURE=1 ./autogen.sh
+}
 
 build() {
-  cd "$srcdir/$_pkgbasename-$pkgver"
+  cd $_pkgbasename
   
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   
-  ./configure --prefix=/usr --libdir=/usr/lib32
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+     --enable-swap-16bit-csp \
+     --enable-experimental \
+     --enable-libwebp{mux,demux,decoder,extras} \
+     --disable-static
+  
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
   make
 }
 
 package() {
-  cd "$srcdir/$_pkgbasename-$pkgver"
+  cd $_pkgbasename
   make DESTDIR="$pkgdir/" install
   rm -rf "${pkgdir}"/usr/{include,share,bin}
 }
