@@ -1,14 +1,14 @@
 _pkgbasename=fluidsynth
 pkgname=lib32-${_pkgbasename}
 pkgver=2.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="A real-time software synthesizer based on the SoundFont 2 specifications (32bit)"
 arch=('x86_64')
 url="http://www.fluidsynth.org/"
-depends=("$_pkgbasename=$pkgver" 'lib32-glib2' 'lib32-jack' 'lib32-alsa-lib' 'lib32-libpulse''lib32-sdl2')
+depends=("$_pkgbasename=$pkgver" 'lib32-glib2' 'lib32-jack' 'lib32-alsa-lib' 'lib32-libpulse' 'lib32-sdl2' 'lib32-portaudio')
 makedepends=('cmake' 'gcc' 'lib32-gcc-libs')
 license=('LGPL')
-source=("http://downloads.sourceforge.net/$_pkgbasename/$_pkgbasename-$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.gz::https://github.com/${_pkgbasename}/${_pkgbasename}/archive/v${pkgver}.tar.gz")
 md5sums=('e8c48388c5b4f4e5115d6500d51d517b')
  
 build() {
@@ -17,7 +17,7 @@ build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-  cmake .. -DCMAKE_INSTALL_PREFIX=/usr \
+  cmake .  -DCMAKE_INSTALL_PREFIX=/usr \
            -DFLUID_DAEMON_ENV_FILE=/etc/conf.d/fluidsynth \
            -Denable-ladspa=ON \
            -Denable-lash=ON \
