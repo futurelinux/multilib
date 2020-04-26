@@ -1,17 +1,14 @@
-pkgname=wine_mono
-pkgver=4.9.4
+pkgname=wine-mono
+pkgver=5.0.0
 pkgrel=1
-pkgdesc="Mono's built-in replacement for Microsoft's .NET Framework"
+pkgdesc="Wine's built-in replacement for Microsoft's .NET Framework"
 arch=('any')
 url="https://wiki.winehq.org/Mono"
-license=(MPL)
+license=('GPL' 'LGPL2.1' 'MPL')
 depends=('wine')
-categories=('system')
-source=(https://dl.winehq.org/wine/wine-mono/$pkgver/${pkgname/_/-}-$pkgver.msi)
-md5sums=('32cdd96094053bbefe8d3af2290f7e1e')
+source=("https://dl.winehq.org/wine/$pkgname/$pkgver/$pkgname-$pkgver-x86.msi")
+sha256sums=('17da208645a82a5e45e84fc75c73a8440acda484411cb8fae8e9b72db9886cd5')
 
 package() {
-  cd "$srcdir"
-  _monodir="$pkgdir/usr/share/wine/mono"
-  install -Dm644 ${pkgname/_/-}-$pkgver.msi "$_monodir/${pkgname/_/-}-$pkgver.msi"
+  install -Dm644 $pkgname-$pkgver-x86.msi "$pkgdir"/usr/share/wine/mono/$pkgname-$pkgver.msi
 }
