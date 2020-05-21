@@ -15,7 +15,7 @@ depends=("lib32-nspr>=${_nsprver}" lib32-sqlite lib32-zlib lib32-p11-kit nss)
 makedepends=(perl python3 gyp)
 source=("https://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/nss-${pkgver}.tar.gz"
         no-plt.diff)
-sha256sums=('185df319775243f5f5daa9d49b7f9cc5f2b389435be3247c3376579bee063ba7'
+sha256sums=('0a0aeb0cdda65ddcb64f746223df58b150f6803f4bfa1a4e876bbe6f9c4c1561'
             'ea8e1b871c0f1dd29cdea1b1a2e7f47bf4713e2ae7b947ec832dba7dfcc67daa')
 
 prepare() {
