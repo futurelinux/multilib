@@ -12,20 +12,21 @@ url="https://p11-glue.freedesktop.org"
 license=(BSD)
 depends=(lib32-glibc lib32-libtasn1 lib32-libffi $_pkgbasename)
 makedepends=(git meson lib32-systemd)
-source=("git+https://github.com/p11-glue/p11-kit#tag=$pkgver")
-sha256sums=('SKIP')
-validpgpkeys=('C0F67099B808FB063E2C81117BFB1108D92765AF')
+source=("https://github.com/p11-glue/p11-kit/releases/download/$pkgver/$_pkgbasename-$pkgver.tar.xz"{,.sig})
+sha256sums=('14d86024c3dfd6b967d9bc0b4ec7b2973014fe7423481f4d230a1a63b8aa6104'
+            'SKIP')
+validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871')
 
 prepare() {
-  cd ${_pkgbasename}
+  cd ${_pkgbasename}-${pkgver}
 }
 
 build() {
   export CC="gcc -m32"
   export CXX="g++ -m32"
-  export PKG_CONFIG_PATH="i686-pc-linux-gnu-pkg-config"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  chakra-meson p11-kit build \
+  chakra-meson ${_pkgbasename}-${pkgver} build \
     --buildtype debugoptimized \
     --libdir /usr/lib32 \
     -D trust_paths=/etc/ca-certificates/trust-source:/usr/share/ca-certificates/trust-source
