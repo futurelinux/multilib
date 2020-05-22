@@ -1,10 +1,10 @@
 pkgname=wine
-pkgver=5.8
+pkgver=5.9
 pkgrel=1
 _pkgver=${pkgver/rc/-rc}
 source=(https://dl.winehq.org/wine/source/5.x/$pkgname-$_pkgver.tar.xz
         30-win32-aliases.conf)
-md5sums=('6b77bdc3f9f7d61c0c7e53f1e7eb9014'
+md5sums=('0a6d8a33de07a2dd25d89bd4f18626c3'
          '1ff4e467f59409272088d92173a0f801')
 pkgdesc="A compatibility layer for running Windows programs"
 url="https://www.winehq.org/"
